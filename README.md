@@ -1,0 +1,1 @@
+# bedtime-tale-type-generator
