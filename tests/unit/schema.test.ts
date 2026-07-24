@@ -37,6 +37,12 @@ describe("taleRequestSchema", () => {
     ).toBe(false);
   });
 
+  it("accepts a non-featured catalogue tale type", () => {
+    expect(
+      taleRequestSchema.safeParse({ ...valid, taleTypeId: "stone-soup" }).success,
+    ).toBe(true);
+  });
+
   it("rejects an invalid age band", () => {
     expect(taleRequestSchema.safeParse({ ...valid, ageBand: "13-18" }).success).toBe(
       false,

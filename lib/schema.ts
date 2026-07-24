@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TALE_TYPE_IDS } from "./tale-types";
+import { ATU_TYPE_IDS } from "./atu-index";
 import { AGE_BAND_ORDER } from "./age-bands";
 import { LENGTH_ORDER } from "./length";
 
@@ -16,7 +16,7 @@ const optionalText = z
 export const taleRequestSchema = z.object({
   taleTypeId: z
     .string()
-    .refine((id) => TALE_TYPE_IDS.includes(id), "Unknown tale type."),
+    .refine((id) => ATU_TYPE_IDS.includes(id), "Unknown tale type."),
   heroName: z
     .string()
     .transform((s) => s.trim())

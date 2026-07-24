@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { TALE_TYPES } from "@/lib/tale-types";
+import { ATU_INDEX } from "@/lib/atu-index";
 
 export default function TaleTypePicker({
   onSelect,
@@ -41,6 +43,16 @@ export default function TaleTypePicker({
           </li>
         ))}
       </ul>
+
+      <div className="mt-8 text-center">
+        <Link
+          href="/browse"
+          data-testid="browse-link"
+          className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-surface/60 px-5 py-3 text-sm text-lavender transition hover:border-amber/50 hover:bg-surface-2/80"
+        >
+          Browse all {ATU_INDEX.length} tale types →
+        </Link>
+      </div>
     </section>
   );
 }

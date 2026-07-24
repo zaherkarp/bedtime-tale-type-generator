@@ -15,14 +15,15 @@ live from the **Claude API** (`claude-opus-4-8`).
 
 ## Features
 
-- **12 real tale types** — genuine patterns from the
-  [Aarne–Thompson–Uther folktale index](https://en.wikipedia.org/wiki/Aarne%E2%80%93Thompson%E2%80%93Uther_Index),
-  gently softened for bedtime: Cinderella (ATU 510A), The Kind and the Unkind
-  Girls (480), Beauty and the Beast (425C), Sleeping Beauty (410), The Frog King
-  (440), The Dragon-Slayer (300), Puss in Boots (545B), Thumbling (700), The Wolf
-  and the Kids (123), The Bremen Town Musicians (130), The Gingerbread Man (2025),
-  and Chicken Little (2033). Each carries its own narrative shape, signature
-  motifs, and voice.
+- **Real ATU tale types** — every story is shaped after a genuine tale type from
+  the [Aarne–Thompson–Uther folktale index](https://en.wikipedia.org/wiki/Aarne%E2%80%93Thompson%E2%80%93Uther_Index),
+  gently softened for bedtime.
+  - **12 featured types** with a hand-authored narrative shape, signature motifs,
+    and voice — Cinderella (ATU 510A), The Dragon-Slayer (300), The Gingerbread
+    Man (2025), and nine more.
+  - **A browsable catalogue** (`/browse`) of the full bedtime-safe set — search by
+    name or ATU number, filter by category, and turn any type into a story. Darker
+    or adult tale types are excluded entirely.
 - **The wind-down arc** — a global rule in the storyteller's prompt guarantees
   every story softens toward sleep.
 - **Age-aware** — 3–5, 6–8, and 9–12 bands tune vocabulary and gentleness.
@@ -72,11 +73,13 @@ Without a key **and** without mock mode, the app still works but shows a gentle
 ```
 app/
   page.tsx            pick → form → streaming story (client state machine)
+  browse/page.tsx     searchable ATU catalogue → hands off to the generator
   library/page.tsx    saved tales (localStorage)
   api/tale/route.ts   validate → Claude stream → newline-delimited JSON
 components/           TaleTypePicker, StoryForm, StoryView, Starfield, LibraryCard
 lib/
-  tale-types.ts       the tale-type registry (the heart of the app)
+  atu-index.ts        the bedtime-safe ATU catalogue (all browsable tale types)
+  tale-types.ts       the 12 featured types with rich, hand-authored beats
   prompt.ts           system persona (wind-down + safety) + per-request brief
   schema.ts           zod validation for the request
   stream-client.ts    browser-side NDJSON consumer
@@ -93,10 +96,28 @@ sanitized and clearly framed as story _data_, never instructions.
 
 ### Add a new tale type
 
-Append one object to `TALE_TYPES` in `lib/tale-types.ts` — its `atuNumber`,
-`category`, `beats`, `signatureElements`, `tone`, and an `exampleOpener`. It
-automatically appears in the picker and drives the prompt. No other changes
-needed. A unit test enforces that every entry is complete.
+- **Catalogue-only type:** append one object to `EXTRA_TYPES` in
+  `lib/atu-index.ts` — `id`, `atu`, `title`, `emoji`, and a gentle `blurb`. Its
+  category is derived from the ATU number. It appears in `/browse` and can be
+  generated immediately (the storyteller works from the title + blurb).
+- **Featured type:** also append an object to `TALE_TYPES` in `lib/tale-types.ts`
+  (same `id`) with a rich `beats`, `signatureElements`, `tone`, and
+  `exampleOpener`. It joins the home picker and drives a richer prompt.
+
+Keep it bedtime-safe: no death, peril, horror, cruelty, or romance. Unit tests
+enforce that every entry is complete and that featured types stay in sync with
+the catalogue.
+
+### Tale-type data & sources
+
+Tale-type numbers and titles follow the ATU index, cross-checked against
+CC0 [Wikidata property P2540](https://www.wikidata.org/wiki/Property:P2540) and
+the open [`trilogy`](https://github.com/j-hagedorn/trilogy) dataset. Full
+public-domain tale texts (for reference) live at
+[Ashliman's Folktexts](https://sites.pitt.edu/~dash/folktexts.html) and the
+[Multilingual Folk Tale Database](http://www.mftd.org/). The one-line blurbs in
+this repo are original, bedtime-framed descriptions — not the academic ATU
+summaries.
 
 ## Privacy
 

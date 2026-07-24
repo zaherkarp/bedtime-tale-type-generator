@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { getTaleType, type AgeBand, type TaleLength } from "@/lib/tale-types";
+import { type AgeBand, type TaleLength } from "@/lib/tale-types";
+import { getAtuEntry } from "@/lib/atu-index";
 import { AGE_BANDS, AGE_BAND_ORDER } from "@/lib/age-bands";
 import { LENGTHS, LENGTH_ORDER } from "@/lib/length";
 import type { TaleRequest } from "@/lib/schema";
@@ -15,7 +16,7 @@ export default function StoryForm({
   onGenerate: (req: TaleRequest) => void;
   onBack: () => void;
 }) {
-  const tale = getTaleType(taleTypeId);
+  const tale = getAtuEntry(taleTypeId);
   const [heroName, setHeroName] = useState("");
   const [ageBand, setAgeBand] = useState<AgeBand>("6-8");
   const [length, setLength] = useState<TaleLength>("medium");
@@ -48,10 +49,10 @@ export default function StoryForm({
           {tale?.emoji}
         </span>
         <div>
-          <p className="font-serif text-2xl text-starlight">{tale?.label}</p>
+          <p className="font-serif text-2xl text-starlight">{tale?.title}</p>
           {tale && (
             <p className="text-xs font-medium uppercase tracking-wide text-lavender/80">
-              {tale.atuNumber} · {tale.category}
+              ATU {tale.atu} · {tale.category}
             </p>
           )}
           <button

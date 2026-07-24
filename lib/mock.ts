@@ -1,5 +1,6 @@
 import type { TaleRequest } from "./schema";
 import { getTaleType } from "./tale-types";
+import { getAtuEntry } from "./atu-index";
 
 /**
  * A deterministic, offline stand-in for the Claude storyteller.
@@ -10,8 +11,10 @@ import { getTaleType } from "./tale-types";
  * exactly as it would with a real story.
  */
 export function buildMockTale(request: TaleRequest): string {
-  const tale = getTaleType(request.taleTypeId);
-  const label = tale?.label ?? "Bedtime";
+  const label =
+    getTaleType(request.taleTypeId)?.label ??
+    getAtuEntry(request.taleTypeId)?.title ??
+    "Bedtime";
   const hero = request.heroName || "the little one";
   const setting = request.setting?.trim();
   const where = setting ? ` in ${setting}` : " in a snug little room";
