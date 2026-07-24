@@ -13,7 +13,7 @@ test("shows a gentle, recoverable error if the storyteller fails", async ({
   );
 
   await page.goto("/");
-  await page.getByTestId("tale-type-fairy-tale").click();
+  await page.getByTestId("tale-type-cinderella").click();
   await page.getByTestId("hero-name").fill("Milo");
   await page.getByTestId("generate-button").click();
 

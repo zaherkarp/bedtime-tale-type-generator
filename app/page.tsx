@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import TaleTypePicker from "@/components/TaleTypePicker";
 import StoryForm from "@/components/StoryForm";
 import StoryView, { type StoryStatus } from "@/components/StoryView";
 import type { TaleRequest } from "@/lib/schema";
-import { getTaleType } from "@/lib/tale-types";
+import { getAtuEntry, ATU_TYPE_IDS } from "@/lib/atu-index";
 import { parseStory } from "@/lib/story";
 import { saveTale } from "@/lib/library";
 import {
@@ -28,6 +28,18 @@ export default function Home() {
   const [saved, setSaved] = useState(false);
 
   const abortRef = useRef<AbortController | null>(null);
+
+  // Deep-link support: /?type=<id> preselects a tale type and jumps to the form,
+  // so the "Browse all tale types" catalogue can hand off to the generator.
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("type");
+    if (requested && ATU_TYPE_IDS.includes(requested)) {
+      /* eslint-disable react-hooks/set-state-in-effect */
+      setTaleTypeId(requested);
+      setStep("form");
+      /* eslint-enable react-hooks/set-state-in-effect */
+    }
+  }, []);
 
   function generate(req: TaleRequest) {
     abortRef.current?.abort();
@@ -63,12 +75,11 @@ export default function Home() {
   function handleSave() {
     if (!request || saved) return;
     const { title, body } = parseStory(raw);
-    const tale = getTaleType(request.taleTypeId);
-    const finalTitle =
-      title || `${request.heroName}'s ${tale?.label ?? "bedtime tale"}`;
+    const typeLabel = getAtuEntry(request.taleTypeId)?.title ?? "Bedtime tale";
+    const finalTitle = title || `${request.heroName}'s ${typeLabel}`;
     saveTale({
       taleTypeId: request.taleTypeId,
-      taleTypeLabel: tale?.label ?? "Bedtime tale",
+      taleTypeLabel: typeLabel,
       heroName: request.heroName,
       ageBand: request.ageBand as never,
       length: request.length as never,

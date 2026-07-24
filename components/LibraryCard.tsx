@@ -1,5 +1,5 @@
 import type { SavedTale } from "@/lib/library";
-import { getTaleType } from "@/lib/tale-types";
+import { getAtuEntry } from "@/lib/atu-index";
 import { parseStory } from "@/lib/story";
 
 export default function LibraryCard({
@@ -11,7 +11,7 @@ export default function LibraryCard({
   onRead: () => void;
   onDelete: () => void;
 }) {
-  const emoji = getTaleType(tale.taleTypeId)?.emoji ?? "🌙";
+  const emoji = getAtuEntry(tale.taleTypeId)?.emoji ?? "🌙";
   const { body } = parseStory(tale.text);
   const preview = body.replace(/\n+/g, " ").slice(0, 130).trim();
   const date = new Date(tale.createdAt).toLocaleDateString(undefined, {

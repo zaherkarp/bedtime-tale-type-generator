@@ -1,5 +1,6 @@
 import type { TaleRequest } from "./schema";
 import { getTaleType } from "./tale-types";
+import { getAtuEntry } from "./atu-index";
 
 /**
  * A deterministic, offline stand-in for the Claude storyteller.
@@ -10,8 +11,10 @@ import { getTaleType } from "./tale-types";
  * exactly as it would with a real story.
  */
 export function buildMockTale(request: TaleRequest): string {
-  const tale = getTaleType(request.taleTypeId);
-  const label = tale?.label ?? "Bedtime";
+  const label =
+    getTaleType(request.taleTypeId)?.label ??
+    getAtuEntry(request.taleTypeId)?.title ??
+    "Bedtime";
   const hero = request.heroName || "the little one";
   const setting = request.setting?.trim();
   const where = setting ? ` in ${setting}` : " in a snug little room";
@@ -20,7 +23,7 @@ export function buildMockTale(request: TaleRequest): string {
 
 Once, when the sky had pulled its softest blanket of stars across the world, ${hero} was wide awake${where}. The lamp glowed the colour of warm honey, and everything felt calm and kind.
 
-"Tonight," whispered the night, "there is a small and gentle wonder just for you." And so there was. ${hero} followed it on tiptoe, past the curtains and into a story shaped like a ${label.toLowerCase()}.
+"Tonight," whispered the night, "there is a small and gentle wonder just for you." And so there was. ${hero} followed it on tiptoe, past the curtains and into a gentle story in the shape of "${label}".
 
 There were quiet friends to meet and small, kind things to do. Nothing was scary, and nobody was ever in any real trouble. Every little worry was met with a soft word and a softer smile, until it drifted away like a dandelion seed.
 

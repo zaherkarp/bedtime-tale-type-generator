@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { TALE_TYPES, TALE_TYPE_IDS, getTaleType } from "@/lib/tale-types";
 
 describe("tale-type registry", () => {
-  it("ships the expected eight tale types", () => {
-    expect(TALE_TYPES).toHaveLength(8);
+  it("ships the expected twelve tale types", () => {
+    expect(TALE_TYPES).toHaveLength(12);
   });
 
   it("has unique ids that match TALE_TYPE_IDS", () => {
@@ -16,6 +16,8 @@ describe("tale-type registry", () => {
     for (const tale of TALE_TYPES) {
       expect(tale.id, "id").toMatch(/^[a-z0-9-]+$/);
       expect(tale.label.length, `${tale.id} label`).toBeGreaterThan(0);
+      expect(tale.atuNumber, `${tale.id} atuNumber`).toMatch(/^ATU\s\S+/);
+      expect(tale.category.length, `${tale.id} category`).toBeGreaterThan(0);
       expect(tale.emoji.length, `${tale.id} emoji`).toBeGreaterThan(0);
       expect(tale.tagline.length, `${tale.id} tagline`).toBeGreaterThan(0);
       expect(tale.tone.length, `${tale.id} tone`).toBeGreaterThan(0);
@@ -32,7 +34,7 @@ describe("tale-type registry", () => {
   });
 
   it("looks up by id and returns undefined for unknown ids", () => {
-    expect(getTaleType("fable")?.label).toBe("Fable");
+    expect(getTaleType("cinderella")?.label).toBe("Cinderella");
     expect(getTaleType("does-not-exist")).toBeUndefined();
   });
 });

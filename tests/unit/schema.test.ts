@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { taleRequestSchema } from "@/lib/schema";
 
 const valid = {
-  taleTypeId: "fable",
+  taleTypeId: "cinderella",
   heroName: "Amara",
   ageBand: "6-8",
   length: "medium",
@@ -35,6 +35,12 @@ describe("taleRequestSchema", () => {
     expect(
       taleRequestSchema.safeParse({ ...valid, taleTypeId: "nope" }).success,
     ).toBe(false);
+  });
+
+  it("accepts a non-featured catalogue tale type", () => {
+    expect(
+      taleRequestSchema.safeParse({ ...valid, taleTypeId: "stone-soup" }).success,
+    ).toBe(true);
   });
 
   it("rejects an invalid age band", () => {
