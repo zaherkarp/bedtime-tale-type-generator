@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { taleRequestSchema } from "@/lib/schema";
 
 const valid = {
-  taleTypeId: "fable",
+  taleTypeId: "cinderella",
   heroName: "Amara",
   ageBand: "6-8",
   length: "medium",

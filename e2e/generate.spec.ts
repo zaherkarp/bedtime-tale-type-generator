@@ -20,7 +20,7 @@ test("pick a tale, generate a streamed story, and save it to the library", async
   await shot(page, "01-picker.png");
 
   // Choose a tale type → the form appears.
-  await page.getByTestId("tale-type-fable").click();
+  await page.getByTestId("tale-type-cinderella").click();
   await expect(page.getByTestId("hero-name")).toBeVisible();
 
   // Fill in the details.
@@ -56,6 +56,6 @@ test("pick a tale, generate a streamed story, and save it to the library", async
   await expect(
     page.getByRole("heading", { name: /my library/i }),
   ).toBeVisible();
-  await expect(page.getByText(/Amara and the Sleepy Fable/i)).toBeVisible();
+  await expect(page.getByText(/Amara and the Sleepy Cinderella/i)).toBeVisible();
   await shot(page, "04-library.png");
 });

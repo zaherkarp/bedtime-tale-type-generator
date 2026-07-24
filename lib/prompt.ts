@@ -67,9 +67,16 @@ export function buildUserBrief(request: TaleRequest): string {
   const lesson = request.lesson ? sanitizeField(request.lesson) : undefined;
 
   const lines: string[] = [];
-  lines.push(`Tell a "${tale.label}" bedtime story.`);
+  lines.push(
+    `Tell an original bedtime story shaped after the classic tale type "${tale.label}" (${tale.atuNumber}).`,
+  );
   lines.push("");
-  lines.push(`TYPE — ${tale.label}: ${tale.tagline}`);
+  lines.push(
+    `TALE TYPE — ${tale.label} (${tale.atuNumber}, ${tale.category}): ${tale.tagline}`,
+  );
+  lines.push(
+    "This is an ORIGINAL story that merely follows the traditional PATTERN of this tale type. Invent all names, places, and specifics; never retell or quote any known published version.",
+  );
   lines.push(`Tone: ${tale.tone}.`);
   lines.push("Follow this gentle shape:");
   lines.push(beatsBlock(tale));

@@ -6,8 +6,8 @@ import { saveTale, deleteTale } from "@/lib/library";
 // entry construction still work and are worth locking down.
 
 const draft = {
-  taleTypeId: "fable" as const,
-  taleTypeLabel: "Fable",
+  taleTypeId: "cinderella" as const,
+  taleTypeLabel: "Cinderella",
   heroName: "Amara",
   ageBand: "6-8" as const,
   length: "medium" as const,

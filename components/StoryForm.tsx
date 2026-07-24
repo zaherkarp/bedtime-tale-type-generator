@@ -49,6 +49,11 @@ export default function StoryForm({
         </span>
         <div>
           <p className="font-serif text-2xl text-starlight">{tale?.label}</p>
+          {tale && (
+            <p className="text-xs font-medium uppercase tracking-wide text-lavender/80">
+              {tale.atuNumber} · {tale.category}
+            </p>
+          )}
           <button
             type="button"
             data-testid="back-button"
