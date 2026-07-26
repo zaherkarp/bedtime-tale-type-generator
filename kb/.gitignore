@@ -1,0 +1,8 @@
+# Quarantined artifacts: retrieved bytes, never checked in. Rebuild with
+# `atukb acquire`; the manifests record the checksums they must match.
+artifacts/
+# Generated, license-filtered exports.
+export/
+__pycache__/
+*.egg-info/
+.pytest_cache/

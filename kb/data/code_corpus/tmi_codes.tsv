@@ -1,0 +1,37 @@
+# Versioned Thompson Motif-Index code-grammar corpus (assessment §3.6, §6.6, §9).
+#
+# The `path` column is the derived ltree path, root first. It is what makes
+# "everything under D" a prefix match rather than a recursive CTE over an edge
+# table that might disagree with the codes themselves. A parser change that
+# alters any path here changes the published hierarchy and must be reviewed.
+#
+# columns: raw <TAB> outcome <TAB> canonical <TAB> path
+# outcome is "ok" or "error"; canonical and path are empty when outcome is error.
+#
+# --- chapter roots and the bucket collapse -----------------------------------
+A0	ok	A0	A.A0
+A1	ok	A1	A.A0.A1
+D	error
+# --- the assessment's own worked example (§6.6) ------------------------------
+D672	ok	D672	D.D600.D672
+D600	ok	D600	D.D600
+D670	ok	D670	D.D600.D670
+# --- decimal sub-levels ------------------------------------------------------
+A1.1	ok	A1.1	A.A0.A1.A1_1
+A1.1.2	ok	A1.1.2	A.A0.A1.A1_1.A1_1_2
+F255.2	ok	F255.2	F.F200.F255.F255_2
+B11.2.1.1	ok	B11.2.1.1	B.B0.B11.B11_2.B11_2_1.B11_2_1_1
+# --- surrounding whitespace is not a parse failure ---------------------------
+ D672 	ok	D672	D.D600.D672
+# --- malformed: quarantined at ingest, never guessed at ----------------------
+	error
+N50[b]	error
+M100[.1]	error
+d672	error
+I100	error
+O100	error
+Y100	error
+672	error
+D672.	error
+D.672	error
+D672.a	error

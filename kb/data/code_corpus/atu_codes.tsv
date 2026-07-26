@@ -1,0 +1,68 @@
+# Versioned ATU code-grammar corpus (assessment §3.10, §9).
+#
+# Every row is a code form that appears in the tale-type literature or in one of
+# the registered sources. A parser change that alters any column here is a
+# breaking change and must be reviewed, not absorbed.
+#
+# columns: raw <TAB> outcome <TAB> kind <TAB> canonical
+# outcome is "ok" or "error"; kind and canonical are empty when outcome is error.
+#
+# --- plain types -------------------------------------------------------------
+1	ok	single	1
+2	ok	single	2
+123	ok	single	123
+510	ok	single	510
+2400	ok	single	2400
+# --- letter suffixes ---------------------------------------------------------
+510A	ok	single	510A
+510B	ok	single	510B
+1851A	ok	single	1851A
+1longAB	error
+# --- asterisked regional types -----------------------------------------------
+1851A*	ok	single	1851A*
+1525**	ok	single	1525**
+750*	ok	single	750*
+10***	ok	single	10***
+# A leading asterisk marks an unofficial/regional type. Real P2540 value.
+*171	ok	single	*171
+# --- suffix letter followed by a sub-number. Real P2540 value. ---------------
+934D1	ok	single	934D1
+513A1*	ok	single	513A1*
+# --- Cyrillic homoglyphs: real corruption in P2540, refused not transliterated
+283В*	error
+327С	error
+61В	error
+# --- printed prefixes are stripped -------------------------------------------
+ATU 510A	ok	single	510A
+ATU510A	ok	single	510A
+AT 313	ok	single	313
+AaTh 313	ok	single	313
+# --- ranges (en dash, em dash and hyphen all appear in print) ----------------
+300–359	ok	range	300-359
+300-359	ok	range	300-359
+300—359	ok	range	300-359
+1200 – 1999	ok	range	1200-1999
+510A–510B	ok	range	510A-510B
+359–300	error
+# --- compound classifications ------------------------------------------------
+327A + 328	ok	compound	327A+328
+327A+328	ok	compound	327A+328
+480 + 510A + 511	ok	compound	480+510A+511
+# --- cf. references ----------------------------------------------------------
+cf. 510A	ok	reference	cf. 510A
+cf 510A	ok	reference	cf. 510A
+Cf. 313	ok	reference	cf. 313
+cf. 327A + 328	error
+# --- malformed: these must raise, never be guessed at ------------------------
+	error
+ATU	error
+abc	error
+510a	error
+513a	error
+-510	error
+510/511	error
+99999	error
+# "300-2" is a sub-numbering written like a range; it parses as a descending
+# range and is refused rather than guessed at. Real P2540 value.
+300-2	error
+772"	error

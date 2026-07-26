@@ -1,0 +1,55 @@
+# Wikidata property P2540 (Aarne-Thompson-Uther Tale Type Index number).
+#
+# The assessment adds this source, which the original proposal omitted (§5.4).
+# It is the only ATU source with no rights question attached, which is precisely
+# why it is the tale-type spine: "incomplete and CC0" beats "complete and
+# unpublishable" for a project whose deliverable is a redistributable database.
+key: wikidata_p2540
+name: Wikidata (property P2540, ATU tale-type number)
+homepage_url: https://www.wikidata.org/wiki/Property:P2540
+description: >-
+  Tale-type identifiers, multilingual labels and stable Q-identifiers, queried
+  through the Wikidata Query Service. Community-edited, so a query date and a
+  checksum over the result set are mandatory.
+
+license_asserted_spdx: CC0-1.0
+license_reviewed_spdx: CC0-1.0
+license_asserted_evidence: wikidata_p2540/license.html
+reviewed_by: repository maintainer
+reviewed_at: 2026-07-26
+review_reasoning: >-
+  Wikidata's structured data is dedicated to the public domain under CC0-1.0 by
+  the Wikimedia Foundation's terms of use, which is asserted on the project
+  itself rather than by a downstream transcriber, so there is no gap between
+  what the licensor holds and what it grants. Labels are contributed under the
+  same dedication.
+
+reading_ok: true
+extraction_ok: true
+transformation_ok: true
+redistribution_ok: true
+commercial_ok: true
+share_alike_required: false
+attribution_text_required: null
+
+upstream_rights_status: clear
+database_right_status: not_applicable
+open_questions: []
+
+gate_status: approved_for_ingestion
+
+ingestable_fields:
+  p2540:
+    identity:
+      - qid
+      - atu_code
+      - label
+      - language
+
+publication:
+  identity:
+    status: approved
+    reasoning: >-
+      CC0-1.0 dedication made by the licensor over its own structured data. No
+      upstream compilation stands behind it whose rights could be narrower.
+    open_questions: []
