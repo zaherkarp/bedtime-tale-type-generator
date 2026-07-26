@@ -38,23 +38,25 @@ jobs:
   # swap are the things most worth testing, and none of them can be faked.
   knowledge-base:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: atukb
-          POSTGRES_PASSWORD: atukb
-          POSTGRES_DB: atukb
-        ports: ["5432:5432"]
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     env:
       ATUKB_DSN: postgresql://atukb:atukb@127.0.0.1:5432/atukb
     steps:
       - uses: actions/checkout@v4
+
+      # The runner image already ships PostgreSQL 16 with contrib, so we use it
+      # rather than a service container. A service container would pull
+      # postgres:16 from Docker Hub on every run, which buys nothing here and
+      # fails the job outright when the registry is briefly unreachable — as it
+      # was on this workflow's first run.
+      - name: Start PostgreSQL
+        run: |
+          sudo systemctl start postgresql@16-main.service \
+            || sudo pg_ctlcluster 16 main start
+          for _ in $(seq 1 30); do pg_isready -q && break; sleep 1; done
+          pg_isready
+          sudo -u postgres psql -v ON_ERROR_STOP=1 \
+            -c "CREATE ROLE atukb LOGIN PASSWORD 'atukb' SUPERUSER"
+          sudo -u postgres createdb -O atukb atukb
 
       - name: Set up Python
         uses: actions/setup-python@v5
