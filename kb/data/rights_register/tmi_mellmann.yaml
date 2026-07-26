@@ -1,0 +1,103 @@
+# Katja Mellmann's CSV transcription of Thompson's Motif-Index.
+#
+# The assessment's §5.1 verdict: authoritative for codes, labels and hierarchy,
+# *conditional on the renewal question*; bibliographic notes are the thicker,
+# more clearly copyrightable content and are gated separately. That is what the
+# ingestable/withheld split below encodes.
+key: tmi_mellmann
+name: Thompson Motif-Index as CSV (Mellmann)
+homepage_url: https://github.com/KatjaMellmann/TMI_as_CSV
+description: >-
+  46,302 motif rows transcribed from Stith Thompson, Motif-Index of
+  Folk-Literature, revised and enlarged edition, 6 vols, Bloomington IN: Indiana
+  University Press 1955-1958.
+
+license_asserted_spdx: CC-BY-4.0
+license_reviewed_spdx: CC-BY-4.0
+license_asserted_evidence: tmi_mellmann/LICENSE
+reviewed_by: repository maintainer
+reviewed_at: 2026-07-26
+review_reasoning: >-
+  The repository states CC-BY-4.0 and the transcriber is identifiable. The
+  license is accepted as governing the transcription itself. It is NOT accepted
+  as resolving the rights in the underlying compilation: a permissive license
+  applied by a transcriber cannot convey rights the transcriber did not hold
+  (§5.1). Codes and short labels are thin factual identifiers; the
+  bibliographies column is not, and is withheld from core accordingly.
+
+reading_ok: true
+extraction_ok: true
+transformation_ok: true
+redistribution_ok: true
+commercial_ok: false
+share_alike_required: false
+attribution_text_required: >-
+  Motif data from Katja Mellmann, TMI_as_CSV (CC BY 4.0), transcribed from Stith
+  Thompson, Motif-Index of Folk-Literature, rev. ed., Indiana University Press
+  1955-1958.
+
+# The 1955-58 revised edition is a US work of a period that required renewal.
+# If renewed, protection runs 95 years from publication. This is unresolved and
+# is the reason this source cannot reach approved_for_publication.
+upstream_rights_status: unresolved
+database_right_status: unresolved
+open_questions:
+  - >-
+    Was the 1955-1958 revised edition's copyright renewed? Resolving evidence:
+    the renewal record in the Catalog of Copyright Entries, or the Stanford
+    Copyright Renewal Database, for the six volumes.
+  - >-
+    Does Indiana University Press assert any continuing rights in the
+    compilation's structure as distinct from its contents?
+  - >-
+    EU/UK sui generis database right in the compilation - jurisdiction-dependent
+    and needs professional review, not an engineer's reading.
+
+gate_status: approved_for_ingestion
+
+ingestable_fields:
+  tmi:
+    structure:
+      - code
+      - MOTIF
+      - chapter
+      - division1
+      - division2
+      - division3
+      - section ("tens")
+      - "[sorting field]"
+
+# §5.1 gates this source's structure and its annotations separately, and they
+# get different answers.
+publication:
+  structure:
+    status: approved
+    reasoning: >-
+      Motif codes, their short labels and the hierarchy those codes encode are
+      thin factual identifiers - the same category §5.3 identifies for ATU
+      numbers and canonical titles. They are published under the transcriber's
+      CC-BY-4.0 with the required attribution naming both the transcriber and
+      Thompson. The renewal question below is recorded against the annotations
+      class, which is where the thick copyrightable content sits, and the
+      contingency if it resolves badly is written down in
+      docs/atu-kb-decisions.md rather than left implicit.
+    open_questions: []
+  annotations:
+    status: withheld
+    reasoning: >-
+      Extended bibliographic annotations are the creative content of the
+      Motif-Index. They are not ingested into core at all, and could not be
+      published even if they were.
+    open_questions:
+      - >-
+        Was the 1955-1958 revised edition's copyright renewed? Until answered,
+        no annotation text may leave raw.
+
+withheld_fields:
+  bibliographies: >-
+    Extended bibliographic annotations are the thicker, more clearly
+    copyrightable content of the Motif-Index (§5.1). They are preserved in
+    immutable raw for citation checking and never normalised into core.
+  "1st ed.": >-
+    First-edition concordance codes are retained in raw only; mapping them into
+    core would assert an edition relationship this source does not document.

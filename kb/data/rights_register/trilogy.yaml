@@ -1,0 +1,122 @@
+# j-hagedorn/trilogy - reference datasets for folktale motifs and tale types.
+#
+# The assessment's §5.2 verdict, held exactly: trilogy is excellent scaffolding
+# and a poor authority. Its value is that it lets the pipeline be built and
+# tested without touching the books; its limitation is that everything in it is
+# a transcription of something else, so a citation chain that stops here is
+# incomplete by construction (§3.7).
+#
+# Nothing from this source may be published while upstream_rights_status is
+# unresolved. Flipping redistribution_ok to false removes every
+# trilogy-contributed record from publish and from every export, with no code
+# change - see tests/test_rights_gates.py::test_flipping_redistribution_empties_export.
+key: trilogy
+name: trilogy (Hagedorn) - ATU tale types, motif sequences, and co-occurrences
+homepage_url: https://github.com/j-hagedorn/trilogy
+description: >-
+  atu_df (2,247 tale-type rows), atu_seq (592,999 type-motif rows) and
+  atu_combos (4,696 co-occurrence rows), plus a Motif-Index copy that is
+  redundant with tmi_mellmann and is deliberately not ingested as a peer (§5.2).
+
+license_asserted_spdx: CC-BY-SA-4.0
+license_reviewed_spdx: CC-BY-SA-4.0
+license_asserted_evidence: trilogy/README.md
+reviewed_by: repository maintainer
+reviewed_at: 2026-07-26
+review_reasoning: >-
+  The repository asserts CC-BY-SA-4.0 and states its contents are "either in the
+  public domain, or permissions have been granted by the copyright holder".
+  That statement is accepted as the licensor's assertion and recorded as such;
+  it is not accepted as evidence, because the tale-type content derives from
+  Uther (2004), which is unambiguously in copyright, and the annotated corpus
+  was seeded from D.L. Ashliman's Folktexts, which the assessment classifies as
+  reference-only and explicitly not to be ingested without permission (§5.5).
+  Ingestion is therefore limited to thin factual columns - the ATU number, the
+  short tale name, and the division headings - and the thick Uther-derived text
+  is withheld from core.
+
+reading_ok: true
+extraction_ok: true
+transformation_ok: true
+# Share-alike is contagious: any published record this source materially
+# contributes to becomes CC-BY-SA-4.0. See atukb.rights.gates.effective_license.
+redistribution_ok: true
+commercial_ok: false
+share_alike_required: true
+attribution_text_required: >-
+  Tale-type data from j-hagedorn/trilogy (CC BY-SA 4.0), derived from
+  Hans-Jorg Uther, The Types of International Folktales (2004).
+
+upstream_rights_status: unresolved
+database_right_status: unresolved
+open_questions:
+  - >-
+    Uther (2004) is in copyright and is published in Finland. Did trilogy's
+    compiler hold the rights it grants over Uther-derived content? Resolving
+    evidence: trilogy's own documentation of what it transcribed and under what
+    permission.
+  - >-
+    How was atu_seq constructed? Uther lists motifs per type largely WITHOUT
+    narrative ordering, so a motif_order column may encode ordering the
+    underlying authority does not assert. Until answered, every atu_seq edge is
+    stored with derivation='inferred' and evidence_kind='inferred_from' (§5.2).
+  - >-
+    The corpus was seeded from D.L. Ashliman's Folktexts, which is a personally
+    maintained compilation containing Ashliman's own translations. No aft
+    content is ingested; confirm no aft-derived text reached atu_df.
+  - >-
+    EU/UK sui generis database right over the Uther compilation - needs
+    professional review.
+
+gate_status: approved_for_ingestion
+
+ingestable_fields:
+  atu_df:
+    thin_facts:
+      - atu_id
+      - tale_name
+      - chapter
+      - division
+      - sub_division
+  atu_seq:
+    thin_facts:
+      - atu_id
+      - tale_variant
+      - motif_order
+      - motif
+  atu_combos:
+    thin_facts:
+      - atu_id
+      - combos
+
+publication:
+  thin_facts:
+    status: approved
+    reasoning: >-
+      ATU numbers, short tale names and motif-code associations are the thin
+      factual layer §5.3 identifies, published under this source's CC-BY-SA-4.0
+      with attribution naming both trilogy and Uther. Share-alike is contagious,
+      so any record this class contributes to becomes CC-BY-SA-4.0 - which is
+      exactly what effective_license computes. The upstream questions recorded
+      on this source remain open and are surfaced verbatim by GET /v0/sources;
+      they are not treated as resolved by this decision. If professional review
+      lands badly, setting redistribution_ok to false here removes every
+      trilogy-contributed record from publish and from every export without a
+      code change, which is §10's "pause the ATU-derived portion" made operable.
+    open_questions: []
+
+withheld_fields:
+  tale_type: >-
+    Uther's tale-type summary. This is the creative editorial work and the most
+    tempting content; §5.3's asymmetry says the parts you most want are the
+    parts you most clearly may not take. Raw only.
+  remarks: >-
+    Uther's editorial apparatus. Raw only, for the same reason as tale_type.
+  litvar: >-
+    Uther's bibliographic essays on literary variants. Raw only.
+  provenance: >-
+    Uther's national-index citations. Substantial creative selection and
+    arrangement. Raw only.
+  combos: >-
+    Redundant with the atu_combos dataset, which carries the same claim in a
+    parseable shape. Ingested from atu_combos, not from this denormalised copy.
