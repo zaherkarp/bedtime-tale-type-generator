@@ -52,21 +52,25 @@ class TmiCode:
         return (self.number // 100) * 100
 
     @property
-    def tens(self) -> int:
-        """The tens bucket ("section") the Motif-Index itself uses, e.g. 670."""
-        return (self.number // 10) * 10
-
-    @property
     def ancestors(self) -> tuple[str, ...]:
         """Canonical codes of every ancestor, outermost first, excluding self.
 
-        ``D672.1`` yields ``('D', 'D600', 'D670', 'D672')``.
+        ``D672.1`` yields ``('D', 'D600', 'D672')`` — chapter, hundreds bucket,
+        then the integer code and any decimal levels below it, exactly the shape
+        §6.6 specifies.
+
+        There is deliberately no "tens" level, even though the printed index has
+        section headings that look decimal. Those sections are variable-width —
+        ``A70. Creator - miscellaneous`` runs to A99 — so a decade bucket derived
+        from the code would not be the index's own section, and a level derived
+        from the *heading* would make the path depend on a second column that
+        can disagree with the identifier. That is the failure §3.6 is about, so
+        the path stays a pure function of the code.
         """
         stem = f"{self.chapter}{self.number}"
         out = [
             self.chapter,
             f"{self.chapter}{self.hundreds}",
-            f"{self.chapter}{self.tens}",
             stem,
         ]
         # Collapse the buckets that coincide with the code itself: D600 is its
@@ -138,11 +142,12 @@ RANGE_RE = re.compile(r"^([A-Z])(\d+)[–-]([A-Z])?(\d+)\.")
 SINGLE_RE = re.compile(r"^([A-Z])(\d+)\.")
 
 
-def parse_range(heading: str) -> tuple[str, int, int] | None:
+def parse_range(heading: str) -> tuple[str, int, int | None] | None:
     """Parse a division/section heading into ``(chapter, low, high)``.
 
-    Returns ``None`` when the heading carries no code range, which is how the
-    CSV represents "this level does not apply to this row".
+    ``high`` is ``None`` for a bare section heading, which states a start and no
+    end. Returns ``None`` when the heading carries no code range at all, which
+    is how the CSV represents "this level does not apply to this row".
     """
     text = (heading or "").strip()
     if not text:
@@ -152,9 +157,12 @@ def parse_range(heading: str) -> tuple[str, int, int] | None:
         return m.group(1), int(m.group(2)), int(m.group(4))
     m = SINGLE_RE.match(text)
     if m:
-        # A bare section heading such as ``D670. Magic flight.`` covers its tens.
-        low = int(m.group(2))
-        return m.group(1), low, low + 9
+        # A bare section heading such as ``A70. Creator - miscellaneous.`` states
+        # where the section *starts* and nothing about where it ends; the real
+        # extent runs to the next heading, which this string does not contain.
+        # Returning an open upper bound keeps the witness honest instead of
+        # inventing a decade the index does not use.
+        return m.group(1), int(m.group(2)), None
     return None
 
 
@@ -171,4 +179,6 @@ def contains(heading: str, code: TmiCode) -> bool | None:
     if rng is None:
         return None
     chapter, low, high = rng
-    return chapter == code.chapter and low <= code.number <= high
+    if chapter != code.chapter or code.number < low:
+        return False
+    return True if high is None else code.number <= high

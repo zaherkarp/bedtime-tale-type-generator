@@ -17,6 +17,7 @@
  */
 
 import { TALE_TYPES } from "./tale-types";
+import { ATU_CANONICAL_TITLES, type AtuCanonicalTitle } from "./atu-canonical";
 
 /** The seven top-level divisions of the ATU index, in order. */
 export const ATU_CATEGORIES = [
@@ -46,6 +47,18 @@ export interface AtuIndexEntry {
   blurb: string;
   /** True when a rich, hand-authored TaleType (with beats) backs this entry. */
   featured: boolean;
+  /**
+   * The canonical scholarly title, generated from the ATU knowledge base in
+   * `kb/`, carrying the source that asserted it. Undefined where the knowledge
+   * base has no record for this number yet.
+   *
+   * Deliberately separate from `title`. The canonical title of ATU 328 is "The
+   * Boy Steals the Ogre's Treasure"; the title a child should see is "Jack and
+   * the Beanstalk". The knowledge base owns the first and this app owns the
+   * second — the same split between a verbatim source label and a safe display
+   * label that the knowledge base makes internally.
+   */
+  canonical?: AtuCanonicalTitle;
 }
 
 /**
@@ -134,21 +147,26 @@ const EXTRA_TYPES: readonly ExtraType[] = [
 ];
 
 /** Featured entries, derived from the rich TaleType registry. */
-const FEATURED_ENTRIES: readonly AtuIndexEntry[] = TALE_TYPES.map((t) => ({
-  id: t.id,
-  atu: t.atuNumber.replace(/^ATU\s+/i, ""),
-  title: t.label,
-  category: t.category as AtuCategory,
-  emoji: t.emoji,
-  blurb: t.tagline,
-  featured: true,
-}));
+const FEATURED_ENTRIES: readonly AtuIndexEntry[] = TALE_TYPES.map((t) => {
+  const atu = t.atuNumber.replace(/^ATU\s+/i, "");
+  return {
+    id: t.id,
+    atu,
+    title: t.label,
+    category: t.category as AtuCategory,
+    emoji: t.emoji,
+    blurb: t.tagline,
+    featured: true,
+    canonical: ATU_CANONICAL_TITLES[atu],
+  };
+});
 
 /** Non-featured entries, with category derived from the ATU number. */
 const EXTRA_ENTRIES: readonly AtuIndexEntry[] = EXTRA_TYPES.map((e) => ({
   ...e,
   category: atuCategory(e.atu),
   featured: false,
+  canonical: ATU_CANONICAL_TITLES[e.atu],
 }));
 
 /** The full bedtime-safe ATU catalogue: featured types first, then the rest. */

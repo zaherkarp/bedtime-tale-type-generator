@@ -45,8 +45,11 @@ def dsn() -> str:
 
 @pytest.fixture
 def conn(dsn: str):
-    with psycopg.connect(dsn) as c:
+    from atukb.db import connect
+
+    with connect(dsn) as c:
         yield c
+        c.rollback()
 
 
 @pytest.fixture(scope="session")

@@ -64,9 +64,23 @@ def test_ltree_label_round_trip_is_lossless() -> None:
 
 def test_tmi_ancestors_are_strict_prefixes_of_the_path() -> None:
     code = tmi.parse("D672.1")
-    assert code.ancestors == ("D", "D600", "D670", "D672")
-    assert code.path == "D.D600.D670.D672.D672_1"
-    assert code.depth == 5
+    assert code.ancestors == ("D", "D600", "D672")
+    assert code.path == "D.D600.D672.D672_1"
+    assert code.depth == 4
+
+
+def test_section_headings_state_a_start_and_not_an_end() -> None:
+    """The printed sections are variable-width, so the witness must not guess.
+
+    ``A70. Creator - miscellaneous`` runs all the way to A99. Reading it as a
+    decade quarantined a fifth of the Motif-Index on a mismatch that was the
+    checker's invention, not the data's.
+    """
+    assert tmi.parse_range("A70. Creator – miscellaneous.") == ("A", 70, None)
+    assert tmi.parse_range("A0–A99. Creator.") == ("A", 0, 99)
+    assert tmi.contains("A70. Creator – miscellaneous.", tmi.parse("A81")) is True
+    assert tmi.contains("A70. Creator – miscellaneous.", tmi.parse("A69")) is False
+    assert tmi.contains("A70. Creator – miscellaneous.", tmi.parse("B81")) is False
 
 
 def test_only_single_atoms_may_own_a_record() -> None:

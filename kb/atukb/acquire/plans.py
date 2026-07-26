@@ -13,13 +13,21 @@ from atukb.acquire.artifact_store import Artifact, ArtifactStore
 
 USER_AGENT = "atukb/0.1 (folklore knowledge base; +https://github.com/zaherkarp)"
 
-#: Every ATU tale type in Wikidata with its label. Wikidata is CC0, which is what
-#: makes it the tale-type spine (§5.4); it is also community-edited, so the
-#: retrieval is checksummed like any other artifact and the query is pinned here
-#: rather than composed at call time.
+#: Wikidata items that *are* ATU tale types, with their multilingual labels.
+#: Wikidata is CC0, which is what makes it the tale-type spine (§5.4); it is also
+#: community-edited, so the retrieval is checksummed like any other artifact and
+#: the query is pinned here rather than composed at call time.
+#:
+#: The ``P31 = Q47451145`` filter is load-bearing, not tidying. P2540 is carried
+#: by individual stories as well as by the types themselves — "this tale is an
+#: instance of ATU 500" — and about a third of the property's ~1,900 subjects are
+#: instances. Without the filter the spine treats a variant's title as the type's
+#: canonical title, so ATU 500 comes back as "Whuppity Stoorie" rather than
+#: "Rumpelstiltskin". Tale *examples* are deferred to v1.1 (§7 Out).
 P2540_SPARQL = """
 SELECT ?item ?atu ?label ?lang WHERE {
   ?item wdt:P2540 ?atu .
+  ?item wdt:P31 wd:Q47451145 .
   ?item rdfs:label ?labelNode .
   BIND(STR(?labelNode) AS ?label)
   BIND(LANG(?labelNode) AS ?lang)

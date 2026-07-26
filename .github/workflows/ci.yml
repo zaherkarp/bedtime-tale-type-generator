@@ -31,3 +31,52 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  # The knowledge base is a separate deliverable with its own toolchain, so it
+  # gets its own job rather than being bolted onto the app's. It needs a real
+  # Postgres: ltree, pg_trgm, the immutability trigger and the atomic publish
+  # swap are the things most worth testing, and none of them can be faked.
+  knowledge-base:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: atukb
+          POSTGRES_PASSWORD: atukb
+          POSTGRES_DB: atukb
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      ATUKB_DSN: postgresql://atukb:atukb@127.0.0.1:5432/atukb
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: pip install -e "kb[dev]"
+
+      - name: Migrate
+        working-directory: kb
+        run: alembic upgrade head
+
+      # No network fetch here: the tests that need ingested data skip when the
+      # database is empty, so CI checks the schema invariants, the gates and the
+      # code grammars on every push. The data-dependent exit criteria run
+      # locally against a populated database.
+      - name: Tests
+        working-directory: kb
+        run: pytest -q
+
+      - name: Gates report
+        working-directory: kb
+        run: python -m atukb.cli gates

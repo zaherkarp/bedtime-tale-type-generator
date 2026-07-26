@@ -133,3 +133,21 @@ must run on the Node.js runtime (it already declares this).
 
 > **Note:** This MVP has no rate limiting — the endpoint uses the deploy owner's
 > API key. For a public deployment, add authentication or per-IP limiting first.
+
+## The ATU knowledge base
+
+`kb/` holds a separate deliverable: a provenance-first folklore knowledge base
+of ATU tale types and Thompson Motif-Index motifs, built to the architecture in
+[`docs/atu-kb-assessment.md`](docs/atu-kb-assessment.md). It is a Python +
+Postgres subproject with no runtime connection to this app — see
+[`kb/README.md`](kb/README.md) to run it, and
+[`docs/atu-kb-decisions.md`](docs/atu-kb-decisions.md) for the decisions taken
+and the rights questions that remain open.
+
+The app consumes it only at build time. `npm run sync:atu` regenerates the
+factual fields of `lib/atu-index.ts` — ATU number and canonical title — from the
+knowledge base's license-filtered export, and never touches the hand-authored
+`blurb`, `emoji` or `id`. Those are original bedtime content, deliberately not
+the academic summaries, and the knowledge base does not model them. Without an
+export present the script is a no-op, so `npm run build` never depends on
+Postgres.
