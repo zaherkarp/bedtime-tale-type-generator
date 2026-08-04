@@ -5,7 +5,8 @@ import { type AgeBand, type TaleLength } from "@/lib/tale-types";
 import { getAtuEntry } from "@/lib/atu-index";
 import { AGE_BANDS, AGE_BAND_ORDER } from "@/lib/age-bands";
 import { LENGTHS, LENGTH_ORDER } from "@/lib/length";
-import type { TaleRequest } from "@/lib/schema";
+import { motifsFor } from "@/lib/motifs";
+import { MAX_MOTIFS, type TaleRequest } from "@/lib/schema";
 
 export default function StoryForm({
   taleTypeId,
@@ -24,8 +25,22 @@ export default function StoryForm({
   const [setting, setSetting] = useState("");
   const [lesson, setLesson] = useState("");
   const [touched, setTouched] = useState(false);
+  const [motifCodes, setMotifCodes] = useState<string[]>([]);
+
+  // The real Thompson motifs recorded for this tale type, already screened.
+  const motifs = tale ? motifsFor(tale.atu) : [];
 
   const heroMissing = heroName.trim().length === 0;
+
+  function toggleMotif(code: string) {
+    setMotifCodes((cur) =>
+      cur.includes(code)
+        ? cur.filter((c) => c !== code)
+        : cur.length >= MAX_MOTIFS
+          ? cur
+          : [...cur, code],
+    );
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -39,6 +54,7 @@ export default function StoryForm({
       companions: companions.trim() || undefined,
       setting: setting.trim() || undefined,
       lesson: lesson.trim() || undefined,
+      motifCodes: motifCodes.length ? motifCodes : undefined,
     });
   }
 
@@ -125,7 +141,7 @@ export default function StoryForm({
       {/* Length */}
       <fieldset className="mb-6">
         <legend className="mb-2 font-medium text-starlight">How long?</legend>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {LENGTH_ORDER.map((id) => {
             const len = LENGTHS[id];
             const active = length === id;
@@ -136,21 +152,57 @@ export default function StoryForm({
                 data-testid={`length-${id}`}
                 aria-pressed={active}
                 onClick={() => setLength(id)}
-                className={`rounded-xl border px-3 py-3 text-center transition ${
+                className={`flex min-h-14 flex-row items-center justify-between gap-2 rounded-xl border px-4 py-3 text-left transition sm:flex-col sm:justify-center sm:text-center ${
                   active
                     ? "border-amber/70 bg-surface-2"
                     : "border-white/12 bg-surface/60 hover:border-white/25"
                 }`}
               >
-                <span className="block font-medium text-starlight">
-                  {len.label}
-                </span>
-                <span className="block text-xs text-muted">{len.readAloud}</span>
+                <span className="font-medium text-starlight">{len.label}</span>
+                <span className="text-xs text-muted">{len.readAloud}</span>
               </button>
             );
           })}
         </div>
       </fieldset>
+
+      {/* Folklore motifs — only where the knowledge base has some for this type */}
+      {motifs.length > 0 && (
+        <fieldset className="mb-6">
+          <legend className="mb-1 font-medium text-starlight">
+            Add a traditional twist?
+          </legend>
+          <p className="mb-3 text-sm text-muted">
+            Real threads folklorists recorded for this tale type. Pick up to{" "}
+            {MAX_MOTIFS} — or none at all.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {motifs.map((m) => {
+              const active = motifCodes.includes(m.code);
+              const full = !active && motifCodes.length >= MAX_MOTIFS;
+              return (
+                <button
+                  key={m.code}
+                  type="button"
+                  data-testid={`motif-${m.code}`}
+                  aria-pressed={active}
+                  disabled={full}
+                  onClick={() => toggleMotif(m.code)}
+                  title={`Thompson Motif-Index ${m.code}`}
+                  className={`min-h-10 rounded-full border px-4 py-2 text-left text-sm transition ${
+                    active
+                      ? "border-amber/70 bg-surface-2 text-starlight"
+                      : "border-white/15 text-muted hover:border-white/25"
+                  } ${full ? "cursor-default opacity-40" : ""}`}
+                >
+                  {active ? "✨ " : ""}
+                  {m.label}
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
+      )}
 
       {/* Optional details */}
       <details className="mb-6 rounded-xl border border-white/10 bg-surface/40 px-4 py-3">
@@ -185,7 +237,7 @@ export default function StoryForm({
       <button
         type="submit"
         data-testid="generate-button"
-        className="w-full rounded-xl bg-amber px-6 py-4 text-lg font-semibold text-night shadow-lg transition hover:bg-amber-soft focus-visible:outline-2"
+        className="min-h-14 w-full rounded-xl bg-amber px-6 py-4 text-lg font-semibold text-night shadow-lg transition hover:bg-amber-soft focus-visible:outline-2"
       >
         Tell me a story ✨
       </button>

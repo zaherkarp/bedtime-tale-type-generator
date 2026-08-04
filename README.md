@@ -94,19 +94,69 @@ per-request brief, then streams the story from Claude as newline-delimited JSON
 events (`{"t":"delta","text":"…"}` … `{"t":"done"}`). User-supplied details are
 sanitized and clearly framed as story _data_, never instructions.
 
-### Add a new tale type
+### The three catalogue tiers
 
-- **Catalogue-only type:** append one object to `EXTRA_TYPES` in
-  `lib/atu-index.ts` — `id`, `atu`, `title`, `emoji`, and a gentle `blurb`. Its
-  category is derived from the ATU number. It appears in `/browse` and can be
-  generated immediately (the storyteller works from the title + blurb).
-- **Featured type:** also append an object to `TALE_TYPES` in `lib/tale-types.ts`
-  (same `id`) with a rich `beats`, `signatureElements`, `tone`, and
-  `exampleOpener`. It joins the home picker and drives a richer prompt.
+The catalogue is 316 tale types in three tiers, ordered by how much anybody has
+actually vouched for them:
 
-Keep it bedtime-safe: no death, peril, horror, cruelty, or romance. Unit tests
-enforce that every entry is complete and that featured types stay in sync with
-the catalogue.
+| Tier | Count | Where | Drives the prompt with |
+|---|---|---|---|
+| `featured` | 12 | `lib/tale-types.ts`, hand-authored | beats, signature elements, tone, opener |
+| `curated` | 50 | `EXTRA_TYPES` in `lib/atu-index.ts`, hand-authored | title + blurb |
+| `extended` | 254 | `lib/atu-extended.ts`, **generated** | title only |
+
+**Adding a hand-authored type:** append one object to `EXTRA_TYPES` — `id`,
+`atu`, `title`, `emoji`, and a gentle `blurb`; the category is derived from the
+ATU number. For a featured type, also append to `TALE_TYPES` with the same `id`.
+Keep it bedtime-safe: no death, peril, horror, cruelty, or romance.
+
+**Regenerating the extended tier** (needs the knowledge base export):
+
+```bash
+npm run catalogue:propose   # ATU index → data/atu-candidates.json
+npm run catalogue:build     # candidates + motif screens → lib/atu-extended.ts
+npm run motifs:build        # → lib/motifs.ts and lib/credits.ts
+```
+
+### How the generated tier stays bedtime-safe
+
+The full ATU index is ~2,250 tale types and most of them have no business in a
+bedtime app. Four screens run in order, and every one of them fails closed:
+
+1. **The stem screen** (`lib/safety.ts`) over the canonical title. It matches
+   *stems*, not words, because an earlier word-matching version passed ATU 36 —
+   "The Fox **Rapes** the She-Bear" — on the grounds that its list held `rape`
+   and `raped` but not `rapes`.
+2. **Two whole divisions are excluded outright.** *Anecdotes and Jokes*
+   (1200–1999) are funny because somebody is humiliated, and *Tales of the
+   Stupid Ogre* (1000–1199) turn on harming an ogre. Both are structurally at
+   odds with "humour is warm and never mean". A word list will always be one
+   unfamiliar word behind; a structural rule will not.
+3. **Motif screens.** A tale type with no motif data is dropped — "we could not
+   check" is not a pass. So is any type carrying a motif with a knowledge-base
+   content advisory, or whose *motif labels* trip the stem screen. Labels are
+   far more descriptive than titles, so this catches the most.
+4. **A regression list** in `tests/unit/atu-index.test.ts` names known-grim ATU
+   numbers across every division and fails if a regeneration lets one back in.
+
+None of that is the real backstop. `SYSTEM_PROMPT` in `lib/prompt.ts` forbids
+death, injury, peril, cruelty, horror and romance in **every** story regardless
+of tale type, and the wind-down arc applies unconditionally. The screens decide
+what a parent is *offered*; the prompt decides what a child *hears*.
+
+Generated entries carry no blurb. A model could write one for each, but an
+invented description printed next to a real ATU number reads as authoritative
+when nobody has read the tale — so the catalogue shows the number and division
+and says nothing it cannot stand behind.
+
+### Traditional twists (motifs)
+
+`lib/motifs.ts` carries 489 Thompson Motif-Index motifs across 217 tale types —
+the real ones folklorists recorded, filtered to those short and gentle enough to
+hand a bedtime storyteller. The form offers up to three per story. The knowledge
+base records these links as *inferred* rather than asserted, so the prompt asks
+for them as ingredients and never as a plot. Attribution is required by their
+licences and is shown at `/credits`.
 
 ### Tale-type data & sources
 
@@ -118,6 +168,27 @@ public-domain tale texts (for reference) live at
 [Multilingual Folk Tale Database](http://www.mftd.org/). The one-line blurbs in
 this repo are original, bedtime-framed descriptions — not the academic ATU
 summaries.
+
+## On your phone
+
+The app is an installable PWA. Open it on a phone, use "Add to Home Screen", and
+it launches standalone with its own icon and no browser chrome.
+
+- **Offline reading.** A service worker (`public/sw.js`) caches the app shell,
+  and saved tales already live in `localStorage`, so the library is readable
+  with no signal. `/api/tale` is deliberately never intercepted — a service
+  worker in front of an NDJSON stream would buffer a story that is supposed to
+  arrive word by word.
+- **Reading controls.** A−/A+ text sizing and a "deep night" mode that dims the
+  whole palette a further notch, both remembered per device and applied on every
+  page.
+- **Screen wake lock** while a story streams or is read aloud, so the phone does
+  not lock two paragraphs from "goodnight".
+- **Safe-area insets** so nothing hides under a notch or a home indicator.
+
+Pinch-to-zoom is deliberately left enabled. Locking it is a common way to make a
+web app feel native and it takes zoom away from anyone who needs it, which for a
+page of prose read in the dark is exactly the wrong trade.
 
 ## Privacy
 
@@ -131,8 +202,27 @@ Deploy anywhere that runs a Node.js Next.js server (e.g. Vercel). Set
 `ANTHROPIC_API_KEY` in the environment. The `/api/tale` route streams, so it
 must run on the Node.js runtime (it already declares this).
 
-> **Note:** This MVP has no rate limiting — the endpoint uses the deploy owner's
-> API key. For a public deployment, add authentication or per-IP limiting first.
+### Set a passcode before you put it on the internet
+
+`/api/tale` spends your Anthropic key on every request and there is still no
+rate limiting, so an open deployment is an open tab at your expense. Set
+`PARENT_PASSCODE` and the app asks for it once:
+
+```bash
+PARENT_PASSCODE="something only you know"
+```
+
+One shared code, no accounts. Entering it sets an httpOnly cookie that lasts 30
+days, so a phone is unlocked once and then forgets about it; changing the value
+signs every device out, because the token signing key is derived from the
+passcode itself. Comparison is timing-safe and the passcode never reaches the
+client bundle.
+
+Leave it unset and the app is open, which is what you want locally — that is
+also what keeps the Playwright suite running with no setup.
+
+> **Still missing:** per-IP rate limiting. The passcode stops strangers, not a
+> shared code that leaks.
 
 ## The ATU knowledge base
 

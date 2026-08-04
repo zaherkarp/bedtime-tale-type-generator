@@ -29,8 +29,25 @@ jobs:
       - name: Unit tests
         run: npm test
 
+      - name: Generated files are in sync
+        # The catalogue and motif tables are generated from the knowledge base
+        # and committed. These fail if someone edits them by hand, or changes a
+        # screen without regenerating. Both no-op without `kb/export/`, which is
+        # gitignored, so this checks the committed files against each other.
+        run: |
+          npm run sync:atu:check
+          npm run catalogue:check
+          npm run motifs:check
+
       - name: Build
         run: npm run build
+
+      - name: End-to-end tests
+        # No API key needed: MOCK_TALE=1 is set by playwright.config.ts, and the
+        # browser is cached by setup-node's npm cache via the Playwright deps.
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:e2e
 
   # The knowledge base is a separate deliverable with its own toolchain, so it
   # gets its own job rather than being bolted onto the app's. It needs a real

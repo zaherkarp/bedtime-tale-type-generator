@@ -17,6 +17,26 @@
 
 :root {
   color-scheme: dark;
+  /* Multiplier for the story's font size, set by the A−/A+ controls. */
+  --story-scale: 1;
+}
+
+/**
+ * Deep night: one notch below the normal dark theme, for reading beside a
+ * child who is nearly asleep. It re-points the theme's colour tokens rather
+ * than filtering the page, so contrast stays under our control instead of
+ * being whatever `brightness()` happens to produce.
+ */
+:root[data-deep-night="true"] {
+  --color-night: #05070f;
+  --color-night-deep: #03050b;
+  --color-surface: #0b0f21;
+  --color-surface-2: #121734;
+  --color-starlight: #a9b0cf;
+  --color-muted: #6d769c;
+  --color-amber: #c2954f;
+  --color-amber-soft: #cfa869;
+  --color-lavender: #8778bd;
 }
 
 body {
@@ -33,6 +53,25 @@ body {
   border-radius: 4px;
 }
 
+/**
+ * The common page frame. Padding lives here rather than in Tailwind classes so
+ * the notch and home-indicator insets are handled once — `env()` returns 0 on
+ * every device without them, so the `max()` collapses to the plain value.
+ */
+.page-shell {
+  padding-top: max(1.5rem, env(safe-area-inset-top));
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+@media (min-width: 640px) {
+  .page-shell {
+    padding-left: max(1.5rem, env(safe-area-inset-left));
+    padding-right: max(1.5rem, env(safe-area-inset-right));
+  }
+}
+
 /* --- Starfield ------------------------------------------------------------ */
 .starfield {
   position: fixed;
@@ -42,6 +81,13 @@ body {
   background:
     radial-gradient(1200px 800px at 80% -10%, #1b2352 0%, transparent 60%),
     radial-gradient(900px 700px at 10% 110%, #171d45 0%, transparent 55%),
+    linear-gradient(180deg, var(--color-night) 0%, var(--color-night-deep) 100%);
+}
+
+:root[data-deep-night="true"] .starfield {
+  background:
+    radial-gradient(1200px 800px at 80% -10%, #0d1130 0%, transparent 60%),
+    radial-gradient(900px 700px at 10% 110%, #0a0e28 0%, transparent 55%),
     linear-gradient(180deg, var(--color-night) 0%, var(--color-night-deep) 100%);
 }
 
@@ -89,10 +135,16 @@ body {
 }
 
 /* --- Story typography ----------------------------------------------------- */
+/**
+ * Fluid down to phone widths, then multiplied by the reader's own A−/A+
+ * setting. The old fixed 1.3rem was set for a laptop and read as slightly too
+ * large held close on a phone, with no way to say so.
+ */
 .story-body {
   font-family: var(--font-serif);
-  font-size: 1.3rem;
-  line-height: 1.9;
+  font-size: calc(clamp(1.125rem, 1.02rem + 0.5vw, 1.3rem) * var(--story-scale, 1));
+  line-height: 1.85;
+  text-wrap: pretty;
 }
 
 .story-body p {

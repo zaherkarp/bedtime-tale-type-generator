@@ -10,6 +10,11 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    // The scripts in `scripts/` run under `node --experimental-strip-types`,
+    // which resolves imports the way Node ESM does and therefore requires the
+    // explicit `.ts` extension. This flag lets tsc accept those same imports;
+    // it is safe here because `noEmit` is on and nothing is transpiled.
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,

@@ -2,6 +2,7 @@ import type { TaleRequest } from "./schema";
 
 export type TaleErrorCode =
   | "invalid"
+  | "locked"
   | "setup"
   | "rate_limit"
   | "overloaded"
@@ -19,6 +20,7 @@ export interface StreamCallbacks {
 /** Friendly, child-appropriate copy for each error code. */
 export const ERROR_MESSAGES: Record<TaleErrorCode, string> = {
   invalid: "Something in the story details needs a tweak. Please check and try again.",
+  locked: "This storyteller is asleep behind a passcode.",
   setup: "The storyteller is still getting ready. (An ANTHROPIC_API_KEY needs to be set up.)",
   rate_limit: "So many bedtime stories tonight! Please wait a moment and try again.",
   overloaded: "The storyteller is a little sleepy right now. Please try again in a moment.",
@@ -30,6 +32,7 @@ export const ERROR_MESSAGES: Record<TaleErrorCode, string> = {
 
 function codeFromStatus(status: number): TaleErrorCode {
   if (status === 400) return "invalid";
+  if (status === 401) return "locked";
   if (status === 503) return "setup";
   if (status === 429) return "rate_limit";
   if (status >= 500) return "overloaded";

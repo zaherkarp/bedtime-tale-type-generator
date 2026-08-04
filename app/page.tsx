@@ -5,6 +5,7 @@ import Link from "next/link";
 import TaleTypePicker from "@/components/TaleTypePicker";
 import StoryForm from "@/components/StoryForm";
 import StoryView, { type StoryStatus } from "@/components/StoryView";
+import PasscodePrompt from "@/components/PasscodePrompt";
 import type { TaleRequest } from "@/lib/schema";
 import { getAtuEntry, ATU_TYPE_IDS } from "@/lib/atu-index";
 import { parseStory } from "@/lib/story";
@@ -28,6 +29,8 @@ export default function Home() {
   const [saved, setSaved] = useState(false);
 
   const abortRef = useRef<AbortController | null>(null);
+  /** The request held back when the storyteller turned out to be locked. */
+  const pendingRef = useRef<TaleRequest | null>(null);
 
   // Deep-link support: /?type=<id> preselects a tale type and jumps to the form,
   // so the "Browse all tale types" catalogue can hand off to the generator.
@@ -47,6 +50,7 @@ export default function Home() {
     abortRef.current = controller;
 
     setRequest(req);
+    pendingRef.current = req;
     setRaw("");
     setStatus("streaming");
     setErrorCode(null);
@@ -99,19 +103,19 @@ export default function Home() {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-5xl flex-col px-4 py-6 sm:px-6">
-      <header className="no-print mb-8 flex items-center justify-between">
+    <div className="page-shell mx-auto flex min-h-dvh max-w-5xl flex-col">
+      <header className="no-print mb-8 flex items-center justify-between gap-3">
         <button
           type="button"
           onClick={handleNew}
-          className="font-serif text-xl text-starlight transition hover:text-amber-soft"
+          className="font-serif text-lg text-starlight transition hover:text-amber-soft sm:text-xl"
         >
           🌙 Bedtime Tales
         </button>
         <Link
           href="/library"
           data-testid="library-link"
-          className="rounded-lg px-3 py-1.5 text-sm text-lavender hover:bg-surface/60"
+          className="rounded-lg px-3 py-2 text-sm text-lavender hover:bg-surface/60"
         >
           My Library
         </Link>
@@ -135,7 +139,20 @@ export default function Home() {
           />
         )}
 
-        {step === "story" && (
+        {/*
+          A locked storyteller is not an error to apologise for — it is a door.
+          Show the door, and pick the story back up the moment it opens.
+        */}
+        {step === "story" && errorCode === "locked" && (
+          <PasscodePrompt
+            onUnlocked={() => {
+              const req = pendingRef.current;
+              if (req) generate(req);
+            }}
+          />
+        )}
+
+        {step === "story" && errorCode !== "locked" && (
           <StoryView
             raw={raw}
             status={status}
@@ -150,6 +167,10 @@ export default function Home() {
       </main>
 
       <footer className="no-print mt-10 pb-4 text-center text-xs text-muted">
+        <Link href="/credits" className="hover:text-lavender">
+          Sources &amp; credits
+        </Link>
+        <span className="mx-2">·</span>
         Sweet dreams. Every tale ends in sleep. 💫
       </footer>
     </div>
