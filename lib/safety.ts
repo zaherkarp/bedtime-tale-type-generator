@@ -110,8 +110,16 @@ export function normaliseForScreen(text: string): string {
 }
 
 /**
- * Every unsafe term matching the given text. A single-word term matches as a
- * *stem* at the start of any word; a multi-word term matches as a phrase.
+ * Every unsafe term matching the given text. Three kinds of term:
+ *
+ * - **stem** (`murder`) — matches at the start of any word, so it catches
+ *   murders, murdered and murderess.
+ * - **whole word** (`war `, written with a trailing space) — matches only that
+ *   exact word. Some short terms are real words that are also the start of
+ *   perfectly innocent ones, and stemming them is worse than useless: `war`
+ *   would reject "warm" and "wary", and `rob` would reject "robin".
+ * - **phrase** (`cut off`) — matches the whole phrase.
+ *
  * Empty means the text is clean as far as this screen can tell — which, as the
  * header says, is not the same as being safe.
  */
@@ -119,14 +127,16 @@ export function unsafeTermsIn(...texts: string[]): string[] {
   const haystack = normaliseForScreen(texts.filter(Boolean).join(" . "));
   const hits = new Set<string>();
   for (const term of UNSAFE_TERMS) {
-    const needle = normaliseForScreen(term);
-    if (needle.includes(" ", 1) && needle.trim().includes(" ")) {
-      // Multi-word: match the whole phrase.
-      if (haystack.includes(needle)) hits.add(term);
-      continue;
+    const wholeWord = term.endsWith(" ");
+    const needle = normaliseForScreen(term).trim();
+    if (needle.includes(" ")) {
+      // Phrase.
+      if (haystack.includes(` ${needle} `)) hits.add(term);
+    } else if (wholeWord) {
+      if (haystack.includes(` ${needle} `)) hits.add(term);
+    } else if (haystack.includes(` ${needle}`)) {
+      hits.add(term);
     }
-    // Single word: match as a stem at a word boundary.
-    if (haystack.includes(` ${needle.trim()}`)) hits.add(term);
   }
   return [...hits];
 }

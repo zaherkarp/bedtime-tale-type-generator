@@ -20,20 +20,31 @@
  *    more descriptive than titles — "Cruel stepmother" says what "Cinderella"
  *    does not — so this is where most of the real filtering happens.
  *
- * ## No invented prose
+ * ## And then somebody read them
  *
- * A tier-three entry carries **no blurb**. The obvious move would be to have a
- * model write one for each of the five hundred-odd types, and the first version
- * of this plan did exactly that. But a generated blurb is an unsourced claim
- * about a tale nobody involved has read, printed next to real ATU numbers and
- * real canonical titles, where it reads as being just as authoritative. The
- * catalogue is better off saying less and meaning all of it.
+ * Those four screens are necessary and nowhere near sufficient. Reading all 254
+ * types they produced found that **about a quarter should not have been there**
+ * — flaying, mutilation, crucifixion, twenty-odd marriage plots, and a dozen
+ * index buckets like "Unfinished Tales" that are not stories at all. Not one of
+ * those was a bug in the screens. They are the vocabulary and judgement gaps a
+ * word list will always have.
  *
- * If reviewed blurbs are ever written — by hand, or by a model with a human
- * reading the output — dropping them into `data/atu-blurbs.reviewed.json` as
- * `{ entries: { "<atu>": { verdict, blurb } } }` picks them up. A record there
- * can *veto* an entry but never resurrect one: anything the deterministic
- * screens rejected is already gone before this file is consulted.
+ * So the fifth and decisive filter is `data/atu-blurbs.reviewed.json`: a
+ * verdict for every tale type, written by reading it. A record can **veto** an
+ * entry but never resurrect one — anything the screens rejected is already gone
+ * before this file is consulted — and `tests/unit/atu-extended.test.ts` fails if
+ * any generated entry lacks a `"safe"` record. The tier is reviewed data now,
+ * not screen output.
+ *
+ * Surviving entries carry a blurb written during that read-through. Generating
+ * blurbs *blind* would be the objectionable thing: an unsourced claim about a
+ * tale nobody looked at, printed beside a real ATU number where it reads as
+ * authoritative. Writing one having read the title and its motifs is not that.
+ *
+ * Changing a screen changes which candidates reach the review file, so new
+ * entries can appear unreviewed — tightening `unsafeTermsIn` to stop matching
+ * `war ` as a stem let ATU 980 through on the very next run. The test is what
+ * catches it.
  *
  * Run with:  npm run catalogue:build   (add --check to fail instead of writing)
  */
@@ -129,6 +140,22 @@ function emojiFor(atu: string, division: string): string {
   let hash = 0;
   for (const ch of atu) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
   return palette[hash % palette.length];
+}
+
+/**
+ * Strip the ATU revision metadata that rides along in some canonical titles.
+ *
+ * The index records renames inline — "The Wolf and the Nurse (previously Wolf
+ * Waits in Vain for the Nurse to Throw away the Child)". That parenthetical is
+ * an editorial footnote about the 2004 revision, not part of the name, and in a
+ * catalogue card it reads as though the app is describing the tale that way.
+ * `tidy()` in `scripts/build-motifs.ts` does the equivalent for motif labels.
+ */
+function tidyTitle(title: string): string {
+  return title
+    .replace(/\s*\(previously[^)]*\)\s*$/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 /** A stable, readable id from the canonical title, disambiguated by number. */
@@ -244,11 +271,17 @@ export function select(): { kept: Selected[]; dropped: Record<string, number> } 
         ? reviewed.blurb
         : undefined;
 
-    let id = idFor(c.atu, c.canonicalTitle);
+    let id = idFor(c.atu, tidyTitle(c.canonicalTitle));
     while (seenIds.has(id)) id += "-alt";
     seenIds.add(id);
 
-    kept.push({ ...c, id, emoji: emojiFor(c.atu, c.division), blurb });
+    kept.push({
+      ...c,
+      canonicalTitle: tidyTitle(c.canonicalTitle),
+      id,
+      emoji: emojiFor(c.atu, c.division),
+      blurb,
+    });
   }
 
   kept.sort((a, b) => a.atu.localeCompare(b.atu, "en", { numeric: true }));
@@ -281,16 +314,16 @@ function render(kept: Selected[]): string {
  *   3. carrying no motif with a knowledge-base content advisory;
  *   4. the same stem screen applied to every one of its motif labels.
  *
+ * ...and then, decisively, a read-through: every entry here has a \`"safe"\`
+ * verdict in \`data/atu-blurbs.reviewed.json\`, and its \`blurb\` was written
+ * during that read. Roughly a quarter of what the screens produced was cut at
+ * that stage, each with its reason recorded in that file.
+ *
  * Titles are the canonical scholarly titles from the knowledge base, carried
- * verbatim — unlike the hand-authored tiers, nothing here is retitled for
- * children, because nobody has read these tales to retitle them honestly.
+ * verbatim apart from stripped \`(previously ...)\` revision notes — unlike the
+ * hand-authored tiers, nothing here is retitled for children.
  *
- * \`blurb\` is present only where \`data/atu-blurbs.reviewed.json\` supplies a
- * reviewed one. Most entries have none, and the catalogue shows the ATU number
- * and division instead of inventing a description.
- *
- * These tale types are offered but not vouched for the way the featured ones
- * are. What keeps a story from them gentle is \`SYSTEM_PROMPT\` in
+ * What keeps a story from these types gentle is still \`SYSTEM_PROMPT\` in
  * \`lib/prompt.ts\`, which applies to every tale regardless of type.
  */
 

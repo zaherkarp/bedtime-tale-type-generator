@@ -1,7 +1,54 @@
+import { readFileSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 import { ATU_EXTENDED } from "@/lib/atu-extended";
 import { ATU_INDEX, atuCategory } from "@/lib/atu-index";
 import { TALE_TYPES } from "@/lib/tale-types";
+
+interface ReviewRecord {
+  verdict: "safe" | "unsafe";
+  reason?: string;
+  blurb?: string;
+}
+
+const review: Record<string, ReviewRecord> = JSON.parse(
+  readFileSync("data/atu-blurbs.reviewed.json", "utf8"),
+).entries;
+
+describe("the review file", () => {
+  it("has a verdict for every entry that ships", () => {
+    // The screens decide what reaches the review file; the review file decides
+    // what reaches the app. An entry with no record would be one nobody read —
+    // which is how ATU 980, "The Ungrateful Son", nearly slipped through after
+    // a screen change widened the candidate set.
+    for (const e of ATU_EXTENDED) {
+      expect(review[e.atu], `ATU ${e.atu} (${e.title}) is unreviewed`).toBeDefined();
+      expect(review[e.atu].verdict, `ATU ${e.atu}`).toBe("safe");
+    }
+  });
+
+  it("records a reason for everything it cut", () => {
+    const cut = Object.entries(review).filter(([, r]) => r.verdict !== "safe");
+    expect(cut.length).toBeGreaterThan(100);
+    for (const [atu, r] of cut) {
+      expect(r.reason?.length, `ATU ${atu} has no reason`).toBeGreaterThan(10);
+    }
+  });
+
+  it("never lets a cut tale type back into the catalogue", () => {
+    const shipped = new Set(ATU_EXTENDED.map((e) => e.atu));
+    for (const [atu, r] of Object.entries(review)) {
+      if (r.verdict !== "safe") {
+        expect(shipped.has(atu), `cut ATU ${atu} is still shipping`).toBe(false);
+      }
+    }
+  });
+
+  it("gives every surviving entry a blurb", () => {
+    for (const e of ATU_EXTENDED) {
+      expect(e.blurb?.length, `ATU ${e.atu} (${e.title})`).toBeGreaterThan(20);
+    }
+  });
+});
 
 describe("generated ATU tier", () => {
   it("is a substantial expansion of the hand-authored catalogue", () => {
@@ -16,8 +63,9 @@ describe("generated ATU tier", () => {
       expect(e.atu, e.id).toMatch(/^\d+[A-Z]*\*{0,3}$/);
       expect(e.title.length, e.id).toBeGreaterThan(0);
       expect(e.emoji.length, e.id).toBeGreaterThan(0);
-      // No blurb is the norm here; an empty string would be a bug.
-      if (e.blurb !== undefined) expect(e.blurb.length).toBeGreaterThan(0);
+      expect(e.blurb?.length, e.id).toBeGreaterThan(0);
+      // Revision footnotes are not part of a title.
+      expect(e.title, e.id).not.toContain("(previously");
     }
   });
 

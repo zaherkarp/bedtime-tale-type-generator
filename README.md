@@ -96,14 +96,14 @@ sanitized and clearly framed as story _data_, never instructions.
 
 ### The three catalogue tiers
 
-The catalogue is 316 tale types in three tiers, ordered by how much anybody has
+The catalogue is 208 tale types in three tiers, ordered by how much anybody has
 actually vouched for them:
 
 | Tier | Count | Where | Drives the prompt with |
 |---|---|---|---|
 | `featured` | 12 | `lib/tale-types.ts`, hand-authored | beats, signature elements, tone, opener |
 | `curated` | 50 | `EXTRA_TYPES` in `lib/atu-index.ts`, hand-authored | title + blurb |
-| `extended` | 254 | `lib/atu-extended.ts`, **generated** | title only |
+| `extended` | 146 | `lib/atu-extended.ts`, generated **then read** | title + blurb |
 
 **Adding a hand-authored type:** append one object to `EXTRA_TYPES` — `id`,
 `atu`, `title`, `emoji`, and a gentle `blurb`; the category is derived from the
@@ -121,7 +121,7 @@ npm run motifs:build        # → lib/motifs.ts and lib/credits.ts
 ### How the generated tier stays bedtime-safe
 
 The full ATU index is ~2,250 tale types and most of them have no business in a
-bedtime app. Four screens run in order, and every one of them fails closed:
+bedtime app. Four automated screens run in order, each failing closed:
 
 1. **The stem screen** (`lib/safety.ts`) over the canonical title. It matches
    *stems*, not words, because an earlier word-matching version passed ATU 36 —
@@ -136,8 +136,21 @@ bedtime app. Four screens run in order, and every one of them fails closed:
    check" is not a pass. So is any type carrying a motif with a knowledge-base
    content advisory, or whose *motif labels* trip the stem screen. Labels are
    far more descriptive than titles, so this catches the most.
-4. **A regression list** in `tests/unit/atu-index.test.ts` names known-grim ATU
-   numbers across every division and fails if a regeneration lets one back in.
+4. **A regression list** in `tests/unit/atu-index.test.ts` names every cut ATU
+   number and fails if a regeneration lets one back in.
+
+And then — decisively — **somebody read them.** The screens produced 254 types;
+reading all 254 found that about a quarter should not have been there: flaying,
+mutilation, crucifixion, twenty-odd marriage plots, and a dozen index buckets
+like "Unfinished Tales" that are not stories at all. None of those was a bug in
+the screens; they are the vocabulary and judgement gaps a word list will always
+have.
+
+So `data/atu-blurbs.reviewed.json` carries a verdict for every tale type, with
+the reason for each of the 109 cuts, and `tests/unit/atu-extended.test.ts` fails
+if anything ships without a `"safe"` record. The tier is reviewed data, not
+screen output. Changing a screen changes which candidates reach the review file,
+so the test is also what catches a newly-admitted type nobody has looked at.
 
 None of that is the real backstop. `SYSTEM_PROMPT` in `lib/prompt.ts` forbids
 death, injury, peril, cruelty, horror and romance in **every** story regardless
@@ -151,7 +164,7 @@ and says nothing it cannot stand behind.
 
 ### Traditional twists (motifs)
 
-`lib/motifs.ts` carries 489 Thompson Motif-Index motifs across 217 tale types —
+`lib/motifs.ts` carries 340 Thompson Motif-Index motifs across 137 tale types —
 the real ones folklorists recorded, filtered to those short and gentle enough to
 hand a bedtime storyteller. The form offers up to three per story. The knowledge
 base records these links as *inferred* rather than asserted, so the prompt asks

@@ -2,7 +2,7 @@
  * GENERATED FILE — do not edit by hand.
  *
  * Written by `npm run motifs:build` from the ATU knowledge base's
- * license-filtered export. 489 motifs across 217 tale types.
+ * license-filtered export. 340 motifs across 137 tale types.
  *
  * A *motif* is the smallest recurring unit folklorists index — "grateful
  * animal helper", "magic object", "the youngest succeeds". These are the real
@@ -34,9 +34,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "32": [
     { code: "K651", label: "Wolf descends into well in one bucket and rescues fox in the other" },
   ],
-  "35B*": [
-    { code: "K1115.1", label: "Animal gets bait from trap by luring another animal into it" },
-  ],
   "41": [
     { code: "K1022.1", label: "Wolf overeats in the cellar (smokehouse). Cannot escape through the entrance hole" },
   ],
@@ -63,9 +60,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "67": [
     { code: "J873", label: "Fox in swollen river claims to be swimming to distant town" },
   ],
-  "67**": [
-    { code: "K634.1", label: "Escape by throwing captor's clothes on the fire" },
-  ],
   "70": [
     { code: "A2342.1", label: "Why hare's lip is split" },
   ],
@@ -83,9 +77,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   ],
   "78A": [
     { code: "K713.1.1", label: "Animal allows himself to be tied so as to avoid being carried off by storm" },
-  ],
-  "80A*": [
-    { code: "B841.1", label: "Animals debate as to which is the elder" },
   ],
   "85": [
     { code: "J512.7", label: "Mouse, bird, and sausage keep house together. When they exchange duties all goes wrong" },
@@ -117,9 +108,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "135*": [
     { code: "B295.1", label: "Mouse makes boat of bread-crust. Takes animals and birds into boat. It capsizes" },
   ],
-  "136A*": [
-    { code: "M114", label: "Oath taken on sacred object" },
-  ],
   "152": [
     { code: "K1013.3", label: "\"Painting\" with a red hot iron" },
     { code: "J2211", label: "Differences in animal nature overlooked" },
@@ -133,14 +121,8 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "159": [
     { code: "B278", label: "Captured animal ransoms self" },
   ],
-  "159*": [
-    { code: "B392", label: "Hero divides spoil for animals" },
-  ],
   "162": [
     { code: "J582.1", label: "Hidden goat discovered by his horn protruding above ground" },
-  ],
-  "168A": [
-    { code: "K735", label: "Capture in pitfall" },
   ],
   "183*": [
     { code: "K571.1", label: "Hare promises to dance if doorway is left free: escapes" },
@@ -158,18 +140,12 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "A2471.1", label: "Why dogs look at one another under tail" },
     { code: "A2275.5.5", label: "Dog loses his patent right; seeks it: why dogs look at one another under the tail" },
   ],
-  "204": [
-    { code: "A2426", label: "Nature and meaning of animal cries" },
-  ],
   "214": [
     { code: "J2413.1", label: "Ass tries to caress his master like the dog. He is driven off" },
   ],
   "214B": [
     { code: "K362.5", label: "Hare in lion's skin gets meat from lioness" },
     { code: "J951.1", label: "Ass in lion's skin unmasked when he raises his voice" },
-  ],
-  "215": [
-    { code: "J2413.3", label: "Daw tries to carry off lamb like eagle. Is caught in the lamb's fleece" },
   ],
   "218": [
     { code: "J1908.2", label: "Cat transformed to maiden runs after mouse" },
@@ -215,10 +191,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "236": [
     { code: "A2271.1", label: "Thrush teaches dove to build nest" },
   ],
-  "236*": [
-    { code: "A1952", label: "Creation of hoopoe. Transformed shepherd" },
-    { code: "A1965.2", label: "Bittern from transformed shepherd" },
-  ],
   "238": [
     { code: "K85", label: "Contest in seeing" },
     { code: "K86", label: "Contest in hearing" },
@@ -240,27 +212,8 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "J1063.1", label: "Mother crab blames her children for not walking straight" },
     { code: "U121.1", label: "Crab walks backward: learned from his parents" },
   ],
-  "277A": [
-    { code: "J955.1", label: "Frog tries in vain to be as big as ox. Bursts" },
-  ],
-  "278": [
-    { code: "J681.1", label: "Rat and frog tie paws together to cross marsh. Carried off by falcon" },
-  ],
   "282B*": [
     { code: "A2332.1.2", label: "How fly got his eyes" },
-  ],
-  "285B": [
-    { code: "N652", label: "Nut falls and wakes man about to be bitten by snake" },
-  ],
-  "285E": [
-    { code: "J552.3", label: "Serpent (weasel) tries to bite a file" },
-  ],
-  "289": [
-    { code: "A2471.4", label: "Why diver always looks at sea" },
-    { code: "A2491.1", label: "Why bat flies by night" },
-  ],
-  "293": [
-    { code: "J461.1", label: "The belly and the members. Debate as to their usefulness. All mutually useful" },
   ],
   "298C*": [
     { code: "J832", label: "Reeds bend before wind (flood). Save themselves while oak is uprooted" },
@@ -303,24 +256,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "H1113", label: "Task: bailing out a pond" },
     { code: "H1104", label: "Task: building castle in one night" },
   ],
-  "314A": [
-    { code: "B184.1", label: "Magic horse" },
-    { code: "G500", label: "Ogre defeated" },
-    { code: "L113.1.4", label: "Shepherd as hero" },
-    { code: "D817", label: "Magic object received from grateful person" },
-    { code: "L161", label: "Lowly hero marries princess" },
-  ],
-  "321": [
-    { code: "D2161.3.1.1", label: "Eyes torn out magically replaced" },
-  ],
-  "325": [
-    { code: "L142.2", label: "Pupil surpasses magician" },
-    { code: "D1711.0.1", label: "Magician's apprentice" },
-    { code: "D615.2", label: "Transformation contest between master and pupil" },
-    { code: "C837", label: "Tabu: loosing bridle in selling man transformed to horse. Disenchantment follows" },
-    { code: "D612", label: "Protean sale: man sells youth in successive transformations" },
-    { code: "H62.1", label: "Recognition of person transformed to animal" },
-  ],
   "328": [
     { code: "G514.1", label: "Ogre trapped in box (cage)" },
     { code: "H1172", label: "Task: bringing an ogre to court" },
@@ -329,9 +264,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   ],
   "369": [
     { code: "H1381.2.2.1", label: "Son seeks unknown father" },
-  ],
-  "401A*": [
-    { code: "D759.9", label: "Failure to disenchant by not watching sleeping princess long enough" },
   ],
   "402": [
     { code: "B493.1", label: "Helpful frog" },
@@ -357,14 +289,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "N711.2", label: "Hero finds maiden in (magic) castle" },
     { code: "D1967.1", label: "Person in magic sleep surrounded by protecting hedge" },
   ],
-  "412": [
-    { code: "E711.4", label: "Soul in necklace" },
-  ],
-  "425*": [
-    { code: "T118", label: "Girl (man) married to (enamored of) a monster" },
-    { code: "H1385.4", label: "Quest for vanished husband" },
-    { code: "D700", label: "Person disenchanted" },
-  ],
   "425A": [
     { code: "C421", label: "Tabu: revealing secret of supernatural husband" },
     { code: "D2006.1.4", label: "Forgotten fiancée buys place in husband's bed and reawakens his memory" },
@@ -377,17 +301,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "C761.2", label: "Tabu: staying too long at home" },
     { code: "D735.1", label: "Beauty and the beast. Disenchantment of animal by being kissed by woman (man)" },
   ],
-  "425D": [
-    { code: "C932", label: "Loss of wife (husband) for breaking tabu" },
-    { code: "B640.1", label: "Marriage to beast by day and man by night" },
-    { code: "T68", label: "Princess offered as prize" },
-    { code: "H1194", label: "Task: making person laugh" },
-    { code: "C991", label: "Quest imposed for breaking tabu" },
-    { code: "K1837", label: "Disguise of woman in man's clothes" },
-  ],
-  "425E": [
-    { code: "C611", label: "Forbidden chamber. Person allowed to enter all chambers of house except one" },
-  ],
   "426": [
     { code: "D763", label: "Disenchantment by destroying enchanter" },
     { code: "F451.2.3.1", label: "Long-bearded dwarf" },
@@ -398,14 +311,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "430": [
     { code: "D721.3", label: "Disenchantment by destroying skin (covering)" },
     { code: "B641.4", label: "Marriage to person in ass form" },
-  ],
-  "434*": [
-    { code: "D700", label: "Person disenchanted" },
-    { code: "L161", label: "Lowly hero marries princess" },
-    { code: "H1132.1.7", label: "Task: recovering crown from sea" },
-    { code: "H911", label: "Tasks assigned at suggestion of jealous rivals" },
-    { code: "D161", label: "Transformation: man to bird of anatidae group (duck)" },
-    { code: "D641", label: "Transformation to reach difficult place" },
   ],
   "440": [
     { code: "D789", label: "Other means of disenchantment" },
@@ -420,10 +325,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "L162", label: "Lowly heroine marries prince (king)" },
     { code: "D431.2", label: "Transformation: tree to person" },
   ],
-  "460A": [
-    { code: "H1291", label: "Questions asked on way to other world" },
-    { code: "H1292", label: "Answers found in other world to questions propounded on the way" },
-  ],
   "465": [
     { code: "B642", label: "Marriage to person in bird form" },
     { code: "H911", label: "Tasks assigned at suggestion of jealous rivals" },
@@ -432,21 +333,10 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "H1090", label: "Tasks requiring miraculous speed" },
     { code: "H1023.3", label: "Task: bringing berries (fruit, roses) in winter" },
   ],
-  "471A": [
-    { code: "D2011.1", label: "Years seem moments while man listens to song of bird" },
-  ],
   "476": [
     { code: "F342.1", label: "Fairy gold. Fairies give coals (wood, earth) that turns to gold" },
     { code: "D475.1.1", label: "Transformation: coals to gold" },
     { code: "N532", label: "Light indicates hidden treasure" },
-  ],
-  "476**": [
-    { code: "D475.1", label: "Transformation: objects to gold" },
-    { code: "F333", label: "Fairy grateful to human midwife" },
-    { code: "F372", label: "Fairies take human nurse to attend fairy child" },
-    { code: "F372.1", label: "Fairies take human midwife to attend fairy woman" },
-    { code: "F451.5.5", label: "Dwarfs have human woman as midwife" },
-    { code: "B81.6", label: "Mermaid has human midwife" },
   ],
   "480": [
     { code: "H1192", label: "Task: combing hair of fairies" },
@@ -494,14 +384,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "H331", label: "Suitor contests: bride offered as prize" },
     { code: "L161", label: "Lowly hero marries princess" },
   ],
-  "514": [
-    { code: "K1837", label: "Disguise of woman in man's clothes" },
-    { code: "D11", label: "Transformation woman to man" },
-  ],
-  "514**": [
-    { code: "K1825.1.2", label: "Poor girl masks as doctor and is made court physician" },
-    { code: "K1837", label: "Disguise of woman in man's clothes" },
-  ],
   "515": [
     { code: "Q42", label: "Generosity rewarded" },
     { code: "L161", label: "Lowly hero marries princess" },
@@ -538,14 +420,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "H81.1", label: "Hero lies by sleeping girl and leaves identification token with her" },
     { code: "T475.2", label: "Hero lies by princess in magic sleep and begets child" },
   ],
-  "552": [
-    { code: "B640", label: "Marriage to person in animal form" },
-    { code: "J2411.3", label: "Unsuccessful imitation of magic production of food" },
-    { code: "D2105", label: "Provisions magically furnished" },
-    { code: "B505.1", label: "Magic object received from animal brother-in-law" },
-    { code: "D621.1", label: "Animal by day; man by night" },
-    { code: "B501", label: "Animal gives part of body as talisman for summoning its aid" },
-  ],
   "554": [
     { code: "H982", label: "Animals help man perform task" },
     { code: "B582.2", label: "Animals help hero win princess" },
@@ -556,9 +430,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "D1761.0.1", label: "Wishes granted without limit" },
     { code: "B170", label: "Magic birds, fish, reptiles, etc" },
     { code: "J514", label: "One should not be too greedy" },
-  ],
-  "556F*": [
-    { code: "H1199.12.2", label: "Task: pasturing witch's cattle (really her daughters). Grateful animals give help" },
   ],
   "560": [
     { code: "D840", label: "Magic object found" },
@@ -598,11 +469,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "H1045", label: "Task: filling a sack full of lies (truths)" },
     { code: "T68", label: "Princess offered as prize" },
   ],
-  "570*": [
-    { code: "D1441.1.2", label: "Magic pipe calls animals together" },
-    { code: "D1427.1", label: "Magic pipe compels one to follow. Pied Piper of Hamelin" },
-    { code: "D1224", label: "Magic pipe (musical)" },
-  ],
   "570A": [
     { code: "K1837", label: "Disguise of woman in man's clothes" },
   ],
@@ -621,43 +487,11 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "D1337.1.7", label: "Magic needle transforms a room from plainness to beauty" },
     { code: "D1485.1", label: "Magic shuttle makes carpet" },
   ],
-  "593": [
-    { code: "N825.3", label: "Old woman helper" },
-    { code: "D1413", label: "Magic object holds person fast" },
-    { code: "D1413.17", label: "Magic adhesive stone. Makes all who poke in fire stick and say \"Fiddevav.\"" },
-    { code: "D2172.1", label: "Magic repetition. Person must keep on doing or saying thing until released" },
-  ],
-  "660": [
-    { code: "H504", label: "Test of skill in handiwork" },
-    { code: "F668.1", label: "Skillful surgeon removes and replaces vital organs" },
-    { code: "E781.3", label: "Eyes borrowed by animal. Later returned" },
-    { code: "E782.1.1", label: "Substituted hand. Man exchanges his hand for that of another" },
-    { code: "E787", label: "Stomach borrowed by animal. Later returned" },
-    { code: "E786", label: "Heart successfully replaced" },
-  ],
-  "678": [
-    { code: "E725", label: "Soul leaves one body and enters another" },
-  ],
-  "682": [
-    { code: "H1113.1", label: "Bailing out pond with thimble" },
-  ],
-  "706D": [
-    { code: "D1622.3", label: "Saint's image lets golden shoe (ring) fall as sign of favor to suppliant" },
-  ],
-  "708": [
-    { code: "S441", label: "Cast-off wife and child abandoned in forest" },
-    { code: "D1717.1", label: "Magic power of monster child" },
-    { code: "L112.1", label: "Monster as hero" },
-    { code: "D741.1", label: "Disenchantment of monster when his mother acknowledges him as son" },
-  ],
   "715A": [
     { code: "B103.1", label: "Treasure-dropping animals" },
   ],
   "736": [
     { code: "N421", label: "Lucky bargain" },
-  ],
-  "736A": [
-    { code: "N211.1", label: "Lost ring found in fish" },
   ],
   "745": [
     { code: "D1602.11", label: "Self-returning magic coin. Keeps coming back" },
@@ -669,72 +503,11 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "759E": [
     { code: "P411.1", label: "Peasant refuses to sell possessions to king" },
   ],
-  "766": [
-    { code: "D1960.1", label: "Seven sleepers. (Rip Van Winkle.) Magic sleep extending over many years" },
-  ],
-  "767": [
-    { code: "Q172.1", label: "Child taken to heaven: offers food to crucifix" },
-  ],
-  "768": [
-    { code: "Q25", label: "Reward for carrying Christ across a stream. Christ is in the form of a child" },
-  ],
-  "770A*": [
-    { code: "V238", label: "Guardian angel" },
-  ],
-  "772*": [
-    { code: "B483", label: "Helpful insects – diptera" },
-  ],
-  "774": [
-    { code: "K1811", label: "Gods (saints) in disguise visit mortals" },
-  ],
-  "774L": [
-    { code: "A2613.1", label: "Mushroom from spittle of deity" },
-  ],
-  "774P": [
-    { code: "A2771.9", label: "Why big trees have small fruit" },
-  ],
   "775": [
     { code: "J2072.1", label: "Short-sighted wish: Midas's touch. Everything to turn to gold" },
   ],
   "779H*": [
     { code: "F962.3", label: "Star drops from heaven: is money" },
-  ],
-  "798": [
-    { code: "A1224.3", label: "Woman created from dog's tail. Eve" },
-  ],
-  "804": [
-    { code: "A661.0.1.2", label: "Saint Peter as porter of heaven" },
-    { code: "F51.1.3", label: "Stalk as sky-rope" },
-  ],
-  "813*": [
-    { code: "J2401", label: "Fatal imitation" },
-  ],
-  "827": [
-    { code: "D2125.1", label: "Magic power to walk on water" },
-    { code: "V51.1", label: "Man who does not know how to pray so holy that he walks on water" },
-  ],
-  "830B": [
-    { code: "C454", label: "Tabu: boasting that one has no need of gods' help" },
-  ],
-  "853": [
-    { code: "L161", label: "Lowly hero marries princess" },
-    { code: "H507.1", label: "Princess offered to man who can defeat her in repartee" },
-    { code: "D1395.2", label: "Escape from prison by use of magic tablecloth" },
-    { code: "D1395.3", label: "Escape from prison by use of magic purse" },
-    { code: "D1415.2.5", label: "Magic fiddle causes dancing" },
-  ],
-  "854": [
-    { code: "H322", label: "Suitor test: finding princess" },
-    { code: "H161", label: "Recognition of transformed person among identical companions. Prearranged signals" },
-  ],
-  "857": [
-    { code: "H573.3", label: "Riddle solved by listening to propounder talk in his sleep" },
-    { code: "B873.1", label: "Giant louse" },
-    { code: "H511", label: "Princess offered to correct guesser" },
-    { code: "F983.2", label: "Louse fattened" },
-  ],
-  "871*": [
-    { code: "K538", label: "Princess cuts hair to escape captor who holds her hair in hand while sleeping with her" },
   ],
   "875": [
     { code: "H1053", label: "Task: coming neither on horse nor on foot (riding nor walking)" },
@@ -755,25 +528,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "875E": [
     { code: "J1191", label: "Reductio ad absurdum of judgment" },
   ],
-  "877": [
-    { code: "D1880", label: "Magic rejuvenation" },
-  ],
-  "879": [
-    { code: "H702", label: "Riddle: how many stars in the heavens?" },
-    { code: "K1837", label: "Disguise of woman in man's clothes" },
-    { code: "K525.1", label: "Substituted object left in bed while intended victim escapes" },
-    { code: "H705.3", label: "How many leaves are on the tree? Counterquestion: how many stars in the sky?" },
-  ],
-  "879A": [
-    { code: "H1194.0.1", label: "Task: causing silent person to speak" },
-  ],
-  "880": [
-    { code: "K1837", label: "Disguise of woman in man's clothes" },
-    { code: "R152.1", label: "Disguised wife helps husband escape from prison" },
-  ],
-  "886": [
-    { code: "K1275", label: "Girl who cannot keep silent thereby provokes her rival to admit unchastity" },
-  ],
   "887A*": [
     { code: "T52", label: "Bride purchased" },
   ],
@@ -783,14 +537,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "L113.1.0.1", label: "Heroine endures hardships with menial husband. Rewarded by his success" },
     { code: "T251.2", label: "Taming the shrew. By outdoing his wife in shrewishness the husband renders her obedient" },
     { code: "T76", label: "Princess calls her suitors ugly names" },
-  ],
-  "901": [
-    { code: "L50", label: "Victorious youngest daughter" },
-    { code: "T251.2", label: "Taming the shrew. By outdoing his wife in shrewishness the husband renders her obedient" },
-    { code: "H386", label: "Bride test: obedience" },
-  ],
-  "903C*": [
-    { code: "K1771", label: "Bluffing threat" },
   ],
   "910": [
     { code: "J163.4", label: "Good counsels bought" },
@@ -811,9 +557,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "K1921.1", label: "Son of the king and of the smith exchanged" },
     { code: "H1023.1.1", label: "Task: hatching boiled eggs; countertask: sowing cooked seeds and harvesting the crop" },
   ],
-  "920D": [
-    { code: "L13", label: "Compassionate youngest son. Kind to people or animals: rewarded" },
-  ],
   "920E": [
     { code: "J462.3.1", label: "Father leaves sons three jewels – Christianity, Judaism, Mohammedanism. All to be used" },
     { code: "J80", label: "Wisdom (knowledge) taught by parable" },
@@ -830,51 +573,20 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "921E": [
     { code: "H1182", label: "Task: letting king hear something that neither he nor his subjects have ever heard" },
   ],
-  "921F": [
-    { code: "J152", label: "Wisdom (knowledge) from sage (teacher)" },
-  ],
   "923A": [
     { code: "H592.1.1", label: "\"Love like wind in hot sun.\" Husband offended but later learns wife's meaning" },
   ],
   "924": [
     { code: "J1804", label: "Conversation by sign language mutually misunderstood" },
   ],
-  "926C*": [
-    { code: "T143", label: "Infant marriages" },
-  ],
-  "929A": [
-    { code: "J142", label: "Lack of proper education regretted" },
-  ],
-  "934F": [
-    { code: "J861.1", label: "Consoled by a drop of honey. Man in pit surrounded by perils thus comforts himself" },
-  ],
   "935": [
     { code: "L161", label: "Lowly hero marries princess" },
     { code: "K1815", label: "Humble disguise. (Cap o' Rushes, Peau d'âne Allerleirauh.) Usually in rough clothing" },
     { code: "K1837", label: "Disguise of woman in man's clothes" },
   ],
-  "935*": [
-    { code: "N171", label: "Unprotected son makes fortune; protected son has bad luck" },
-  ],
   "936*": [
     { code: "K521.1.1", label: "Man sewed in animal's hide carried off by birds" },
     { code: "B31.1", label: "Roc. A giant bird which carries off men in its claws" },
-  ],
-  "938": [
-    { code: "J214", label: "Choice: suffering in youth or old age" },
-    { code: "N121", label: "Fate decided before birth" },
-  ],
-  "938A": [
-    { code: "J214", label: "Choice: suffering in youth or old age" },
-  ],
-  "938B": [
-    { code: "J210", label: "Choice between evils" },
-    { code: "N527", label: "Treasure (money) carried by bird to nest" },
-    { code: "J214", label: "Choice: suffering in youth or old age" },
-  ],
-  "939": [
-    { code: "C50", label: "Tabu: offending the gods" },
-    { code: "C930", label: "Loss of fortune for breaking tabu" },
   ],
   "940*": [
     { code: "Q68.2", label: "Honesty rewarded" },
@@ -889,12 +601,6 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "945A*": [
     { code: "N183", label: "Money lost twice: recovered third time" },
     { code: "N421", label: "Lucky bargain" },
-  ],
-  "958F*": [
-    { code: "H1578.1.4.1", label: "Woman throws apple to man in woman's dress. He puts his legs together to catch it" },
-  ],
-  "960C": [
-    { code: "E524.2.1", label: "Cooked cock crows" },
   ],
   "967": [
     { code: "B523.1", label: "Spider-web over hole saves fugitive" },
@@ -912,14 +618,8 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
   "1548": [
     { code: "K112.2", label: "\"Soup stone\" sold. It needs only the addition of a few vegetables and a bit of meat" },
   ],
-  "2013": [
-    { code: "Z17", label: "Rounds. Stories which begin over and over again and repeat" },
-  ],
   "2016": [
     { code: "Z39.2", label: "There was a wee wee woman who had a wee wee cow, etc" },
-  ],
-  "2019": [
-    { code: "Z31.1", label: "Pif Paf Poltrie. The suitor sent from one relation to the other for consent to the wedding" },
   ],
   "2030": [
     { code: "Z41.7.1", label: "Boy dirties his shoe and asks the hay stack to wipe it clean" },
@@ -936,17 +636,8 @@ export const MOTIFS_BY_ATU: Readonly<Record<string, readonly Motif[]>> = {
     { code: "H631.5", label: "What is strongest? Truth" },
     { code: "H631.8", label: "What is strongest? Wine" },
   ],
-  "2031C": [
-    { code: "L392", label: "Mouse stronger than wall, wind, mountain" },
-  ],
   "2301": [
     { code: "Z11.1", label: "Endless tale: corn carried away grain at a time" },
-  ],
-  "2302": [
-    { code: "Z39.3", label: "The crow on the tarred bridge. His beak and tail alternately stick. (Endless.)" },
-  ],
-  "2335": [
-    { code: "Z19.2", label: "Tales filled with contradictions" },
   ],
 };
 
