@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build && playwright test",
     "sync:atu": "node --experimental-strip-types scripts/sync-atu-index.ts",
     "sync:atu:check": "node --experimental-strip-types scripts/sync-atu-index.ts --check",
     "build:icons": "node --experimental-strip-types scripts/build-icons.ts",

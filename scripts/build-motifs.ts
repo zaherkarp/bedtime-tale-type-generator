@@ -35,10 +35,27 @@ const EXPORT_DIR = process.env.ATUKB_EXPORT_DIR ?? resolve(REPO_ROOT, "kb/export
 const OUTPUT_PATH = resolve(REPO_ROOT, "lib/motifs.ts");
 const CREDITS_PATH = resolve(REPO_ROOT, "lib/credits.ts");
 
+/** Export files this script cannot run without. */
+const REQUIRED_EXPORTS = ["motifs.jsonl", "tale-type-motifs.jsonl", "attribution.json"];
+
 /** Longer than this and it is a plot summary, not a motif. */
 const MAX_LABEL = 90;
 /** Enough for variety across re-rolls without bloating the bundle. */
 const MAX_PER_TYPE = 6;
+
+/**
+ * True when the knowledge-base export this script reads from is present.
+ *
+ * `kb/export/` is gitignored and takes a Postgres pipeline to produce, so it is
+ * absent in CI and in any fresh clone. Without this guard `--check` sees zero
+ * motif rows, decides every candidate has no motif data, and reports the
+ * committed file as out of date — which is how it failed the first CI run on
+ * this branch. `scripts/sync-atu-index.ts` has always no-opped this way; these
+ * two now match it.
+ */
+function exportPresent(): boolean {
+  return REQUIRED_EXPORTS.every((name) => existsSync(resolve(EXPORT_DIR, name)));
+}
 
 function readJsonl<T>(name: string): T[] {
   const path = resolve(EXPORT_DIR, name);
@@ -250,6 +267,16 @@ ${raw.sources
 
 function main(): number {
   const check = process.argv.includes("--check");
+
+  if (!exportPresent()) {
+    console.log(
+      `build-motifs: no knowledge-base export under ${EXPORT_DIR}; leaving ` +
+        `lib/motifs.ts and lib/credits.ts as they stand. Run ` +
+        `\`cd kb && atukb publish && atukb export\` first.`,
+    );
+    return 0;
+  }
+
   const byType = build();
   const rendered = render(byType);
   const existing = existsSync(OUTPUT_PATH) ? readFileSync(OUTPUT_PATH, "utf8") : "";

@@ -48,6 +48,9 @@ const CANDIDATES_PATH = resolve(REPO_ROOT, "data/atu-candidates.json");
 const BLURBS_PATH = resolve(REPO_ROOT, "data/atu-blurbs.reviewed.json");
 const OUTPUT_PATH = resolve(REPO_ROOT, "lib/atu-extended.ts");
 
+/** Export files this script cannot run without. */
+const REQUIRED_EXPORTS = ["motifs.jsonl", "tale-type-motifs.jsonl"];
+
 interface Candidate {
   atu: string;
   canonicalTitle: string;
@@ -140,6 +143,20 @@ function idFor(atu: string, title: string): string {
     .join("-");
   const suffix = atu.toLowerCase().replace(/[^a-z0-9]+/g, "");
   return slug ? `atu-${suffix}-${slug}` : `atu-${suffix}`;
+}
+
+/**
+ * True when the knowledge-base export this script reads from is present.
+ *
+ * `kb/export/` is gitignored and takes a Postgres pipeline to produce, so it is
+ * absent in CI and in any fresh clone. Without this guard `--check` sees zero
+ * motif rows, decides every candidate has no motif data, and reports the
+ * committed file as out of date — which is how it failed the first CI run on
+ * this branch. `scripts/sync-atu-index.ts` has always no-opped this way; these
+ * two now match it.
+ */
+function exportPresent(): boolean {
+  return REQUIRED_EXPORTS.every((name) => existsSync(resolve(EXPORT_DIR, name)));
 }
 
 function readJsonl<T>(name: string): T[] {
@@ -294,6 +311,15 @@ ${rows}
 
 function main(): number {
   const check = process.argv.includes("--check");
+
+  if (!exportPresent()) {
+    console.log(
+      `build-catalogue: no knowledge-base export under ${EXPORT_DIR}; leaving ` +
+        `lib/atu-extended.ts as it stands. Run \`cd kb && atukb publish && ` +
+        `atukb export\` first.`,
+    );
+    return 0;
+  }
 
   if (!existsSync(CANDIDATES_PATH)) {
     console.error(

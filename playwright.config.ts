@@ -59,14 +59,16 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: `npm run build && npm run start -- -p ${PORT}`,
+      // Both servers only serve — `npm run test:e2e` builds first. Playwright
+      // starts every entry in a webServer array in parallel, so building inside
+      // one of them races the other into `next start` on a clean checkout.
+      command: `npm run start -- -p ${PORT}`,
       url: baseURL,
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
       env: { MOCK_TALE: "1" },
     },
     {
-      // `npm run start` only — the build above already produced `.next`.
       command: `npm run start -- -p ${LOCKED_PORT}`,
       url: lockedBaseURL,
       reuseExistingServer: !process.env.CI,
