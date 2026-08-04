@@ -163,6 +163,17 @@ const EXTRA_TYPES: readonly ExtraType[] = [
   { id: "the-endless-tale", atu: "2300", title: "The Endless Tale", emoji: "♾️", blurb: "A story with no ending at all, as sheep hop over a wall one… by… one…" },
 ];
 
+/**
+ * Card blurbs for the fifty types that were catalogue-only before they had
+ * beats. They keep their hand-written blurb rather than falling back to the
+ * `tagline` from the registry: the blurb was written to sell the tale to a
+ * parent scanning a grid, and the tagline was written to orient a storyteller.
+ * Both are good; they are just aimed at different readers.
+ */
+const CURATED_BLURBS: Readonly<Record<string, string>> = Object.fromEntries(
+  EXTRA_TYPES.map((e) => [e.id, e.blurb!]),
+);
+
 /** Featured entries, derived from the rich TaleType registry. */
 const FEATURED_ENTRIES: readonly AtuIndexEntry[] = TALE_TYPES.map((t) => {
   const atu = t.atuNumber.replace(/^ATU\s+/i, "");
@@ -172,15 +183,27 @@ const FEATURED_ENTRIES: readonly AtuIndexEntry[] = TALE_TYPES.map((t) => {
     title: t.label,
     category: t.category as AtuCategory,
     emoji: t.emoji,
-    blurb: t.tagline,
+    blurb: CURATED_BLURBS[t.id] ?? t.tagline,
     featured: true,
     tier: "featured" as const,
     canonical: ATU_CANONICAL_TITLES[atu],
   };
 });
 
-/** Non-featured entries, with category derived from the ATU number. */
-const EXTRA_ENTRIES: readonly AtuIndexEntry[] = EXTRA_TYPES.map((e) => ({
+/**
+ * Entries still without beats.
+ *
+ * Anything in `EXTRA_TYPES` that has since acquired a `TaleType` record is
+ * dropped here — it is already in `FEATURED_ENTRIES`, and listing it twice
+ * would put a duplicate id in the catalogue. As of the curated beats pass this
+ * filter removes all fifty, so `EXTRA_ENTRIES` is currently empty; the array
+ * stays because the next hand-written catalogue-only type will land in it.
+ */
+const FEATURED_IDS = new Set(TALE_TYPES.map((t) => t.id));
+
+const EXTRA_ENTRIES: readonly AtuIndexEntry[] = EXTRA_TYPES.filter(
+  (e) => !FEATURED_IDS.has(e.id),
+).map((e) => ({
   ...e,
   category: atuCategory(e.atu),
   featured: false,

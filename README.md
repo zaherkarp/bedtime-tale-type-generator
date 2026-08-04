@@ -101,14 +101,32 @@ actually vouched for them:
 
 | Tier | Count | Where | Drives the prompt with |
 |---|---|---|---|
-| `featured` | 12 | `lib/tale-types.ts`, hand-authored | beats, signature elements, tone, opener |
-| `curated` | 50 | `EXTRA_TYPES` in `lib/atu-index.ts`, hand-authored | title + blurb |
+| `featured` | 62 | `lib/tale-types.ts` + `lib/tale-types-curated.ts`, hand-authored | beats, signature elements, tone, opener |
+| `curated` | 0 | `EXTRA_TYPES` in `lib/atu-index.ts`, hand-authored | title + blurb |
 | `extended` | 146 | `lib/atu-extended.ts`, generated **then read** | title + blurb |
+
+`curated` is empty because all fifty of its entries were promoted once beats
+were written for them. The tier stays because it is where the next hand-written
+blurb-only type lands.
 
 **Adding a hand-authored type:** append one object to `EXTRA_TYPES` — `id`,
 `atu`, `title`, `emoji`, and a gentle `blurb`; the category is derived from the
-ATU number. For a featured type, also append to `TALE_TYPES` with the same `id`.
-Keep it bedtime-safe: no death, peril, horror, cruelty, or romance.
+ATU number. To make it featured, also add a `TaleType` record with the same `id`
+carrying `beats`, `signatureElements`, `tone` and `exampleOpener`. Keep it
+bedtime-safe: no death, peril, horror, cruelty, or romance.
+
+The home picker deliberately shows only the original twelve. Sixty-two cards is
+a wall to scroll past on a phone at bedtime, and the rest are one tap away.
+
+**On the beats for the fifty:** they are written as the *gentle* telling, not
+the faithful one. Rapunzel's prince traditionally falls into thorns and is
+blinded; the Fisherman's Wife ends in a storm and a hovel; the Fox and the Crow
+ends with the crow humiliated. `SYSTEM_PROMPT` forbids all of that, so writing
+the beats faithfully would only set the brief arguing with the safety rules —
+and the brief would lose, less predictably. They were written from knowledge of
+these very well-known tales rather than from the public-domain texts, which
+means nothing is quoted but also that they are checked against the shape of a
+tale rather than against an edition.
 
 **Regenerating the extended tier** (needs the knowledge base export):
 

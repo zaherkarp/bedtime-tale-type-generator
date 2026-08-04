@@ -1,3 +1,5 @@
+import { CURATED_TALE_TYPES } from "./tale-types-curated";
+
 /**
  * The tale-type registry — the heart of the generator.
  *
@@ -33,7 +35,14 @@ export interface TaleType {
   exampleOpener: string;
 }
 
-export const TALE_TYPES: readonly TaleType[] = [
+/**
+ * The twelve types this app shipped with, hand-authored from scratch.
+ *
+ * Exported so tests can assert them by name: they are the reference
+ * implementation of the shape, and the fifty added later were written to match
+ * them rather than the other way round.
+ */
+export const ORIGINAL_TALE_TYPES: readonly TaleType[] = [
   {
     id: "cinderella",
     label: "Cinderella",
@@ -323,6 +332,20 @@ export const TALE_TYPES: readonly TaleType[] = [
       'Plink! Something small bonked the little chick right on the head. "The sky!" she gasped. "The sky is falling!"',
   },
 ] as const;
+
+/**
+ * The full featured registry: the twelve originals, then the fifty that were
+ * catalogue-only until beats were written for them.
+ *
+ * The import sits at the bottom rather than the top because
+ * `lib/tale-types-curated.ts` imports the `TaleType` type from this file. It is
+ * a type-only import and therefore erased at build time, but keeping the value
+ * import down here makes the one-directional shape obvious to a reader.
+ */
+export const TALE_TYPES: readonly TaleType[] = [
+  ...ORIGINAL_TALE_TYPES,
+  ...CURATED_TALE_TYPES,
+];
 
 /** All valid tale-type ids, useful for validation. */
 export const TALE_TYPE_IDS: readonly string[] = TALE_TYPES.map((t) => t.id);

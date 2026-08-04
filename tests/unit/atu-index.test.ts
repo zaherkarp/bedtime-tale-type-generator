@@ -55,7 +55,12 @@ describe("ATU index", () => {
       // `featured` is the old boolean and must never disagree with the tier.
       expect(e.featured, `${e.id} featured/tier agree`).toBe(e.tier === "featured");
     }
-    for (const tier of ["featured", "curated", "extended"] as const) {
+    // `curated` is currently empty: every one of the fifty catalogue-only
+    // types was promoted to `featured` once beats were written for them. The
+    // tier stays in the union because it is where the next hand-written
+    // blurb-only type will land, so this asserts the two that must be there
+    // rather than all three.
+    for (const tier of ["featured", "extended"] as const) {
       expect(ATU_INDEX.some((e) => e.tier === tier), `${tier} present`).toBe(true);
     }
   });
