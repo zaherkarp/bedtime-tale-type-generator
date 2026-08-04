@@ -1,0 +1,104 @@
+import { readFileSync } from "node:fs";
+import { describe, it, expect } from "vitest";
+import { ATU_EXTENDED } from "@/lib/atu-extended";
+import { ATU_INDEX, atuCategory } from "@/lib/atu-index";
+import { TALE_TYPES } from "@/lib/tale-types";
+
+interface ReviewRecord {
+  verdict: "safe" | "unsafe";
+  reason?: string;
+  blurb?: string;
+}
+
+const review: Record<string, ReviewRecord> = JSON.parse(
+  readFileSync("data/atu-blurbs.reviewed.json", "utf8"),
+).entries;
+
+describe("the review file", () => {
+  it("has a verdict for every entry that ships", () => {
+    // The screens decide what reaches the review file; the review file decides
+    // what reaches the app. An entry with no record would be one nobody read —
+    // which is how ATU 980, "The Ungrateful Son", nearly slipped through after
+    // a screen change widened the candidate set.
+    for (const e of ATU_EXTENDED) {
+      expect(review[e.atu], `ATU ${e.atu} (${e.title}) is unreviewed`).toBeDefined();
+      expect(review[e.atu].verdict, `ATU ${e.atu}`).toBe("safe");
+    }
+  });
+
+  it("records a reason for everything it cut", () => {
+    const cut = Object.entries(review).filter(([, r]) => r.verdict !== "safe");
+    expect(cut.length).toBeGreaterThan(100);
+    for (const [atu, r] of cut) {
+      expect(r.reason?.length, `ATU ${atu} has no reason`).toBeGreaterThan(10);
+    }
+  });
+
+  it("never lets a cut tale type back into the catalogue", () => {
+    const shipped = new Set(ATU_EXTENDED.map((e) => e.atu));
+    for (const [atu, r] of Object.entries(review)) {
+      if (r.verdict !== "safe") {
+        expect(shipped.has(atu), `cut ATU ${atu} is still shipping`).toBe(false);
+      }
+    }
+  });
+
+  it("gives every surviving entry a blurb", () => {
+    for (const e of ATU_EXTENDED) {
+      expect(e.blurb?.length, `ATU ${e.atu} (${e.title})`).toBeGreaterThan(20);
+    }
+  });
+});
+
+describe("generated ATU tier", () => {
+  it("is a substantial expansion of the hand-authored catalogue", () => {
+    expect(ATU_EXTENDED.length).toBeGreaterThan(100);
+    const handAuthored = ATU_INDEX.filter((e) => e.tier !== "extended");
+    expect(ATU_EXTENDED.length).toBeGreaterThan(handAuthored.length);
+  });
+
+  it("has a well-formed record for every entry", () => {
+    for (const e of ATU_EXTENDED) {
+      expect(e.id, e.atu).toMatch(/^atu-[a-z0-9-]+$/);
+      expect(e.atu, e.id).toMatch(/^\d+[A-Z]*\*{0,3}$/);
+      expect(e.title.length, e.id).toBeGreaterThan(0);
+      expect(e.emoji.length, e.id).toBeGreaterThan(0);
+      expect(e.blurb?.length, e.id).toBeGreaterThan(0);
+      // Revision footnotes are not part of a title.
+      expect(e.title, e.id).not.toContain("(previously");
+    }
+  });
+
+  it("never collides with a hand-authored entry", () => {
+    const handAuthored = ATU_INDEX.filter((e) => e.tier !== "extended");
+    const numbers = new Set(handAuthored.map((e) => e.atu));
+    const ids = new Set(handAuthored.map((e) => e.id));
+    for (const e of ATU_EXTENDED) {
+      expect(numbers.has(e.atu), `ATU ${e.atu} duplicated`).toBe(false);
+      expect(ids.has(e.id), `id ${e.id} duplicated`).toBe(false);
+    }
+  });
+
+  it("draws from no excluded division", () => {
+    // Anecdotes and Jokes (1200–1999) and Tales of the Stupid Ogre (1000–1199)
+    // are built on humiliation and on harming an ogre. `SYSTEM_PROMPT` promises
+    // the opposite of both, so the generator never proposes from them — this is
+    // the assertion that keeps a future regeneration honest about it.
+    for (const e of ATU_EXTENDED) {
+      const n = parseInt(e.atu, 10);
+      expect(Number.isFinite(n), e.atu).toBe(true);
+      expect(n >= 1000 && n <= 1999, `${e.atu} is in an excluded range`).toBe(false);
+      expect(
+        ["Anecdotes and Jokes", "Tales of the Stupid Ogre"],
+        `${e.atu} division`,
+      ).not.toContain(atuCategory(e.atu));
+    }
+  });
+
+  it("never shadows a featured type", () => {
+    const featured = new Set(TALE_TYPES.map((t) => t.atuNumber.replace(/^ATU\s+/i, "")));
+    for (const e of ATU_EXTENDED) {
+      expect(featured.has(e.atu), `${e.atu} shadows a featured type`).toBe(false);
+    }
+  });
+});

@@ -3,8 +3,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import LibraryCard from "@/components/LibraryCard";
+import StoryArticle from "@/components/StoryArticle";
+import ReadingControls, {
+  useReadingPrefs,
+  useWakeLock,
+} from "@/components/ReadingControls";
+import { BTN_PRIMARY, BTN_SECONDARY } from "@/components/ui";
 import { loadLibrary, deleteTale, type SavedTale } from "@/lib/library";
-import { parseStory, toBlocks } from "@/lib/story";
+import { parseStory } from "@/lib/story";
 import { speak, cancelSpeech, isSpeechSupported } from "@/lib/speech";
 
 export default function LibraryPage() {
@@ -37,17 +43,17 @@ export default function LibraryPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-5xl flex-col px-4 py-6 sm:px-6">
-      <header className="mb-8 flex items-center justify-between">
+    <div className="page-shell mx-auto flex min-h-dvh max-w-5xl flex-col">
+      <header className="mb-8 flex items-center justify-between gap-3">
         <Link
           href="/"
-          className="font-serif text-xl text-starlight transition hover:text-amber-soft"
+          className="font-serif text-lg text-starlight transition hover:text-amber-soft sm:text-xl"
         >
           🌙 Bedtime Tales
         </Link>
         <Link
           href="/"
-          className="rounded-lg px-3 py-1.5 text-sm text-lavender hover:bg-surface/60"
+          className="rounded-lg px-3 py-2 text-sm text-lavender hover:bg-surface/60"
         >
           + New tale
         </Link>
@@ -59,7 +65,7 @@ export default function LibraryPage() {
         {!mounted ? null : tales.length === 0 ? (
           <div
             data-testid="library-empty"
-            className="rounded-2xl border border-white/10 bg-surface/50 p-10 text-center"
+            className="rounded-2xl border border-white/10 bg-surface/50 p-8 text-center sm:p-10"
           >
             <p className="mb-2 text-4xl" aria-hidden="true">
               📚
@@ -67,10 +73,7 @@ export default function LibraryPage() {
             <p className="mb-6 text-muted">
               No saved tales yet. Your favourites will appear here.
             </p>
-            <Link
-              href="/"
-              className="inline-block rounded-xl bg-amber px-5 py-2.5 font-semibold text-night hover:bg-amber-soft"
-            >
+            <Link href="/" className={BTN_PRIMARY}>
               Create a tale
             </Link>
           </div>
@@ -103,9 +106,10 @@ function SavedTaleReader({
 }) {
   const [speaking, setSpeaking] = useState(false);
   const { title, body } = parseStory(tale.text);
-  const blocks = toBlocks(body);
   const speechOK = isSpeechSupported();
+  const { prefs, update } = useReadingPrefs();
 
+  useWakeLock(speaking);
   useEffect(() => () => cancelSpeech(), []);
 
   function toggleReadAloud() {
@@ -122,40 +126,27 @@ function SavedTaleReader({
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-2xl flex-col px-4 py-6 sm:px-6">
-      <button
-        type="button"
-        onClick={onBack}
-        className="no-print mb-6 self-start text-sm text-lavender hover:underline"
-      >
-        ← Back to library
-      </button>
+    <div className="page-shell mx-auto flex min-h-dvh max-w-2xl flex-col">
+      <div className="no-print mb-4 flex items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={onBack}
+          className="rounded-lg px-2 py-2 text-sm text-lavender hover:underline"
+        >
+          ← Back to library
+        </button>
+        <ReadingControls prefs={prefs} update={update} />
+      </div>
 
-      <article className="printable rounded-2xl border border-white/10 bg-surface/50 p-6 sm:p-10">
-        <h1 className="mb-6 text-center font-serif text-3xl text-starlight sm:text-4xl">
-          {title || tale.title}
-        </h1>
-        <div className="story-body">
-          {blocks.map((block, i) => (
-            <p key={i}>
-              {block.split("\n").map((line, j, arr) => (
-                <span key={j} className="verse-line">
-                  {line}
-                  {j < arr.length - 1 ? <br /> : null}
-                </span>
-              ))}
-            </p>
-          ))}
-        </div>
-      </article>
+      <StoryArticle title={title || tale.title} body={body} />
 
-      <div className="no-print mt-6 flex flex-wrap justify-center gap-3">
+      <div className="no-print mt-6 grid grid-cols-2 gap-3 sm:flex sm:justify-center">
         {speechOK && (
           <button
             type="button"
             onClick={toggleReadAloud}
             aria-pressed={speaking}
-            className="rounded-xl border border-white/15 px-5 py-2.5 text-starlight hover:bg-surface-2"
+            className={`${BTN_SECONDARY} col-span-2 sm:col-span-1`}
           >
             {speaking ? "Stop reading" : "Read aloud"}
           </button>
@@ -163,15 +154,11 @@ function SavedTaleReader({
         <button
           type="button"
           onClick={() => window.print()}
-          className="rounded-xl border border-white/15 px-5 py-2.5 text-starlight hover:bg-surface-2"
+          className={BTN_SECONDARY}
         >
           Print
         </button>
-        <button
-          type="button"
-          onClick={onDelete}
-          className="rounded-xl border border-white/15 px-5 py-2.5 text-starlight hover:bg-surface-2"
-        >
+        <button type="button" onClick={onDelete} className={BTN_SECONDARY}>
           Delete
         </button>
       </div>

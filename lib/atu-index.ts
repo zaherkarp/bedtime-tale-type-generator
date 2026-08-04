@@ -18,6 +18,7 @@
 
 import { TALE_TYPES } from "./tale-types";
 import { ATU_CANONICAL_TITLES, type AtuCanonicalTitle } from "./atu-canonical";
+import { ATU_EXTENDED } from "./atu-extended";
 
 /** The seven top-level divisions of the ATU index, in order. */
 export const ATU_CATEGORIES = [
@@ -43,10 +44,26 @@ export interface AtuIndexEntry {
   category: AtuCategory;
   /** A single emoji used as the catalogue-card icon. */
   emoji: string;
-  /** Our own gentle, bedtime-framed one-line description. */
-  blurb: string;
+  /**
+   * Our own gentle, bedtime-framed one-line description.
+   *
+   * Optional, because the generated tier does not have one. Nobody has read
+   * those tales closely enough to describe them, and an invented description
+   * printed beside a real ATU number reads as authoritative when it is not.
+   */
+  blurb?: string;
   /** True when a rich, hand-authored TaleType (with beats) backs this entry. */
   featured: boolean;
+  /**
+   * How this entry got here, which is really a statement about how much it has
+   * been vouched for:
+   *
+   * - `featured`  — hand-authored, with narrative beats driving the prompt.
+   * - `curated`   — hand-authored title, blurb and emoji; no beats.
+   * - `extended`  — generated from the knowledge base and passed automatically
+   *   through the screens in `lib/safety.ts`. Nobody read it.
+   */
+  tier: "featured" | "curated" | "extended";
   /**
    * The canonical scholarly title, generated from the ATU knowledge base in
    * `kb/`, carrying the source that asserted it. Undefined where the knowledge
@@ -77,7 +94,7 @@ export function atuCategory(atu: string): AtuCategory {
 }
 
 /** The raw shape for a non-featured catalogue entry (category is derived). */
-type ExtraType = Omit<AtuIndexEntry, "category" | "featured">;
+type ExtraType = Omit<AtuIndexEntry, "category" | "featured" | "tier">;
 
 /**
  * Curated bedtime-safe tale types beyond the twelve featured ones. Darker famous
@@ -146,6 +163,17 @@ const EXTRA_TYPES: readonly ExtraType[] = [
   { id: "the-endless-tale", atu: "2300", title: "The Endless Tale", emoji: "♾️", blurb: "A story with no ending at all, as sheep hop over a wall one… by… one…" },
 ];
 
+/**
+ * Card blurbs for the fifty types that were catalogue-only before they had
+ * beats. They keep their hand-written blurb rather than falling back to the
+ * `tagline` from the registry: the blurb was written to sell the tale to a
+ * parent scanning a grid, and the tagline was written to orient a storyteller.
+ * Both are good; they are just aimed at different readers.
+ */
+const CURATED_BLURBS: Readonly<Record<string, string>> = Object.fromEntries(
+  EXTRA_TYPES.map((e) => [e.id, e.blurb!]),
+);
+
 /** Featured entries, derived from the rich TaleType registry. */
 const FEATURED_ENTRIES: readonly AtuIndexEntry[] = TALE_TYPES.map((t) => {
   const atu = t.atuNumber.replace(/^ATU\s+/i, "");
@@ -155,24 +183,59 @@ const FEATURED_ENTRIES: readonly AtuIndexEntry[] = TALE_TYPES.map((t) => {
     title: t.label,
     category: t.category as AtuCategory,
     emoji: t.emoji,
-    blurb: t.tagline,
+    blurb: CURATED_BLURBS[t.id] ?? t.tagline,
     featured: true,
+    tier: "featured" as const,
     canonical: ATU_CANONICAL_TITLES[atu],
   };
 });
 
-/** Non-featured entries, with category derived from the ATU number. */
-const EXTRA_ENTRIES: readonly AtuIndexEntry[] = EXTRA_TYPES.map((e) => ({
+/**
+ * Entries still without beats.
+ *
+ * Anything in `EXTRA_TYPES` that has since acquired a `TaleType` record is
+ * dropped here — it is already in `FEATURED_ENTRIES`, and listing it twice
+ * would put a duplicate id in the catalogue. As of the curated beats pass this
+ * filter removes all fifty, so `EXTRA_ENTRIES` is currently empty; the array
+ * stays because the next hand-written catalogue-only type will land in it.
+ */
+const FEATURED_IDS = new Set(TALE_TYPES.map((t) => t.id));
+
+const EXTRA_ENTRIES: readonly AtuIndexEntry[] = EXTRA_TYPES.filter(
+  (e) => !FEATURED_IDS.has(e.id),
+).map((e) => ({
   ...e,
   category: atuCategory(e.atu),
   featured: false,
+  tier: "curated" as const,
   canonical: ATU_CANONICAL_TITLES[e.atu],
 }));
 
-/** The full bedtime-safe ATU catalogue: featured types first, then the rest. */
+/**
+ * The generated tier, from `lib/atu-extended.ts`. Category is derived from the
+ * ATU number by the same range rule the curated tier uses, so all three tiers
+ * agree about which division a number belongs to.
+ */
+const EXTENDED_ENTRIES: readonly AtuIndexEntry[] = ATU_EXTENDED.map((e) => ({
+  id: e.id,
+  atu: e.atu,
+  title: e.title,
+  category: atuCategory(e.atu),
+  emoji: e.emoji,
+  blurb: e.blurb,
+  featured: false,
+  tier: "extended" as const,
+  canonical: ATU_CANONICAL_TITLES[e.atu],
+}));
+
+/**
+ * The full bedtime-safe ATU catalogue, most vouched-for first: the featured
+ * types, then the curated ones, then the generated tier.
+ */
 export const ATU_INDEX: readonly AtuIndexEntry[] = [
   ...FEATURED_ENTRIES,
   ...EXTRA_ENTRIES,
+  ...EXTENDED_ENTRIES,
 ];
 
 /** All valid tale-type ids the generator will accept. */
@@ -206,7 +269,7 @@ export function searchAtu(opts: {
       e.atu.toLowerCase().includes(q) ||
       `atu ${e.atu}`.toLowerCase().includes(q) ||
       e.category.toLowerCase().includes(q) ||
-      e.blurb.toLowerCase().includes(q)
+      (e.blurb?.toLowerCase().includes(q) ?? false)
     );
   });
 }

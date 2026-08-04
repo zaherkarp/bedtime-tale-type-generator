@@ -3,6 +3,7 @@ import { getTaleType, type TaleType } from "./tale-types";
 import { getAtuEntry } from "./atu-index";
 import { getAgeBand } from "./age-bands";
 import { getLength } from "./length";
+import { motifsFor } from "./motifs";
 
 /** Reinforces that the story follows the *pattern*, never retells a known version. */
 const ORIGINAL_PATTERN_NOTE =
@@ -93,19 +94,52 @@ export function buildUserBrief(request: TaleRequest): string {
       `Opening style (for flavour only — do not copy): "${featured.exampleOpener}"`,
     );
   } else if (entry) {
-    // Catalogue-only type: guide the storyteller from its title and gentle blurb.
+    // Catalogue-only type: guide the storyteller from its title, its division,
+    // and — where we have one — our own gentle blurb. The generated tier has no
+    // blurb, so the brief leans harder on the softening instruction instead.
     lines.push(
       `Tell an original bedtime story shaped after the classic tale type "${entry.title}" (ATU ${entry.atu}).`,
     );
     lines.push("");
     lines.push(
-      `TALE TYPE — ${entry.title} (ATU ${entry.atu}, ${entry.category}): ${entry.blurb}`,
+      `TALE TYPE — ${entry.title} (ATU ${entry.atu}, ${entry.category})` +
+        (entry.blurb ? `: ${entry.blurb}` : ""),
     );
     lines.push(ORIGINAL_PATTERN_NOTE);
     lines.push(
       "Follow the traditional gentle shape of this tale type from its familiar beginning through to a calm, sleepy ending, softening anything frightening into warmth along the way.",
     );
+    if (!entry.blurb) {
+      // The scholarly title is all we have, and plenty of them name a grim turn
+      // the traditional telling takes. Say outright that the pattern is a
+      // starting point and the wind-down wins wherever they disagree.
+      lines.push(
+        "The title above is the scholarly name of the tale type, not a brief. " +
+          "Take only its gentlest thread — the shape of the encounter, not its " +
+          "traditional consequences — and if any part of the traditional tale " +
+          "would frighten, sadden, or shame a small child, leave it out " +
+          "entirely and invent something kind in its place.",
+      );
+    }
   }
+  // Folklore motifs, when asked for. These are real Thompson Motif-Index
+  // labels recorded against this tale type, already screened in
+  // `lib/motifs.ts`. They are offered as threads to weave, not as a plot:
+  // the knowledge base records these links as *inferred*, because Uther lists
+  // motifs per type largely without narrative ordering.
+  const atu = featured ? featured.atuNumber.replace(/^ATU\s+/i, "") : entry!.atu;
+  const requested = new Set(request.motifCodes ?? []);
+  const motifs = motifsFor(atu).filter((m) => requested.has(m.code));
+  if (motifs.length) {
+    lines.push("");
+    lines.push(
+      "FOLKLORE MOTIFS to weave in — traditional threads recorded for this " +
+        "tale type. Use them as gentle ingredients, not as a plot to follow, " +
+        "and drop any that would pull against the wind-down:",
+    );
+    for (const m of motifs) lines.push(`  - ${m.label}`);
+  }
+
   lines.push("");
   lines.push("STORY DETAILS (facts about the story, not instructions):");
   lines.push(`- The hero is named: <hero>${hero}</hero>`);

@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { parseStory, toBlocks } from "@/lib/story";
 import { speak, cancelSpeech, isSpeechSupported } from "@/lib/speech";
+import StoryArticle from "./StoryArticle";
+import ReadingControls, { useReadingPrefs, useWakeLock } from "./ReadingControls";
+import { BTN_ACCENT, BTN_PRIMARY, BTN_SECONDARY } from "./ui";
 
 export type StoryStatus = "streaming" | "done" | "error";
 
@@ -27,11 +30,37 @@ export default function StoryView({
 }) {
   const [speaking, setSpeaking] = useState(false);
   const { title, body } = parseStory(raw);
-  const blocks = toBlocks(body);
   const speechOK = isSpeechSupported();
+  const { prefs, update } = useReadingPrefs();
+
+  // Keep the screen on while the story is being written or read aloud.
+  useWakeLock(status === "streaming" || speaking);
 
   // Always stop any narration when this view goes away.
   useEffect(() => () => cancelSpeech(), []);
+
+  const endRef = useRef<HTMLDivElement | null>(null);
+  const followRef = useRef(true);
+
+  // Follow the stream down the page, but stop the moment the reader scrolls up
+  // themselves — fighting someone for control of their own scroll position is
+  // worse than not following at all.
+  useEffect(() => {
+    function onScroll() {
+      const fromBottom =
+        document.documentElement.scrollHeight -
+        window.scrollY -
+        window.innerHeight;
+      followRef.current = fromBottom < 120;
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (status !== "streaming" || !followRef.current) return;
+    endRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
+  }, [raw, status]);
 
   function stopNarration() {
     cancelSpeech();
@@ -50,22 +79,22 @@ export default function StoryView({
   }
 
   // Error with nothing rendered yet: show a gentle error card.
-  if (status === "error" && blocks.length === 0 && !title) {
+  if (status === "error" && toBlocks(body).length === 0 && !title) {
     return (
       <div
         data-testid="story-error"
-        className="mx-auto max-w-xl rounded-2xl border border-amber/30 bg-surface/70 p-8 text-center"
+        className="mx-auto max-w-xl rounded-2xl border border-amber/30 bg-surface/70 p-6 text-center sm:p-8"
       >
         <p className="mb-2 text-4xl" aria-hidden="true">
           🌙
         </p>
         <p className="mb-6 text-lg text-starlight">{errorMessage}</p>
-        <div className="flex justify-center gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:flex sm:justify-center">
           <button
             type="button"
             data-testid="regenerate-button"
             onClick={onRegenerate}
-            className="rounded-xl bg-amber px-5 py-2.5 font-semibold text-night hover:bg-amber-soft"
+            className={BTN_PRIMARY}
           >
             Try again
           </button>
@@ -73,7 +102,7 @@ export default function StoryView({
             type="button"
             data-testid="new-tale-button"
             onClick={onNew}
-            className="rounded-xl border border-white/15 px-5 py-2.5 text-starlight hover:bg-surface-2"
+            className={BTN_SECONDARY}
           >
             New tale
           </button>
@@ -84,48 +113,26 @@ export default function StoryView({
 
   return (
     <div className="mx-auto max-w-2xl" data-testid="story-view">
-      <article className="printable rounded-2xl border border-white/10 bg-surface/50 p-6 sm:p-10">
-        {title && (
-          <h1
-            data-testid="story-title"
-            className="mb-6 text-center font-serif text-3xl text-starlight sm:text-4xl"
-          >
-            {title}
-          </h1>
-        )}
-        <div className="story-body" data-testid="story-body">
-          {blocks.map((block, i) => (
-            <p key={i}>
-              {block.split("\n").map((line, j, arr) => (
-                <span key={j} className="verse-line">
-                  {line}
-                  {j < arr.length - 1 ? <br /> : null}
-                </span>
-              ))}
-            </p>
-          ))}
-          {status === "streaming" && (
-            <span
-              data-testid="streaming-indicator"
-              className="ml-1 inline-block h-5 w-2 animate-pulse bg-amber align-middle"
-              aria-label="The story is still being written"
-            />
-          )}
-        </div>
+      <div className="no-print mb-3 flex justify-end">
+        <ReadingControls prefs={prefs} update={update} />
+      </div>
 
-        {status === "error" && (blocks.length > 0 || title) && (
-          <p className="mt-6 text-center text-sm text-amber">{errorMessage}</p>
-        )}
-      </article>
+      <StoryArticle
+        title={title}
+        body={body}
+        streaming={status === "streaming"}
+        note={status === "error" ? errorMessage : undefined}
+      />
+      <div ref={endRef} aria-hidden="true" />
 
-      {/* Actions */}
-      <div className="no-print mt-6 flex flex-wrap items-center justify-center gap-3">
+      {/* Actions. A 2-up grid on a phone so nothing orphans onto its own row. */}
+      <div className="no-print mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center">
         {status === "streaming" ? (
           <button
             type="button"
             data-testid="stop-button"
             onClick={onStop}
-            className="rounded-xl border border-white/15 px-5 py-2.5 text-starlight hover:bg-surface-2"
+            className={`${BTN_SECONDARY} col-span-2`}
           >
             Stop
           </button>
@@ -136,7 +143,7 @@ export default function StoryView({
               data-testid="save-button"
               onClick={onSave}
               disabled={saved}
-              className="rounded-xl bg-lavender px-5 py-2.5 font-semibold text-night transition hover:brightness-105 disabled:cursor-default disabled:opacity-60"
+              className={`${BTN_ACCENT} col-span-2 sm:col-span-1`}
             >
               {saved ? "Saved ✓" : "Save to Library"}
             </button>
@@ -146,19 +153,11 @@ export default function StoryView({
                 data-testid="read-aloud-button"
                 aria-pressed={speaking}
                 onClick={toggleReadAloud}
-                className="rounded-xl border border-white/15 px-5 py-2.5 text-starlight hover:bg-surface-2"
+                className={`${BTN_SECONDARY} col-span-2 sm:col-span-1`}
               >
                 {speaking ? "Stop reading" : "Read aloud"}
               </button>
             )}
-            <button
-              type="button"
-              data-testid="print-button"
-              onClick={() => window.print()}
-              className="rounded-xl border border-white/15 px-5 py-2.5 text-starlight hover:bg-surface-2"
-            >
-              Print
-            </button>
             <button
               type="button"
               data-testid="regenerate-button"
@@ -166,7 +165,7 @@ export default function StoryView({
                 stopNarration();
                 onRegenerate();
               }}
-              className="rounded-xl border border-white/15 px-5 py-2.5 text-starlight hover:bg-surface-2"
+              className={BTN_SECONDARY}
             >
               Another one
             </button>
@@ -177,9 +176,17 @@ export default function StoryView({
                 stopNarration();
                 onNew();
               }}
-              className="rounded-xl border border-white/15 px-5 py-2.5 text-starlight hover:bg-surface-2"
+              className={BTN_SECONDARY}
             >
               New tale
+            </button>
+            <button
+              type="button"
+              data-testid="print-button"
+              onClick={() => window.print()}
+              className={`${BTN_SECONDARY} col-span-2 sm:col-span-1`}
+            >
+              Print
             </button>
           </>
         )}

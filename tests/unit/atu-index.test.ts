@@ -28,13 +28,40 @@ describe("ATU index", () => {
   it("has a well-formed, category-consistent entry for every type", () => {
     for (const e of ATU_INDEX) {
       expect(e.id, "id").toMatch(/^[a-z0-9-]+$/);
-      expect(e.atu, `${e.id} atu`).toMatch(/^\d+[A-Z]?$/);
+      // The real ATU grammar: a number, optional letters, optional asterisks
+      // ("2B", "6*", "1525K*", "1730***"). The hand-authored tiers use a much
+      // narrower slice of it, asserted separately below.
+      expect(e.atu, `${e.id} atu`).toMatch(/^\d+[A-Z]*\*{0,3}$/);
       expect(e.title.length, `${e.id} title`).toBeGreaterThan(0);
-      expect(e.blurb.length, `${e.id} blurb`).toBeGreaterThan(0);
       expect(e.emoji.length, `${e.id} emoji`).toBeGreaterThan(0);
       expect(ATU_CATEGORIES, `${e.id} category`).toContain(e.category);
       // The declared category must match the one implied by the ATU number.
       expect(atuCategory(e.atu), `${e.id} category range`).toBe(e.category);
+    }
+  });
+
+  it("gives every hand-authored entry a blurb and a simple ATU number", () => {
+    // Only the generated tier is allowed to go without a description; someone
+    // wrote every featured and curated entry by hand and owes it a sentence.
+    for (const e of ATU_INDEX.filter((x) => x.tier !== "extended")) {
+      expect(e.blurb?.length, `${e.id} blurb`).toBeGreaterThan(0);
+      expect(e.atu, `${e.id} atu`).toMatch(/^\d+[A-Z]?$/);
+    }
+  });
+
+  it("labels every entry with the tier that says how vouched-for it is", () => {
+    for (const e of ATU_INDEX) {
+      expect(["featured", "curated", "extended"], `${e.id} tier`).toContain(e.tier);
+      // `featured` is the old boolean and must never disagree with the tier.
+      expect(e.featured, `${e.id} featured/tier agree`).toBe(e.tier === "featured");
+    }
+    // `curated` is currently empty: every one of the fifty catalogue-only
+    // types was promoted to `featured` once beats were written for them. The
+    // tier stays in the union because it is where the next hand-written
+    // blurb-only type will land, so this asserts the two that must be there
+    // rather than all three.
+    for (const tier of ["featured", "extended"] as const) {
+      expect(ATU_INDEX.some((e) => e.tier === tier), `${tier} present`).toBe(true);
     }
   });
 
@@ -78,9 +105,36 @@ describe("ATU index", () => {
   });
 
   it("excludes known non-child-safe tale types entirely", () => {
-    // Vampire, Eaten Heart, obscene anecdote, Snow White, Red Riding Hood,
-    // Juniper Tree, Bluebeard, Rescue by the Sister — none belong in a bedtime app.
-    const unsafe = ["363", "992", "1425", "709", "333", "720", "312", "311"];
+    // The regression net. It mattered less when the catalogue was 62 entries
+    // somebody had read; with a generated tier in the hundreds it is the thing
+    // that catches a bad regeneration, so it lists the well-known grim types
+    // across every division rather than a token handful.
+    // Every number below was either cut by the read-through recorded in
+    // data/atu-blurbs.reviewed.json, or was never a candidate. Together they
+    // are the net that catches a regeneration quietly restoring one.
+    const unsafe = [
+      "35B*", "67**", "75*", "80A*", "93", "107", "136A*", "159*", "168A",
+      "184", "204", "215", "236*", "277A", "278", "285B", "285E", "288B**",
+      "289", "293", "296", "314A", "321", "325", "401A*", "412", "425*",
+      "425D", "425E", "434*", "460A", "471A", "476**", "514", "514**", "552",
+      "556F*", "570*", "593", "660", "678", "682", "706D", "708", "736A",
+      "737B*", "754**", "760***", "766", "767", "768", "770A*", "772*",
+      "774", "774D", "774L", "774P", "798", "802", "804", "805", "813*",
+      "827", "830B", "830C", "843*", "853", "853A", "854", "857", "859",
+      "862", "871*", "874*", "875*", "877", "879", "879A", "880", "886",
+      "890**", "901", "903C*", "920D", "921F", "925", "926", "926C*",
+      "927C*", "929A", "934F", "935*", "938", "938A", "938B", "939", "947",
+      "958F*", "960C", "980", "2010", "2013", "2019", "2019*", "2031B",
+      "2031C", "2250", "2302", "2335",
+      // Known-grim types that never reached the generated tier at all.
+      "300A", "311", "312", "312A", "315", "327A", "327B", "333", "363",
+      "365", "407", "451", "461", "590", "706", "709", "720", "725", "746",
+      "756B", "760", "762", "769", "780", "781", "785", "830", "838",
+      "883A", "890", "899", "930", "931", "950", "955", "956B", "990",
+      "992", "1030A", "1119", "1131", "1191", "1350", "1353", "1360C",
+      "1417", "1420", "1425", "1510", "1511", "1516", "1525A", "1730",
+      "1740", "1791", "1804", "1825", "1831",
+    ];
     const present = new Set(ATU_INDEX.map((e) => e.atu));
     for (const atu of unsafe) {
       expect(present.has(atu), `unsafe ATU ${atu} must be absent`).toBe(false);

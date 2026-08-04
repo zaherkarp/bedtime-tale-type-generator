@@ -70,7 +70,7 @@ describe("ATU canonical titles", () => {
     const uncovered = ATU_INDEX.filter((e) => !e.canonical);
     for (const entry of uncovered) {
       expect(entry.title.length).toBeGreaterThan(0);
-      expect(entry.blurb.length).toBeGreaterThan(0);
+      expect(entry.blurb === undefined || entry.blurb.length > 0).toBe(true);
     }
   });
 });

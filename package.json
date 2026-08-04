@@ -10,9 +10,15 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build && playwright test",
     "sync:atu": "node --experimental-strip-types scripts/sync-atu-index.ts",
-    "sync:atu:check": "node --experimental-strip-types scripts/sync-atu-index.ts --check"
+    "sync:atu:check": "node --experimental-strip-types scripts/sync-atu-index.ts --check",
+    "build:icons": "node --experimental-strip-types scripts/build-icons.ts",
+    "catalogue:propose": "node --experimental-strip-types scripts/propose-catalogue.ts",
+    "catalogue:build": "node --experimental-strip-types scripts/build-catalogue.ts",
+    "catalogue:check": "node --experimental-strip-types scripts/build-catalogue.ts --check",
+    "motifs:build": "node --experimental-strip-types scripts/build-motifs.ts",
+    "motifs:check": "node --experimental-strip-types scripts/build-motifs.ts --check"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.113.0",

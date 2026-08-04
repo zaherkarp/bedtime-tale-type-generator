@@ -1,5 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { cookies } from "next/headers";
 import { taleRequestSchema, type TaleRequest } from "@/lib/schema";
+import { COOKIE_NAME, isUnlocked } from "@/lib/passcode";
 import { SYSTEM_PROMPT, buildUserBrief } from "@/lib/prompt";
 import { getLength } from "@/lib/length";
 import { buildMockTale } from "@/lib/mock";
@@ -124,6 +126,18 @@ function liveStream(req: TaleRequest): ReadableStream<Uint8Array> {
 }
 
 export async function POST(request: Request) {
+  // The lock is checked here, in the route handler, rather than in a `proxy.ts`.
+  // Next 16's own guidance is to verify authorization inside the thing being
+  // protected rather than relying on Proxy, and this is the only endpoint that
+  // spends money, so there is nothing a second layer would buy.
+  const jar = await cookies();
+  if (!isUnlocked(jar.get(COOKIE_NAME)?.value)) {
+    return Response.json(
+      { error: "This storyteller is locked. Enter the passcode to wake it." },
+      { status: 401 },
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();

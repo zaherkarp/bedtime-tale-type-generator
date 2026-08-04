@@ -1,0 +1,1031 @@
+{
+  "note": "Reviewed by reading every generated tale type, not by running a screen over it. The automated screens in lib/safety.ts decide what reaches this file; this file decides what reaches the app. A record can veto an entry but never resurrect one: anything the screens rejected is already gone before build-catalogue.ts reads this. verdict is 'safe' or 'unsafe'; an unsafe record carries the reason it was cut, so the judgement can be argued with later. Blurbs are written from the canonical title and the motifs recorded against the type, and are bedtime framings rather than summaries of the scholarly record.",
+  "reviewedAt": "2026-08-04",
+  "counts": {
+    "reviewed": 255,
+    "safe": 146,
+    "unsafe": 109
+  },
+  "entries": {
+    "2B": {
+      "verdict": "safe",
+      "blurb": "A basket, a wolf's tail, and a plan that unravels as fast as it was tied."
+    },
+    "5": {
+      "verdict": "safe",
+      "blurb": "A small creature bites at a root and buys itself just enough time."
+    },
+    "6": {
+      "verdict": "safe",
+      "blurb": "Caught fast, and talked free — the captor is coaxed into opening his mouth."
+    },
+    "6*": {
+      "verdict": "safe",
+      "blurb": "A captor who cannot resist answering, and loses what he was holding."
+    },
+    "7": {
+      "verdict": "safe",
+      "blurb": "Three trees, three names, and a riddle answered one branch at a time."
+    },
+    "20C": {
+      "verdict": "safe",
+      "blurb": "The sky seems to be falling, so the animals set off in a worried, hurrying line."
+    },
+    "31": {
+      "verdict": "safe",
+      "blurb": "A fox and a wolf in a deep pit, and a way up that only one of them sees."
+    },
+    "32": {
+      "verdict": "safe",
+      "blurb": "Two buckets in a well: as one goes down the other comes up, and a friend is lifted out."
+    },
+    "34": {
+      "verdict": "safe",
+      "blurb": "The moon lies white on the water, and a hungry wolf mistakes it for cheese."
+    },
+    "34A": {
+      "verdict": "safe",
+      "blurb": "A dog with a fine dinner sees another dog below the bridge, and wants that one too."
+    },
+    "34C": {
+      "verdict": "safe",
+      "blurb": "A monkey with a whole handful of lentils drops the lot chasing one."
+    },
+    "35B*": {
+      "verdict": "unsafe",
+      "reason": "luring another animal into a trap is harm done on purpose"
+    },
+    "41": {
+      "verdict": "safe",
+      "blurb": "A wolf who ate his fill in a cellar and cannot fit back out through the gap."
+    },
+    "43": {
+      "verdict": "safe",
+      "blurb": "A house of wood and a house of ice, and only one of them still standing in spring."
+    },
+    "50A": {
+      "verdict": "safe",
+      "blurb": "Every footprint leads to the lion's door, and none lead away — so the fox stays outside."
+    },
+    "51A": {
+      "verdict": "safe",
+      "blurb": "The fox has a cold and a very good excuse ready for everyone."
+    },
+    "53*": {
+      "verdict": "safe",
+      "blurb": "A great roar in the forest, and a fox brave enough to go and look."
+    },
+    "58": {
+      "verdict": "safe",
+      "blurb": "A crocodile ferries a jackal across the river, and the crossing is not restful."
+    },
+    "63": {
+      "verdict": "safe",
+      "blurb": "A fox lowers himself into the water inch by inch until every last flea has hopped off."
+    },
+    "67": {
+      "verdict": "safe",
+      "blurb": "The river rises, and a fox has to decide what to carry and what to let go."
+    },
+    "67**": {
+      "verdict": "unsafe",
+      "reason": "a butcher catches the fox; the tale ends at a slaughterhouse"
+    },
+    "75": {
+      "verdict": "safe",
+      "blurb": "A lion spares a mouse, and one day the mouse gnaws through the net that holds him."
+    },
+    "75*": {
+      "verdict": "unsafe",
+      "reason": "the older title is 'Wolf Waits in Vain for the Nurse to Throw away the Child'"
+    },
+    "75A": {
+      "verdict": "safe",
+      "blurb": "The greatest of the animals, undone by the smallest, and gentler for learning it."
+    },
+    "78A": {
+      "verdict": "safe",
+      "blurb": "An animal roped to a tree for safety in a storm, and glad of it by morning."
+    },
+    "80A*": {
+      "verdict": "unsafe",
+      "reason": "'Who Gets the Booty?' — no tale a parent could recognise"
+    },
+    "81": {
+      "verdict": "safe",
+      "blurb": "It is far too cold to build a house in winter, and far too warm to bother in summer."
+    },
+    "87A*": {
+      "verdict": "safe",
+      "blurb": "A bear stands high on a heap of wood, certain he can see the whole world from there."
+    },
+    "93": {
+      "verdict": "unsafe",
+      "reason": "'The Master Taken Seriously' — too vague to offer"
+    },
+    "107": {
+      "verdict": "unsafe",
+      "reason": "a battle between dogs and wolves"
+    },
+    "111": {
+      "verdict": "safe",
+      "blurb": "A cat and a mouse hold a long, careful conversation from a very safe distance."
+    },
+    "112**": {
+      "verdict": "safe",
+      "blurb": "The mice hold a meeting, and the rooster has opinions about all of it."
+    },
+    "116": {
+      "verdict": "safe",
+      "blurb": "A bear climbs onto a loaded hay-wagon and rides home in it like a lord."
+    },
+    "120": {
+      "verdict": "safe",
+      "blurb": "Who will see the sunrise first? Everyone looks east except the one who looks up."
+    },
+    "121": {
+      "verdict": "safe",
+      "blurb": "Wolves climbing on one another's shoulders, higher and wobblier and higher."
+    },
+    "122C": {
+      "verdict": "safe",
+      "blurb": "A sheep asks the wolf to sing first, and the singing brings the shepherd running."
+    },
+    "122D": {
+      "verdict": "safe",
+      "blurb": "A caught animal promises something better just over the hill, and is believed."
+    },
+    "122E": {
+      "verdict": "safe",
+      "blurb": "'Wait for the fat goat,' says the thin one — and the fat one never comes."
+    },
+    "135*": {
+      "verdict": "safe",
+      "blurb": "A mouse hollows out a bread-crust and sails away in it down the stream."
+    },
+    "135A*": {
+      "verdict": "safe",
+      "blurb": "A fox in the dark stumbles into a violin and leaps at the sound it makes."
+    },
+    "136A*": {
+      "verdict": "unsafe",
+      "reason": "'Confession of Animals' — a heading, not a story"
+    },
+    "152": {
+      "verdict": "safe",
+      "blurb": "A plowman and his animals, and a long day's work shared out fairly."
+    },
+    "156A": {
+      "verdict": "safe",
+      "blurb": "A lion who keeps his word long after everyone expected him to forget it."
+    },
+    "157B": {
+      "verdict": "safe",
+      "blurb": "A sparrow teaches his sons what to be wary of, and they mostly listen."
+    },
+    "158": {
+      "verdict": "safe",
+      "blurb": "All the wild animals pile onto one sleigh, and the runners creak alarmingly."
+    },
+    "159": {
+      "verdict": "safe",
+      "blurb": "A bull made of straw, standing patiently in a field, gathering visitors."
+    },
+    "159*": {
+      "verdict": "unsafe",
+      "reason": "a quarrel over a killed stag"
+    },
+    "159C": {
+      "verdict": "safe",
+      "blurb": "A lion looks at a statue of a man standing over a lion, and asks who carved it."
+    },
+    "162": {
+      "verdict": "safe",
+      "blurb": "The master notices what the farmhand walked straight past."
+    },
+    "163": {
+      "verdict": "safe",
+      "blurb": "A wolf who would rather sing than do anything else, to everyone's cost but his own."
+    },
+    "168A": {
+      "verdict": "unsafe",
+      "reason": "an old woman and a wolf trapped in a pit together"
+    },
+    "183*": {
+      "verdict": "safe",
+      "blurb": "A hare promises to dance, and everyone gathers, and the hare is nowhere."
+    },
+    "184": {
+      "verdict": "unsafe",
+      "reason": "'Half of the Money Thrown into Water' — unreadable as a title"
+    },
+    "185": {
+      "verdict": "safe",
+      "blurb": "A cap-seller naps under a tree and wakes to find monkeys wearing his whole stock."
+    },
+    "186": {
+      "verdict": "safe",
+      "blurb": "A monkey and a nut too hard to open, until patience does what force could not."
+    },
+    "200A": {
+      "verdict": "safe",
+      "blurb": "A dog loses the paper that proved he was in charge, and has been looking ever since."
+    },
+    "202": {
+      "verdict": "safe",
+      "blurb": "Two stubborn goats meet in the middle of a narrow bridge and neither will step back."
+    },
+    "204": {
+      "verdict": "unsafe",
+      "reason": "the title is literally animals in peril at sea"
+    },
+    "214": {
+      "verdict": "safe",
+      "blurb": "A donkey sees the little dog petted and decides to try being a lapdog too."
+    },
+    "214B": {
+      "verdict": "safe",
+      "blurb": "A donkey in a lion's costume, roaring grandly, until he forgets and brays."
+    },
+    "215": {
+      "verdict": "unsafe",
+      "reason": "a bird tries to carry off a lamb"
+    },
+    "217": {
+      "verdict": "safe",
+      "blurb": "A cat holding a candle very still, for as long as a cat can manage."
+    },
+    "218": {
+      "verdict": "safe",
+      "blurb": "A cat turned into a girl who is perfectly poised until a mouse crosses the floor."
+    },
+    "219F*": {
+      "verdict": "safe",
+      "blurb": "A dog and a sow arguing about who has the better life, neither giving an inch."
+    },
+    "219H*": {
+      "verdict": "safe",
+      "blurb": "A rooster finds a pearl in the yard and would much rather have found barley."
+    },
+    "220": {
+      "verdict": "safe",
+      "blurb": "All the birds gather in council, and everyone has something to say."
+    },
+    "224": {
+      "verdict": "safe",
+      "blurb": "A wedding for the birds, or the beetles — feathers, music and a very small cake."
+    },
+    "230*": {
+      "verdict": "safe",
+      "blurb": "A race between a rooster and two moor-birds, run over the heather."
+    },
+    "232": {
+      "verdict": "safe",
+      "blurb": "The birch-cock watches the travelling birds go, and decides to stay where he is."
+    },
+    "232D*": {
+      "verdict": "safe",
+      "blurb": "A thirsty crow drops pebble after pebble until the water rises to meet her."
+    },
+    "233B": {
+      "verdict": "safe",
+      "blurb": "The birds lift the net and fly off with the whole thing, all pulling together."
+    },
+    "233D": {
+      "verdict": "safe",
+      "blurb": "A fowler sets his net, and the birds are wiser than he counted on."
+    },
+    "235": {
+      "verdict": "safe",
+      "blurb": "A jay borrows the cuckoo's feathers and finds they do not quite suit him."
+    },
+    "235C*": {
+      "verdict": "safe",
+      "blurb": "A bird has new clothes made and cannot decide which way round to wear them."
+    },
+    "236": {
+      "verdict": "safe",
+      "blurb": "The magpie shows the dove how to build a nest, and the dove stops watching too soon."
+    },
+    "236*": {
+      "verdict": "unsafe",
+      "reason": "'Miscellaneous Tales with Imitation of Bird Sounds' — an index bucket"
+    },
+    "238": {
+      "verdict": "safe",
+      "blurb": "A dove and a frog boasting to each other, each sure their home is the finer."
+    },
+    "239": {
+      "verdict": "safe",
+      "blurb": "A crow spots the snare and calls until the deer understands and steps clear."
+    },
+    "240": {
+      "verdict": "safe",
+      "blurb": "A dove who is not happy with her eggs and goes looking to swap them."
+    },
+    "244": {
+      "verdict": "safe",
+      "blurb": "A raven in borrowed feathers, splendid until the wind picks up."
+    },
+    "253": {
+      "verdict": "safe",
+      "blurb": "A fish who slips the net, and the long story he tells about it afterwards."
+    },
+    "275A": {
+      "verdict": "safe",
+      "blurb": "The hare is faster and knows it; the tortoise simply does not stop."
+    },
+    "276": {
+      "verdict": "safe",
+      "blurb": "A crab told to walk straight, who points out how his parents taught him."
+    },
+    "277A": {
+      "verdict": "unsafe",
+      "reason": "the frog puffs itself up until it bursts"
+    },
+    "278": {
+      "verdict": "unsafe",
+      "reason": "frog and mouse tied together, both taken by a bird"
+    },
+    "278A*": {
+      "verdict": "safe",
+      "blurb": "The frogs look down into the well and decide, wisely, not to jump in."
+    },
+    "280": {
+      "verdict": "safe",
+      "blurb": "An ant carrying a crumb bigger than herself, all the way home without complaint."
+    },
+    "282B*": {
+      "verdict": "safe",
+      "blurb": "A fly and a flea in conversation, each with a great deal to say."
+    },
+    "285B": {
+      "verdict": "unsafe",
+      "reason": "a snake attack, averted by chance"
+    },
+    "285E": {
+      "verdict": "unsafe",
+      "reason": "a snake bites at a file until its mouth is ruined"
+    },
+    "288B**": {
+      "verdict": "unsafe",
+      "reason": "'Festina Lente' — a Latin tag, not a title"
+    },
+    "289": {
+      "verdict": "unsafe",
+      "reason": "a shipwreck"
+    },
+    "293": {
+      "verdict": "unsafe",
+      "reason": "a debate between the belly and the limbs; an allegory, not a tale"
+    },
+    "296": {
+      "verdict": "unsafe",
+      "reason": "the clay pot is shattered against the brass one"
+    },
+    "298C*": {
+      "verdict": "safe",
+      "blurb": "The reeds bend low and let the storm pass over them, and are standing after."
+    },
+    "299": {
+      "verdict": "safe",
+      "blurb": "The whole mountain groans and shakes, and out comes one small mouse."
+    },
+    "302C*": {
+      "verdict": "safe",
+      "blurb": "A horse that is more than a horse, waiting patiently for the right rider."
+    },
+    "314A": {
+      "verdict": "unsafe",
+      "reason": "giants, and the traditional ending is killing them"
+    },
+    "321": {
+      "verdict": "unsafe",
+      "reason": "eyes torn out and recovered"
+    },
+    "325": {
+      "verdict": "unsafe",
+      "reason": "a transformation duel that ends in a death"
+    },
+    "369": {
+      "verdict": "safe",
+      "blurb": "A young traveller goes looking for the father he has never met."
+    },
+    "401A*": {
+      "verdict": "unsafe",
+      "reason": "soldiers and an enchanted castle; peril throughout"
+    },
+    "408": {
+      "verdict": "safe",
+      "blurb": "Three oranges, and inside each one something more wonderful than the last."
+    },
+    "412": {
+      "verdict": "unsafe",
+      "reason": "a soul kept outside a body in a necklace; eerie rather than gentle"
+    },
+    "425*": {
+      "verdict": "unsafe",
+      "reason": "an insulted bridegroom; a marriage plot"
+    },
+    "425D": {
+      "verdict": "unsafe",
+      "reason": "a vanished husband"
+    },
+    "425E": {
+      "verdict": "unsafe",
+      "reason": "an enchanted husband; a marriage plot despite the lullaby"
+    },
+    "426": {
+      "verdict": "safe",
+      "blurb": "Two sisters, a gentle bear at the door, and a winter that turns out kindly."
+    },
+    "430": {
+      "verdict": "safe",
+      "blurb": "A donkey who is not what he seems, and a household slowly learning to see it."
+    },
+    "434*": {
+      "verdict": "unsafe",
+      "reason": "a diver lost underwater"
+    },
+    "442": {
+      "verdict": "safe",
+      "blurb": "An old woman deep in the forest who turns out to have been waiting to help."
+    },
+    "460A": {
+      "verdict": "unsafe",
+      "reason": "a journey to God to ask why; doctrinal"
+    },
+    "465": {
+      "verdict": "safe",
+      "blurb": "Sent to fetch a thing that has no name, and finding it anyway."
+    },
+    "471A": {
+      "verdict": "unsafe",
+      "reason": "a monk and a bird; a parable about eternity"
+    },
+    "476": {
+      "verdict": "safe",
+      "blurb": "A lump of coal carried home in a pocket, gold by the time the door closes."
+    },
+    "476**": {
+      "verdict": "unsafe",
+      "reason": "a midwife carried into the underworld"
+    },
+    "513B": {
+      "verdict": "safe",
+      "blurb": "A ship that sails as easily over the fields as over the sea."
+    },
+    "514": {
+      "verdict": "unsafe",
+      "reason": "a change of sex, to marry"
+    },
+    "514**": {
+      "verdict": "unsafe",
+      "reason": "a woman in disguise wooed by a queen"
+    },
+    "515": {
+      "verdict": "safe",
+      "blurb": "A shepherd boy who answers the king's impossible questions with plain good sense."
+    },
+    "517": {
+      "verdict": "safe",
+      "blurb": "A boy who understands what the birds are saying, and is careful who he tells."
+    },
+    "552": {
+      "verdict": "unsafe",
+      "reason": "girls married to animals"
+    },
+    "554": {
+      "verdict": "safe",
+      "blurb": "Animals helped along the way who come back, each in their own time, to help in return."
+    },
+    "556F*": {
+      "verdict": "unsafe",
+      "reason": "a child bound into service to a witch"
+    },
+    "570*": {
+      "verdict": "unsafe",
+      "reason": "a rat-catcher; the tale is about killing them"
+    },
+    "570A": {
+      "verdict": "safe",
+      "blurb": "A princess and a shell that hums with the sound of the whole sea inside it."
+    },
+    "593": {
+      "verdict": "unsafe",
+      "reason": "'Fiddevav' — meaningless without the tale"
+    },
+    "660": {
+      "verdict": "unsafe",
+      "reason": "three doctors swap out their own eyes, hands and hearts"
+    },
+    "678": {
+      "verdict": "unsafe",
+      "reason": "a king moves his soul into a bird and cannot get back"
+    },
+    "681": {
+      "verdict": "safe",
+      "blurb": "A moment that lasts a lifetime, and a lifetime that passes in a moment."
+    },
+    "682": {
+      "verdict": "unsafe",
+      "reason": "a meditation on the Trinity"
+    },
+    "706D": {
+      "verdict": "unsafe",
+      "reason": "St Wilgefortis, who grew a beard and was crucified for it"
+    },
+    "708": {
+      "verdict": "unsafe",
+      "reason": "a mutilated child abandoned in a forest"
+    },
+    "715A": {
+      "verdict": "safe",
+      "blurb": "A rooster whose crowing turns out to be worth more than anyone guessed."
+    },
+    "735": {
+      "verdict": "safe",
+      "blurb": "Two men and two very different fortunes, and what each one does with his."
+    },
+    "736": {
+      "verdict": "safe",
+      "blurb": "Luck and wealth argue over which of them is really running things."
+    },
+    "736A": {
+      "verdict": "unsafe",
+      "reason": "the ring of Polycrates: the tale exists to end in doom"
+    },
+    "737B*": {
+      "verdict": "unsafe",
+      "reason": "a tale about the luck a wife brings her husband"
+    },
+    "739*": {
+      "verdict": "safe",
+      "blurb": "A creature that brings good fortune to whichever house takes it in."
+    },
+    "745": {
+      "verdict": "safe",
+      "blurb": "A single small coin that will not stay lost, however often it is spent."
+    },
+    "745A": {
+      "verdict": "safe",
+      "blurb": "A treasure that has been waiting all along for the one it belongs to."
+    },
+    "752B": {
+      "verdict": "safe",
+      "blurb": "A wind everyone forgot to thank, and what happens the year it forgets them."
+    },
+    "754": {
+      "verdict": "safe",
+      "blurb": "A poor household that turns out to be the luckiest one in the valley."
+    },
+    "754**": {
+      "verdict": "unsafe",
+      "reason": "St Peter and his wife"
+    },
+    "756E*": {
+      "verdict": "safe",
+      "blurb": "A kindness given without expecting anything, and repaid many times over."
+    },
+    "759E": {
+      "verdict": "safe",
+      "blurb": "A miller who will not sell his mill, and a king who learns to respect it."
+    },
+    "760***": {
+      "verdict": "unsafe",
+      "reason": "an infant death, framed as salvation"
+    },
+    "766": {
+      "verdict": "unsafe",
+      "reason": "the Seven Sleepers; a saints' legend"
+    },
+    "767": {
+      "verdict": "unsafe",
+      "reason": "food left for a crucifix"
+    },
+    "768": {
+      "verdict": "unsafe",
+      "reason": "St Christopher carrying the Christ child"
+    },
+    "770A*": {
+      "verdict": "unsafe",
+      "reason": "a guardian angel; doctrinal"
+    },
+    "772*": {
+      "verdict": "unsafe",
+      "reason": "flies where the nails were, on Christ's heart"
+    },
+    "774": {
+      "verdict": "unsafe",
+      "reason": "Christ and St Peter walking the roads"
+    },
+    "774D": {
+      "verdict": "unsafe",
+      "reason": "St Peter takes God's job for a day"
+    },
+    "774L": {
+      "verdict": "unsafe",
+      "reason": "mushrooms grown from St Peter's spittle"
+    },
+    "774P": {
+      "verdict": "unsafe",
+      "reason": "St Peter and the nuts"
+    },
+    "775": {
+      "verdict": "safe",
+      "blurb": "Everything he touches turns to gold, including his supper, and he wishes it undone."
+    },
+    "779H*": {
+      "verdict": "safe",
+      "blurb": "A child who gives away everything she has, and finds stars falling into her apron."
+    },
+    "798": {
+      "verdict": "unsafe",
+      "reason": "a woman made from a monkey's tail; the joke is on her"
+    },
+    "802": {
+      "verdict": "unsafe",
+      "reason": "a farmer's tour of heaven"
+    },
+    "804": {
+      "verdict": "unsafe",
+      "reason": "St Peter's mother falls out of heaven"
+    },
+    "805": {
+      "verdict": "unsafe",
+      "reason": "Joseph and Mary threaten to walk out of heaven"
+    },
+    "813*": {
+      "verdict": "unsafe",
+      "reason": "the tale is an instruction not to sleep for three nights"
+    },
+    "821B": {
+      "verdict": "safe",
+      "blurb": "Boiled eggs will not hatch chickens — a quiet answer to a very silly claim."
+    },
+    "827": {
+      "verdict": "unsafe",
+      "reason": "a pious man who knows nothing of God; doctrinal"
+    },
+    "830B": {
+      "verdict": "unsafe",
+      "reason": "crops that will thrive without God's blessing"
+    },
+    "830C": {
+      "verdict": "unsafe",
+      "reason": "'If God wills' — a lesson in saying it"
+    },
+    "842C*": {
+      "verdict": "safe",
+      "blurb": "Coins that float instead of sinking, and the honest hand they float towards."
+    },
+    "843*": {
+      "verdict": "unsafe",
+      "reason": "a lazy woman shamed out of her laziness"
+    },
+    "844": {
+      "verdict": "safe",
+      "blurb": "The happiest man in the kingdom, who turns out not to own a shirt at all."
+    },
+    "853": {
+      "verdict": "unsafe",
+      "reason": "the hero wins the princess by catching her out"
+    },
+    "853A": {
+      "verdict": "unsafe",
+      "reason": "the title is the single word 'No'"
+    },
+    "854": {
+      "verdict": "unsafe",
+      "reason": "a golden ram used to win a bride"
+    },
+    "857": {
+      "verdict": "unsafe",
+      "reason": "a princess's suitors killed over a riddle about a louse's skin"
+    },
+    "859": {
+      "verdict": "unsafe",
+      "reason": "a penniless bridegroom pretending to wealth"
+    },
+    "862": {
+      "verdict": "unsafe",
+      "reason": "'He that asketh shall receive'"
+    },
+    "871*": {
+      "verdict": "unsafe",
+      "reason": "a princess who goes looking for trouble, and marries it"
+    },
+    "874*": {
+      "verdict": "unsafe",
+      "reason": "Ariadne's thread, and what waits at the middle of the labyrinth"
+    },
+    "875*": {
+      "verdict": "unsafe",
+      "reason": "the women of Weinsberg carry their husbands out of a siege"
+    },
+    "875B": {
+      "verdict": "safe",
+      "blurb": "A girl who answers the king's riddles better than any of his counsellors."
+    },
+    "875E": {
+      "verdict": "safe",
+      "blurb": "An impossible judgement met with an even more impossible question."
+    },
+    "877": {
+      "verdict": "unsafe",
+      "reason": "an old woman is skinned"
+    },
+    "879": {
+      "verdict": "unsafe",
+      "reason": "the basil maiden; a courtship of insults"
+    },
+    "879A": {
+      "verdict": "unsafe",
+      "reason": "a fisherman marries the princess"
+    },
+    "880": {
+      "verdict": "unsafe",
+      "reason": "a man boasts about his wife and is tested on it"
+    },
+    "886": {
+      "verdict": "unsafe",
+      "reason": "a girl who cannot keep a secret; a marriage plot"
+    },
+    "887A*": {
+      "verdict": "safe",
+      "blurb": "Precious stones hidden in ordinary bricks, and a house worth more than it looks."
+    },
+    "890**": {
+      "verdict": "unsafe",
+      "reason": "a debtor forced to sleep in a bed of his own debt"
+    },
+    "901": {
+      "verdict": "unsafe",
+      "reason": "Taming of the Shrew — a wife broken into obedience"
+    },
+    "903C*": {
+      "verdict": "unsafe",
+      "reason": "a mother-in-law and daughter-in-law at war"
+    },
+    "910": {
+      "verdict": "safe",
+      "blurb": "Three pieces of advice, each one useless until the moment it is not."
+    },
+    "910E": {
+      "verdict": "safe",
+      "blurb": "'The treasure is in the vineyard' — and the digging is the treasure."
+    },
+    "910F": {
+      "verdict": "safe",
+      "blurb": "One twig snaps easily; the whole bundle will not break at all."
+    },
+    "910G": {
+      "verdict": "safe",
+      "blurb": "A man pays a penny for a piece of wisdom and gets his money's worth."
+    },
+    "915": {
+      "verdict": "safe",
+      "blurb": "The same news, taken two ways, and how much depends on which you choose."
+    },
+    "915A": {
+      "verdict": "safe",
+      "blurb": "Instructions followed exactly, and everything going sideways because of it."
+    },
+    "920A": {
+      "verdict": "safe",
+      "blurb": "Boiled eggs, a long-ago loan, and a case argued into good sense."
+    },
+    "920B": {
+      "verdict": "safe",
+      "blurb": "Each son chooses a bird, and each choice says more than he meant it to."
+    },
+    "920D": {
+      "verdict": "unsafe",
+      "reason": "'The Four Princes' — too vague to offer"
+    },
+    "920E": {
+      "verdict": "safe",
+      "blurb": "Three rings, identical to the eye, and a father who will not say which is real."
+    },
+    "921A": {
+      "verdict": "safe",
+      "blurb": "Bread or money, shared out by someone who has thought about it more carefully."
+    },
+    "921B": {
+      "verdict": "safe",
+      "blurb": "Who is the best friend and who the worst enemy — and both answers are the same."
+    },
+    "921C": {
+      "verdict": "safe",
+      "blurb": "Why the hair on your head goes grey before your beard does."
+    },
+    "921C*": {
+      "verdict": "safe",
+      "blurb": "A stargazer and a doctor argue at a farmer's table, and the farmer wins."
+    },
+    "921E": {
+      "verdict": "safe",
+      "blurb": "An answer nobody in the hall has ever heard before, and cannot argue with."
+    },
+    "921F": {
+      "verdict": "unsafe",
+      "reason": "a philosopher spits in a king's beard"
+    },
+    "922B": {
+      "verdict": "safe",
+      "blurb": "Whose face belongs on the coin, and who gets to decide."
+    },
+    "923A": {
+      "verdict": "safe",
+      "blurb": "Loved like wind in the hot sun — a strange answer that turns out to be the kindest."
+    },
+    "924": {
+      "verdict": "safe",
+      "blurb": "A whole discussion held in gestures, with both sides sure they understood."
+    },
+    "925": {
+      "verdict": "unsafe",
+      "reason": "'Tidings for the King' — the tidings are a death"
+    },
+    "925*": {
+      "verdict": "safe",
+      "blurb": "The most beautiful thing in the garden, and how long it takes to notice it."
+    },
+    "926": {
+      "verdict": "unsafe",
+      "reason": "Solomon threatens to cut a living baby in two"
+    },
+    "926C*": {
+      "verdict": "unsafe",
+      "reason": "children betrothed to each other"
+    },
+    "927A*": {
+      "verdict": "safe",
+      "blurb": "An old saddle, granted by the king, worth far more than it appears."
+    },
+    "927C*": {
+      "verdict": "unsafe",
+      "reason": "land measured out with a flayed horse's hide"
+    },
+    "928": {
+      "verdict": "safe",
+      "blurb": "An old man planting trees he will never sit under, for someone he will never meet."
+    },
+    "929A": {
+      "verdict": "unsafe",
+      "reason": "a father humiliated for being uneducated"
+    },
+    "934F": {
+      "verdict": "unsafe",
+      "reason": "a man trapped down a well"
+    },
+    "935": {
+      "verdict": "safe",
+      "blurb": "A long way from home, and a door still open at the end of it."
+    },
+    "935*": {
+      "verdict": "unsafe",
+      "reason": "a stepson sent to sea to be rid of him"
+    },
+    "936*": {
+      "verdict": "safe",
+      "blurb": "A golden mountain, and the long slow climb that is the real story."
+    },
+    "938": {
+      "verdict": "unsafe",
+      "reason": "Placidas: a Job story, family lost one by one"
+    },
+    "938A": {
+      "verdict": "unsafe",
+      "reason": "misfortune after misfortune in a childhood"
+    },
+    "938B": {
+      "verdict": "unsafe",
+      "reason": "the same, arranged the other way round"
+    },
+    "939": {
+      "verdict": "unsafe",
+      "reason": "an offended god takes revenge"
+    },
+    "940*": {
+      "verdict": "safe",
+      "blurb": "A debt forgiven, and the quiet that comes after it."
+    },
+    "944": {
+      "verdict": "safe",
+      "blurb": "King for a single year, and what a wise one does with the time."
+    },
+    "944*": {
+      "verdict": "safe",
+      "blurb": "Easy come, easy go — a fortune that arrives and leaves by the same door."
+    },
+    "945": {
+      "verdict": "safe",
+      "blurb": "Luck and intelligence set out together to see which gets further."
+    },
+    "945A*": {
+      "verdict": "safe",
+      "blurb": "Money and fortune, and the discovery that they are not the same thing."
+    },
+    "947": {
+      "verdict": "unsafe",
+      "reason": "a man pursued by bad luck his whole life"
+    },
+    "958F*": {
+      "verdict": "unsafe",
+      "reason": "a test of sex, by how a girl catches an apple"
+    },
+    "960C": {
+      "verdict": "unsafe",
+      "reason": "a murder revealed by a chicken standing up on the plate"
+    },
+    "967": {
+      "verdict": "safe",
+      "blurb": "A spider spins across the mouth of the cave, and the searchers pass by."
+    },
+    "980": {
+      "verdict": "unsafe",
+      "reason": "a son who hides food from his father, and the toad that fastens onto his face for the rest of his life"
+    },
+    "983": {
+      "verdict": "safe",
+      "blurb": "Dish after dish, all the same flavour, and a point made without a word."
+    },
+    "987": {
+      "verdict": "safe",
+      "blurb": "A magician's grand illusion undone by one girl who simply looked closely."
+    },
+    "2009": {
+      "verdict": "safe",
+      "blurb": "One grain on the first square, two on the next, and the whole kingdom not enough."
+    },
+    "2010": {
+      "verdict": "unsafe",
+      "reason": "'Ehod mi yodea' — a Hebrew counting song title, opaque here"
+    },
+    "2010A": {
+      "verdict": "safe",
+      "blurb": "Twelve days of gifts, piling up verse by verse until nobody can remember them all."
+    },
+    "2010I": {
+      "verdict": "safe",
+      "blurb": "A rich man's servant paid in a way that gets funnier the longer it goes on."
+    },
+    "2010IA": {
+      "verdict": "safe",
+      "blurb": "A house full of animals with names so peculiar the tale keeps tripping over them."
+    },
+    "2013": {
+      "verdict": "unsafe",
+      "reason": "the record is truncated mid-sentence and mis-quoted"
+    },
+    "2016": {
+      "verdict": "safe",
+      "blurb": "A wee wee woman in a wee wee house, and everything just as small as she is."
+    },
+    "2019": {
+      "verdict": "unsafe",
+      "reason": "'Pif Paf Poltrie' — meaningless without the tale"
+    },
+    "2019*": {
+      "verdict": "unsafe",
+      "reason": "a louse and a flea who wish to marry"
+    },
+    "2031A": {
+      "verdict": "safe",
+      "blurb": "A chain of stronger and strongest, each link topping the one before."
+    },
+    "2031B": {
+      "verdict": "unsafe",
+      "reason": "Abraham learns which thing to worship"
+    },
+    "2031C": {
+      "verdict": "unsafe",
+      "reason": "a daughter married off to the mightiest being"
+    },
+    "2034": {
+      "verdict": "safe",
+      "blurb": "A mouse who loses her tail and has to ask everyone in turn to get it back."
+    },
+    "2039": {
+      "verdict": "safe",
+      "blurb": "For want of a nail — the smallest thing at the start of the longest chain."
+    },
+    "2250": {
+      "verdict": "unsafe",
+      "reason": "'Unfinished Tales' — an index bucket"
+    },
+    "2301": {
+      "verdict": "safe",
+      "blurb": "Grain by grain by grain, carried away one at a time, for as long as you like."
+    },
+    "2302": {
+      "verdict": "unsafe",
+      "reason": "birds caught on a tarred bridge"
+    },
+    "2335": {
+      "verdict": "unsafe",
+      "reason": "'Tales Filled with Contradictions' — an index bucket"
+    }
+  }
+}

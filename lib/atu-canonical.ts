@@ -31,7 +31,7 @@ export const ATU_CANONICAL_TITLES: Readonly<Record<string, AtuCanonicalTitle>> =
   "2": { title: "The Tail-Fisher", source: "wikidata_p2540", spdx: "CC-BY-SA-4.0", disputed: false },
   "57": { title: "Raven with Cheese in his Mouth", source: "wikidata_p2540", spdx: "CC-BY-SA-4.0", disputed: false },
   "59": { title: "The Fox and the Sour Grapes", source: "wikidata_p2540", spdx: "CC-BY-SA-4.0", disputed: false },
-  "60": { title: "Fox and Crane Invite Each Other", source: "wikidata_p2540", spdx: "CC-BY-SA-4.0", disputed: false },
+  "60": { title: "The Fox and the Stork", source: "wikidata_p2540", spdx: "CC-BY-SA-4.0", disputed: true },
   "70": { title: "More Cowardly than the Hare", source: "wikidata_p2540", spdx: "CC-BY-SA-4.0", disputed: false },
   "76": { title: "The Wolf and the Crane", source: "wikidata_p2540", spdx: "CC-BY-SA-4.0", disputed: false },
   "77": { title: "The Stag Admires Himself in a Spring", source: "wikidata_p2540", spdx: "CC-BY-SA-4.0", disputed: false },
