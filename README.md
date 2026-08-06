@@ -109,6 +109,14 @@ actually vouched for them:
 were written for them. The tier stays because it is where the next hand-written
 blurb-only type lands.
 
+Only `buildUserBrief()` in `lib/prompt.ts` (server-only) reads a `featured`
+type's beats, signature elements, tone, or opener. Everything else — the
+picker, the browse grid, `lib/atu-index.ts` — needs just the label, emoji,
+tagline, ATU number, and category, so those six fields live separately in the
+generated `lib/tale-types-catalogue.ts` (`npm run tale-catalogue:build`).
+Client components import that instead of the full registry, so the ~55KB of
+prompt-only prose never rides along into the browser bundle.
+
 **Adding a hand-authored type:** append one object to `EXTRA_TYPES` — `id`,
 `atu`, `title`, `emoji`, and a gentle `blurb`; the category is derived from the
 ATU number. To make it featured, also add a `TaleType` record with the same `id`

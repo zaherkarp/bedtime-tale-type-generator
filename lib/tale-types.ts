@@ -1,4 +1,4 @@
-import { CURATED_TALE_TYPES } from "./tale-types-curated";
+import { CURATED_TALE_TYPES } from "./tale-types-curated.ts";
 
 /**
  * The tale-type registry — the heart of the generator.

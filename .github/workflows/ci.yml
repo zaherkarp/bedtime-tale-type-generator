@@ -35,10 +35,13 @@ jobs:
         # regenerating — but only where `kb/export/` exists, and it is gitignored
         # and needs the Postgres pipeline, so here they no-op and say so. The
         # unit tests are what actually assert the committed files' contents.
+        # `tale-catalogue:check` is different: it derives from files already in
+        # the repo, so it never no-ops and always fails on drift.
         run: |
           npm run sync:atu:check
           npm run catalogue:check
           npm run motifs:check
+          npm run tale-catalogue:check
 
       - name: Build
         run: npm run build
