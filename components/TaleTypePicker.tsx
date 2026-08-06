@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ORIGINAL_TALE_TYPES } from "@/lib/tale-types";
+import { ORIGINAL_TALE_TYPE_SUMMARIES } from "@/lib/tale-types-catalogue";
 import { ATU_INDEX } from "@/lib/atu-index";
 
 export default function TaleTypePicker({
@@ -26,7 +26,7 @@ export default function TaleTypePicker({
         phone at bedtime, and everything else is one tap away below.
       */}
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {ORIGINAL_TALE_TYPES.map((tale) => (
+        {ORIGINAL_TALE_TYPE_SUMMARIES.map((tale) => (
           <li key={tale.id}>
             <button
               type="button"

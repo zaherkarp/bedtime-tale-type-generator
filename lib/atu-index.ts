@@ -10,13 +10,17 @@
  * Wikidata property P2540 and the open `trilogy` dataset). The one-line `blurb`s
  * are our own gentle descriptions — never the academic/Uther summaries verbatim.
  *
- * The twelve "featured" types (rich beats, signature elements, tone) live in
- * `lib/tale-types.ts`; they are folded in here so the catalogue and the generator
- * share one id space. Adding a new browsable type is as simple as appending one
- * object to EXTRA_TYPES below.
+ * The 62 "featured" types (rich beats, signature elements, tone) live in
+ * `lib/tale-types.ts`, but this module — reached from "use client" components —
+ * only ever needs their picker-card fields (label, emoji, tagline, ATU number,
+ * category), so it draws those from the generated `lib/tale-types-catalogue.ts`
+ * rather than the full registry. Importing the full registry here would pull
+ * every beat and example opener into the browser bundle for nothing; only the
+ * server's `buildUserBrief()` in `lib/prompt.ts` needs them. Adding a new
+ * browsable type is as simple as appending one object to EXTRA_TYPES below.
  */
 
-import { TALE_TYPES } from "./tale-types";
+import { TALE_TYPE_SUMMARIES } from "./tale-types-catalogue";
 import { ATU_CANONICAL_TITLES, type AtuCanonicalTitle } from "./atu-canonical";
 import { ATU_EXTENDED } from "./atu-extended";
 
@@ -174,8 +178,8 @@ const CURATED_BLURBS: Readonly<Record<string, string>> = Object.fromEntries(
   EXTRA_TYPES.map((e) => [e.id, e.blurb!]),
 );
 
-/** Featured entries, derived from the rich TaleType registry. */
-const FEATURED_ENTRIES: readonly AtuIndexEntry[] = TALE_TYPES.map((t) => {
+/** Featured entries, derived from the client-facing tale-type summaries. */
+const FEATURED_ENTRIES: readonly AtuIndexEntry[] = TALE_TYPE_SUMMARIES.map((t) => {
   const atu = t.atuNumber.replace(/^ATU\s+/i, "");
   return {
     id: t.id,
@@ -199,7 +203,7 @@ const FEATURED_ENTRIES: readonly AtuIndexEntry[] = TALE_TYPES.map((t) => {
  * filter removes all fifty, so `EXTRA_ENTRIES` is currently empty; the array
  * stays because the next hand-written catalogue-only type will land in it.
  */
-const FEATURED_IDS = new Set(TALE_TYPES.map((t) => t.id));
+const FEATURED_IDS = new Set(TALE_TYPE_SUMMARIES.map((t) => t.id));
 
 const EXTRA_ENTRIES: readonly AtuIndexEntry[] = EXTRA_TYPES.filter(
   (e) => !FEATURED_IDS.has(e.id),
