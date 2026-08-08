@@ -67,7 +67,7 @@ export default function StoryForm({
         <div>
           <p className="font-serif text-2xl text-starlight">{tale?.title}</p>
           {tale && (
-            <p className="text-xs font-medium uppercase tracking-wide text-lavender/80">
+            <p className="text-xs font-medium uppercase tracking-wide text-lavender">
               ATU {tale.atu} · {tale.category}
             </p>
           )}
@@ -95,7 +95,7 @@ export default function StoryForm({
           value={heroName}
           onChange={(e) => setHeroName(e.target.value)}
           placeholder="A name, e.g. Amara"
-          className="w-full rounded-xl border border-white/15 bg-surface/70 px-4 py-3 text-starlight placeholder:text-muted/70 focus:border-amber/60 focus:outline-none"
+          className="w-full rounded-xl border border-white/15 bg-surface/70 px-4 py-3 text-starlight placeholder:text-muted focus:border-amber/60 focus:outline-none"
           aria-invalid={touched && heroMissing}
           aria-describedby={touched && heroMissing ? "heroName-error" : undefined}
         />
@@ -271,7 +271,7 @@ function OptionalField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-white/12 bg-surface/60 px-3 py-2 text-starlight placeholder:text-muted/60 focus:border-amber/60 focus:outline-none"
+        className="w-full rounded-lg border border-white/12 bg-surface/60 px-3 py-2 text-starlight placeholder:text-muted focus:border-amber/60 focus:outline-none"
       />
     </div>
   );

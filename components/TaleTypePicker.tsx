@@ -40,7 +40,7 @@ export default function TaleTypePicker({
               <span className="font-serif text-xl text-starlight">
                 {tale.label}
               </span>
-              <span className="mt-0.5 text-xs font-medium uppercase tracking-wide text-lavender/80">
+              <span className="mt-0.5 text-xs font-medium uppercase tracking-wide text-lavender">
                 {tale.atuNumber} · {tale.category}
               </span>
               <span className="mt-1 text-sm text-muted">{tale.tagline}</span>

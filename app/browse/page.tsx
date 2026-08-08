@@ -78,7 +78,7 @@ export default function BrowsePage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by name, ATU number, or category…"
-            className="min-h-12 w-full rounded-xl border border-white/15 bg-surface/70 px-4 py-3 text-base text-starlight placeholder:text-muted/70 focus:border-amber/60 focus:outline-none"
+            className="min-h-12 w-full rounded-xl border border-white/15 bg-surface/70 px-4 py-3 text-base text-starlight placeholder:text-muted focus:border-amber/60 focus:outline-none"
           />
         </div>
 
@@ -144,7 +144,7 @@ export default function BrowsePage() {
                     <span className="font-serif text-xl text-starlight">
                       {e.title}
                     </span>
-                    <span className="mt-0.5 text-xs font-medium uppercase tracking-wide text-lavender/80">
+                    <span className="mt-0.5 text-xs font-medium uppercase tracking-wide text-lavender">
                       ATU {e.atu} · {e.category}
                     </span>
                     {e.blurb && (
