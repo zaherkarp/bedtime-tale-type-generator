@@ -1,6 +1,7 @@
 import type { TaleRequest } from "./schema";
 import { getTaleType } from "./tale-types";
 import { getAtuEntry } from "./atu-index";
+import { getFable } from "./fables";
 
 /**
  * A deterministic, offline stand-in for the Claude storyteller.
@@ -12,14 +13,19 @@ import { getAtuEntry } from "./atu-index";
  */
 export function buildMockTale(request: TaleRequest): string {
   const label =
-    getTaleType(request.taleTypeId)?.label ??
-    getAtuEntry(request.taleTypeId)?.title ??
-    "Bedtime";
+    request.kind === "fable"
+      ? (getFable(request.fableId)?.title ?? "Bedtime")
+      : (getTaleType(request.taleTypeId)?.label ??
+        getAtuEntry(request.taleTypeId)?.title ??
+        "Bedtime");
+  // Fable titles are noun phrases ("The Lion and the Mouse"), and the mock's
+  // own title template already supplies an article.
+  const shortLabel = label.replace(/^The\s+/i, "");
   const hero = request.heroName || "the little one";
   const setting = request.setting?.trim();
   const where = setting ? ` in ${setting}` : " in a snug little room";
 
-  return `# ${hero} and the Sleepy ${label}
+  return `# ${hero} and the Sleepy ${shortLabel}
 
 Once, when the sky had pulled its softest blanket of stars across the world, ${hero} was wide awake${where}. The lamp glowed the colour of warm honey, and everything felt calm and kind.
 

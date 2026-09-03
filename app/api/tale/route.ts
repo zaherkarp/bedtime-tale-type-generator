@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { cookies } from "next/headers";
 import { taleRequestSchema, type TaleRequest } from "@/lib/schema";
 import { COOKIE_NAME, isUnlocked } from "@/lib/passcode";
-import { SYSTEM_PROMPT, buildUserBrief } from "@/lib/prompt";
+import { SYSTEM_PROMPT, buildUserBrief, familyOf } from "@/lib/prompt";
 import { getLength } from "@/lib/length";
 import { buildMockTale } from "@/lib/mock";
 
@@ -79,7 +79,9 @@ function mockStream(req: TaleRequest): ReadableStream<Uint8Array> {
 /** Live storyteller backed by the Claude API. */
 function liveStream(req: TaleRequest): ReadableStream<Uint8Array> {
   const client = new Anthropic();
-  const length = getLength(req.length as never);
+  // The token ceiling follows the story family: a "long" fable is a 1,300–1,600
+  // word bedtime story, which does not fit in the folktale family's budget.
+  const length = getLength(req.length as never, familyOf(req));
 
   return new ReadableStream({
     async start(controller) {

@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { parseStory, toBlocks } from "@/lib/story";
 import { speak, cancelSpeech, isSpeechSupported } from "@/lib/speech";
 import StoryArticle from "./StoryArticle";
+import BehindTheStory from "./BehindTheStory";
 import ReadingControls, { useReadingPrefs, useWakeLock } from "./ReadingControls";
 import { BTN_ACCENT, BTN_PRIMARY, BTN_SECONDARY } from "./ui";
+import type { Fable } from "@/lib/fables";
 
 export type StoryStatus = "streaming" | "done" | "error";
 
@@ -18,6 +20,7 @@ export default function StoryView({
   onRegenerate,
   onNew,
   onStop,
+  behindTheStory,
 }: {
   raw: string;
   status: StoryStatus;
@@ -27,6 +30,8 @@ export default function StoryView({
   onRegenerate: () => void;
   onNew: () => void;
   onStop: () => void;
+  /** The curated fable this story was grown from, when there is one. */
+  behindTheStory?: Fable;
 }) {
   const [speaking, setSpeaking] = useState(false);
   const { title, body } = parseStory(raw);
@@ -191,6 +196,15 @@ export default function StoryView({
           </>
         )}
       </div>
+
+      {/*
+        Only once the tale has finished. A provenance panel that appears while
+        a child is being read to is a distraction; afterwards it is exactly
+        where a curious parent looks.
+      */}
+      {behindTheStory && status !== "streaming" && (
+        <BehindTheStory fable={behindTheStory} />
+      )}
     </div>
   );
 }

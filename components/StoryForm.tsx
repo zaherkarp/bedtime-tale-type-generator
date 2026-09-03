@@ -3,21 +3,35 @@
 import { useState } from "react";
 import { type AgeBand, type TaleLength } from "@/lib/tale-types";
 import { getAtuEntry } from "@/lib/atu-index";
+import { getFable } from "@/lib/fables";
 import { AGE_BANDS, AGE_BAND_ORDER } from "@/lib/age-bands";
-import { LENGTHS, LENGTH_ORDER } from "@/lib/length";
+import { lengthsFor, LENGTH_ORDER } from "@/lib/length";
 import { motifsFor } from "@/lib/motifs";
-import { MAX_MOTIFS, type TaleRequest } from "@/lib/schema";
+import { MAX_MOTIFS, type StorySource, type TaleRequest } from "@/lib/schema";
 
 export default function StoryForm({
-  taleTypeId,
+  source,
   onGenerate,
   onBack,
 }: {
-  taleTypeId: string;
+  source: StorySource;
   onGenerate: (req: TaleRequest) => void;
   onBack: () => void;
 }) {
-  const tale = getAtuEntry(taleTypeId);
+  // One header, two catalogues. The rest of the form is identical for both
+  // families, which is exactly why they share it: hero, age, length and the
+  // optional details mean the same thing whichever door you came through.
+  const fable = source.kind === "fable" ? getFable(source.id) : undefined;
+  const tale = source.kind === "atu" ? getAtuEntry(source.id) : undefined;
+  const title = fable?.title ?? tale?.title;
+  const emoji = fable?.emoji ?? tale?.emoji;
+  const subtitle = fable
+    ? `${fable.tradition}${fable.region ? ` · ${fable.region.split(";")[0]}` : ""}`
+    : tale
+      ? `ATU ${tale.atu} · ${tale.category}`
+      : undefined;
+  const LENGTHS = lengthsFor(source.kind === "fable" ? "fable" : "folktale");
+
   const [heroName, setHeroName] = useState("");
   const [ageBand, setAgeBand] = useState<AgeBand>("6-8");
   const [length, setLength] = useState<TaleLength>("medium");
@@ -28,6 +42,8 @@ export default function StoryForm({
   const [motifCodes, setMotifCodes] = useState<string[]>([]);
 
   // The real Thompson motifs recorded for this tale type, already screened.
+  // Fables have none: the Thompson index records motifs against ATU tale
+  // types, and inventing links for this corpus would be worse than having none.
   const motifs = tale ? motifsFor(tale.atu) : [];
 
   const heroMissing = heroName.trim().length === 0;
@@ -46,29 +62,37 @@ export default function StoryForm({
     e.preventDefault();
     setTouched(true);
     if (heroMissing) return;
-    onGenerate({
-      taleTypeId,
+    const common = {
       heroName: heroName.trim(),
       ageBand,
       length,
       companions: companions.trim() || undefined,
       setting: setting.trim() || undefined,
       lesson: lesson.trim() || undefined,
-      motifCodes: motifCodes.length ? motifCodes : undefined,
-    });
+    };
+    onGenerate(
+      source.kind === "fable"
+        ? { kind: "fable", fableId: source.id, ...common }
+        : {
+            kind: "atu",
+            taleTypeId: source.id,
+            ...common,
+            motifCodes: motifCodes.length ? motifCodes : undefined,
+          },
+    );
   }
 
   return (
     <form onSubmit={handleSubmit} className="mx-auto max-w-xl">
       <div className="mb-6 flex items-center gap-3">
         <span className="text-4xl" aria-hidden="true">
-          {tale?.emoji}
+          {emoji}
         </span>
         <div>
-          <p className="font-serif text-2xl text-starlight">{tale?.title}</p>
-          {tale && (
+          <p className="font-serif text-2xl text-starlight">{title}</p>
+          {subtitle && (
             <p className="text-xs font-medium uppercase tracking-wide text-lavender">
-              ATU {tale.atu} · {tale.category}
+              {subtitle}
             </p>
           )}
           <button

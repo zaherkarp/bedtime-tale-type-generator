@@ -3,10 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import TaleTypePicker from "@/components/TaleTypePicker";
+import FablePicker from "@/components/FablePicker";
 import StoryForm from "@/components/StoryForm";
 import StoryView, { type StoryStatus } from "@/components/StoryView";
 import PasscodePrompt from "@/components/PasscodePrompt";
-import type { TaleRequest } from "@/lib/schema";
+import type { StorySource, TaleRequest } from "@/lib/schema";
+import { sourceIdOf } from "@/lib/schema";
+import { getFable, FABLE_IDS } from "@/lib/fables";
 import { getAtuEntry, ATU_TYPE_IDS } from "@/lib/atu-index";
 import { parseStory } from "@/lib/story";
 import { saveTale } from "@/lib/library";
@@ -18,9 +21,13 @@ import {
 
 type Step = "pick" | "form" | "story";
 
+/** The two doors on the first screen. */
+type Family = "folktale" | "fable";
+
 export default function Home() {
   const [step, setStep] = useState<Step>("pick");
-  const [taleTypeId, setTaleTypeId] = useState<string>("");
+  const [family, setFamily] = useState<Family>("folktale");
+  const [source, setSource] = useState<StorySource | null>(null);
   const [request, setRequest] = useState<TaleRequest | null>(null);
 
   const [raw, setRaw] = useState("");
@@ -34,14 +41,22 @@ export default function Home() {
 
   // Deep-link support: /?type=<id> preselects a tale type and jumps to the form,
   // so the "Browse all tale types" catalogue can hand off to the generator.
+  // /?fable=<id> does the same for the fable corpus. `type` keeps its original
+  // meaning, so every link ever shared or bookmarked still lands where it did.
   useEffect(() => {
-    const requested = new URLSearchParams(window.location.search).get("type");
-    if (requested && ATU_TYPE_IDS.includes(requested)) {
-      /* eslint-disable react-hooks/set-state-in-effect */
-      setTaleTypeId(requested);
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type");
+    const fable = params.get("fable");
+    /* eslint-disable react-hooks/set-state-in-effect */
+    if (type && ATU_TYPE_IDS.includes(type)) {
+      setSource({ kind: "atu", id: type });
       setStep("form");
-      /* eslint-enable react-hooks/set-state-in-effect */
+    } else if (fable && FABLE_IDS.includes(fable)) {
+      setFamily("fable");
+      setSource({ kind: "fable", id: fable });
+      setStep("form");
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   function generate(req: TaleRequest) {
@@ -79,10 +94,17 @@ export default function Home() {
   function handleSave() {
     if (!request || saved) return;
     const { title, body } = parseStory(raw);
-    const typeLabel = getAtuEntry(request.taleTypeId)?.title ?? "Bedtime tale";
+    // Saved tales keep the one `taleTypeId` field they have always had; for a
+    // fable it holds the fable id. The library only ever uses it to look up a
+    // label and an emoji, and both lookups already tolerate a miss.
+    const sourceId = sourceIdOf(request);
+    const typeLabel =
+      (request.kind === "fable"
+        ? getFable(request.fableId)?.title
+        : getAtuEntry(request.taleTypeId)?.title) ?? "Bedtime tale";
     const finalTitle = title || `${request.heroName}'s ${typeLabel}`;
     saveTale({
-      taleTypeId: request.taleTypeId,
+      taleTypeId: sourceId,
       taleTypeLabel: typeLabel,
       heroName: request.heroName,
       ageBand: request.ageBand as never,
@@ -96,7 +118,7 @@ export default function Home() {
   function handleNew() {
     abortRef.current?.abort();
     setStep("pick");
-    setTaleTypeId("");
+    setSource(null);
     setRequest(null);
     setRaw("");
     setSaved(false);
@@ -123,17 +145,54 @@ export default function Home() {
 
       <main className="flex-1">
         {step === "pick" && (
-          <TaleTypePicker
-            onSelect={(id) => {
-              setTaleTypeId(id);
-              setStep("form");
-            }}
-          />
+          <>
+            {/*
+              The two doors. Both lead to the same form and the same wind-down;
+              they differ only in which catalogue you choose from, which is the
+              whole architectural claim of the fable family.
+            */}
+            <div
+              role="group"
+              aria-label="What kind of story tonight?"
+              className="mx-auto mb-8 flex max-w-md gap-2 rounded-2xl border border-white/10 bg-surface/50 p-1.5"
+            >
+              <FamilyTab
+                active={family === "folktale"}
+                testId="family-folktale"
+                onClick={() => setFamily("folktale")}
+              >
+                Folktale
+              </FamilyTab>
+              <FamilyTab
+                active={family === "fable"}
+                testId="family-fable"
+                onClick={() => setFamily("fable")}
+              >
+                Fable &amp; wisdom tale
+              </FamilyTab>
+            </div>
+
+            {family === "folktale" ? (
+              <TaleTypePicker
+                onSelect={(id) => {
+                  setSource({ kind: "atu", id });
+                  setStep("form");
+                }}
+              />
+            ) : (
+              <FablePicker
+                onSelect={(id) => {
+                  setSource({ kind: "fable", id });
+                  setStep("form");
+                }}
+              />
+            )}
+          </>
         )}
 
-        {step === "form" && (
+        {step === "form" && source && (
           <StoryForm
-            taleTypeId={taleTypeId}
+            source={source}
             onGenerate={generate}
             onBack={() => setStep("pick")}
           />
@@ -162,6 +221,10 @@ export default function Home() {
             onRegenerate={() => request && generate(request)}
             onNew={handleNew}
             onStop={handleStop}
+            /* Provenance is for the parent, after the tale — never part of it. */
+            behindTheStory={
+              request?.kind === "fable" ? getFable(request.fableId) : undefined
+            }
           />
         )}
       </main>
@@ -174,5 +237,33 @@ export default function Home() {
         Sweet dreams. Every tale ends in sleep. 💫
       </footer>
     </div>
+  );
+}
+
+function FamilyTab({
+  active,
+  onClick,
+  testId,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  testId: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      data-testid={testId}
+      aria-pressed={active}
+      onClick={onClick}
+      className={`min-h-11 flex-1 rounded-xl px-4 py-2 text-sm font-medium transition ${
+        active
+          ? "bg-surface-2 text-starlight"
+          : "text-muted hover:text-starlight"
+      }`}
+    >
+      {children}
+    </button>
   );
 }
