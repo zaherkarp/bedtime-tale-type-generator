@@ -24,6 +24,11 @@ live from the **Claude API** (`claude-opus-4-8`).
   - **A browsable catalogue** (`/browse`) of the full bedtime-safe set — search by
     name or ATU number, filter by category, and turn any type into a story. Darker
     or adult tale types are excluded entirely.
+- **Fables & wisdom tales** — a second story family: 11 curated traditional
+  fables from seven named traditions (Aesopic, Jātaka, Panchatantra,
+  Hitopadesha, Kalīla wa Dimna, Akan, and Chinese, Japanese and Korean
+  tradition), each grown from a 200-word kernel into a 600–1,600-word bedtime
+  story, with parent-facing provenance and per-fable child-adaptation metadata.
 - **The wind-down arc** — a global rule in the storyteller's prompt guarantees
   every story softens toward sleep.
 - **Age-aware** — 3–5, 6–8, and 9–12 bands tune vocabulary and gentleness.
@@ -80,8 +85,10 @@ components/           TaleTypePicker, StoryForm, StoryView, Starfield, LibraryCa
 lib/
   atu-index.ts        the bedtime-safe ATU catalogue (all browsable tale types)
   tale-types.ts       the 12 featured types with rich, hand-authored beats
-  prompt.ts           system persona (wind-down + safety) + per-request brief
-  schema.ts           zod validation for the request
+  fables.ts           the curated fable corpus (the second story family)
+  prompt.ts           system persona (wind-down + safety) + brief assembly
+  fable-prompt.ts     the kernel / adaptation / expansion blocks for a fable
+  schema.ts           zod validation for the request (tagged by story family)
   stream-client.ts    browser-side NDJSON consumer
   library.ts          localStorage read/write
   speech.ts           read-aloud helpers
@@ -93,6 +100,126 @@ wind-down arc, age-appropriate safety rules, and the output contract) plus a
 per-request brief, then streams the story from Claude as newline-delimited JSON
 events (`{"t":"delta","text":"…"}` … `{"t":"done"}`). User-supplied details are
 sanitized and clearly framed as story _data_, never instructions.
+
+### Two story families
+
+The first screen has two doors, and they are genuinely different data models —
+not one catalogue with a flag on it.
+
+|  | **Folktales** | **Fables & wisdom tales** |
+|---|---|---|
+| Identified by | an ATU tale-type number | a named traditional story, in a named tradition |
+| Lives in | `lib/atu-index.ts`, `lib/tale-types.ts` | `lib/fables.ts` |
+| Size | 208 types, three tiers, mostly generated | 11 fables, all hand-modelled |
+| Drives the prompt with | beats, signature elements, tone, opener | `coreBeats` + adaptation metadata + `expansionBeats` |
+| Extras | Thompson motifs (up to 3 per story) | provenance, themes, per-fable child adaptation |
+| Safety comes from | the stem screens in `lib/safety.ts`, plus review | per-fable metadata written by a person who read the tale |
+| Length | 300 / 600 / 900 words | 600–800 / 900–1,200 / 1,300–1,600 words |
+| Request | `{ kind: "atu", taleTypeId }` | `{ kind: "fable", fableId }` |
+
+Both share everything that makes this a bedtime app: the same `SYSTEM_PROMPT`,
+the same wind-down arc, the same age bands, the same sanitizing and injection
+guard, the same streaming route, library, read-aloud and print.
+
+**Why fables are not ATU tale types.** The ATU index is an index of *patterns*:
+a number and a canonical title, with no answer to "whose telling, in which
+collection, under what licence" — because for a pattern there is no single
+answer. A fable is the opposite: "The Lion and the Mouse" is Perry 150 of the
+Aesopic corpus, "The Quails and the Net" is Jātaka 33, and the tradition and the
+collection are the interesting facts. Forcing fables into ATU would assign
+numbers the index does not assign and flatten Panchatantra, Jātaka and Aesopic
+transmission into one European scheme. So they get their own small registry.
+
+**Requests stay backward compatible.** `taleRequestSchema` is a discriminated
+union on `kind`, but any request arriving without a `kind` is stamped `"atu"`
+first. Every request the app has ever sent, and every shared `/?type=<id>` deep
+link, still validates unchanged. Fables opt in explicitly, and get `/?fable=<id>`.
+
+### Fables: kernel, adaptation, expansion
+
+Three ideas do all the work, and they are what a new curated fable has to supply.
+
+**`coreBeats` — the kernel.** The causal spine that makes the traditional fable
+recognisable: sequence, problem, reversal, inference, consequence. Drop one and
+it stops being that fable. The brief tells the storyteller to play them through
+*once*, cleanly, in the middle of the story. What is inherited is the mechanism,
+never the prose.
+
+**`expansionBeats` — where it may grow.** A traditional fable is 150–300 words
+and a bedtime story is 900–1,500, and the naive way to close that gap — running
+the encounter three times, or padding the conflict — destroys the fable, because
+a reversal that happens repeatedly is not a reversal. So the brief allocates the
+extra length outward, to setting, travel, ordinary routines, relationships,
+discovery, aftermath, reflection and the sleepy return, and says explicitly where
+length may *not* come from. `expansionBeats` name the places this particular tale
+grows well. Mouse meets lion, mouse helps lion — with a world built around it,
+not four more meetings.
+
+The default shape is ordinary world → a reason to travel → approach → the kernel
+→ the result settling → understanding it → the journey home → narrowing senses →
+somewhere safe → sleep. It is offered as a shape, not a checklist; ten literal
+beats produces ten mechanical paragraphs. The last third still obeys the global
+wind-down arc, and the moral is asked to arrive through events and reflection
+rather than a closing `MORAL:` line.
+
+**`adaptation` — the child-safety metadata.** Traditional fables contain a great
+deal that has no business at bedtime, and "make it child-friendly" hands that
+judgement to the model afresh on every request. Instead the corpus carries it, in
+a file that can be reviewed in a pull request. Each fable names its `concerns`
+from a fixed list — death, injury, predation, threat, abandonment, betrayal,
+humiliation, punishment, coercion, frightening transformation, hunger peril —
+and then says what to do, with four verbs that are not synonyms:
+
+- **`preserve`** — the reason the fable works;
+- **`soften`** — keep it, lower its temperature;
+- **`substitute`** — swap it for something carrying the same weight;
+- **`remove`** — leave it out; nothing replaces it.
+
+`preserve` exists to stop the other three from sterilising the tale. If
+cleverness beats brute force because a weak character escapes being eaten, the
+adaptation may remove the eating — but not the asymmetry, the real problem, the
+inference, or the escape. **"Safe" must not come to mean "nothing happens"**, and
+the brief says so in as many words. `ageFloor` marks tales kept for older
+listeners; picking a younger band does not refuse the request, it asks for every
+softening applied in full, because a parent who knows their child outranks a
+number in a data file.
+
+### Adding a curated fable
+
+Append one object to `FABLES` in `lib/fables.ts`. Nothing else changes — the
+picker, the schema, the brief and the provenance panel are all driven from it.
+
+1. `id` (kebab-case, must not collide with an ATU id), `title` (our own English
+   title, not any translator's wording), `emoji`, `tradition` (add it to
+   `FABLE_TRADITIONS` if it is new — name a people, a language community or a
+   textual tradition, never a continent), `region`, and a one-sentence `setup`
+   for the card.
+2. `coreBeats` — 4–7 beats, in your own words, describing structure. Never paste
+   a telling.
+3. `themes`, and `expansionBeats` naming where this tale has room to breathe.
+4. `adaptation` — `concerns`, then `preserve` (always), and whichever of
+   `soften` / `substitute` / `remove` the concerns require. A fable with concerns
+   and no handling fails `tests/unit/fables.test.ts`.
+5. `source` — see below.
+
+**Provenance expectations.** Record the collection, the compiler or collector as
+an attribution rather than an assertion of authorship, the year of the *cited
+edition*, and any scholarly designation (`Perry 150`, `Jātaka 33`). Then set
+`confidence`, and if it is not `high`, write a `note` saying exactly what is
+uncertain — the note is shown to parents. Prefer primary and public-domain
+editions, university, library and museum references, Gutenberg or Internet
+Archive scans of appropriate historical editions, and standard folklore
+reference works; do not treat generic "world folktale" sites as authoritative.
+A URL is optional and should be omitted rather than guessed. **Never invent
+cultural provenance**, and never round a disputed attribution up to a certain
+one.
+
+**What must never be stored here.** No copyrighted modern retelling, in whole or
+in part. No public-domain translation's prose either — this repo stores
+structured factual metadata and our own summaries of traditional structure, and
+the app generates original prose over them. The "Behind the story" panel says
+plainly that the tale is inspired by a tradition and is *not* an authentic
+traditional telling; nothing in the product should imply otherwise.
 
 ### The three catalogue tiers
 

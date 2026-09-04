@@ -1,5 +1,6 @@
 import type { SavedTale } from "@/lib/library";
 import { getAtuEntry } from "@/lib/atu-index";
+import { getFable } from "@/lib/fables";
 import { parseStory } from "@/lib/story";
 
 export default function LibraryCard({
@@ -11,7 +12,12 @@ export default function LibraryCard({
   onRead: () => void;
   onDelete: () => void;
 }) {
-  const emoji = getAtuEntry(tale.taleTypeId)?.emoji ?? "🌙";
+  // `taleTypeId` holds an ATU id or a fable id depending on which door the
+  // tale came through; both lookups miss quietly, and the moon is the fallback.
+  const emoji =
+    getAtuEntry(tale.taleTypeId)?.emoji ??
+    getFable(tale.taleTypeId)?.emoji ??
+    "🌙";
   const { body } = parseStory(tale.text);
   const preview = body.replace(/\n+/g, " ").slice(0, 130).trim();
   const date = new Date(tale.createdAt).toLocaleDateString(undefined, {
