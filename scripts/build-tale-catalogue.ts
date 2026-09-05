@@ -1,8 +1,9 @@
 /**
  * Generate `lib/tale-types-catalogue.ts` — the client-facing tale-type summary.
  *
- * `lib/tale-types.ts` (plus `lib/tale-types-curated.ts`) hand-authors a full
- * `TaleType` record for each of the 62 featured tale types: the picker-card
+ * `lib/tale-types.ts` (plus `lib/tale-types-curated.ts` and
+ * `lib/tale-types-extended-authored.ts`) hand-authors a full
+ * `TaleType` record for each featured tale type: the picker-card
  * fields (label, emoji, tagline, ATU number, category) *and* the prompt-only
  * fields that steer generation (beats, signature elements, tone, an example
  * opener). Only `buildUserBrief()` in `lib/prompt.ts` — server-only — ever
@@ -25,6 +26,7 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { ORIGINAL_TALE_TYPES, type TaleType } from "../lib/tale-types.ts";
 import { CURATED_TALE_TYPES } from "../lib/tale-types-curated.ts";
+import { EXTENDED_TALE_TYPES } from "../lib/tale-types-extended-authored.ts";
 
 const REPO_ROOT = resolve(import.meta.dirname, "..");
 const OUTPUT_PATH = resolve(REPO_ROOT, "lib/tale-types-catalogue.ts");
@@ -49,10 +51,11 @@ function render(): string {
   return `/**
  * GENERATED FILE — do not edit by hand.
  *
- * Written by \`npm run tale-catalogue:build\` from \`lib/tale-types.ts\` and
- * \`lib/tale-types-curated.ts\`. Carries the six fields a picker card or the
- * story form needs — never the beats, signature elements, tone, or example
- * opener that steer the prompt. Those stay in the full \`TaleType\` registry,
+ * Written by \`npm run tale-catalogue:build\` from \`lib/tale-types.ts\`,
+ * \`lib/tale-types-curated.ts\` and \`lib/tale-types-extended-authored.ts\`.
+ * Carries the six fields a picker card or the story form needs — never the
+ * beats, signature elements, tone, or example opener that steer the prompt.
+ * Those stay in the full \`TaleType\` registry,
  * imported only by \`lib/prompt.ts\` and \`lib/mock.ts\` (both server-only), so
  * that prose never rides along into a "use client" bundle.
  */
@@ -76,10 +79,16 @@ export const CURATED_TALE_TYPE_SUMMARIES: readonly TaleTypeSummary[] = [
 ${renderRows(CURATED_TALE_TYPES)}
 ];
 
-/** All 62 featured tale types, picker-card fields only. */
+/** The tale types promoted out of the generated tier, picker-card fields only. */
+export const EXTENDED_TALE_TYPE_SUMMARIES: readonly TaleTypeSummary[] = [
+${renderRows(EXTENDED_TALE_TYPES)}
+];
+
+/** Every featured tale type, picker-card fields only. */
 export const TALE_TYPE_SUMMARIES: readonly TaleTypeSummary[] = [
   ...ORIGINAL_TALE_TYPE_SUMMARIES,
   ...CURATED_TALE_TYPE_SUMMARIES,
+  ...EXTENDED_TALE_TYPE_SUMMARIES,
 ];
 `;
 }

@@ -1,10 +1,11 @@
 /**
  * GENERATED FILE — do not edit by hand.
  *
- * Written by `npm run tale-catalogue:build` from `lib/tale-types.ts` and
- * `lib/tale-types-curated.ts`. Carries the six fields a picker card or the
- * story form needs — never the beats, signature elements, tone, or example
- * opener that steer the prompt. Those stay in the full `TaleType` registry,
+ * Written by `npm run tale-catalogue:build` from `lib/tale-types.ts`,
+ * `lib/tale-types-curated.ts` and `lib/tale-types-extended-authored.ts`.
+ * Carries the six fields a picker card or the story form needs — never the
+ * beats, signature elements, tone, or example opener that steer the prompt.
+ * Those stay in the full `TaleType` registry,
  * imported only by `lib/prompt.ts` and `lib/mock.ts` (both server-only), so
  * that prose never rides along into a "use client" bundle.
  */
@@ -522,8 +523,213 @@ export const CURATED_TALE_TYPE_SUMMARIES: readonly TaleTypeSummary[] = [
   },
 ];
 
-/** All 62 featured tale types, picker-card fields only. */
+/** The tale types promoted out of the generated tier, picker-card fields only. */
+export const EXTENDED_TALE_TYPE_SUMMARIES: readonly TaleTypeSummary[] = [
+  {
+    id: "atu-2b-basket-tied-to-wolf-s-tail",
+    label: "The Basket on the Wolf's Tail",
+    atuNumber: "ATU 2B",
+    category: "Animal Tales",
+    emoji: "🧺",
+    tagline: "A borrowed basket, a wolf's swishing tail, and a fishing trip that goes sideways.",
+  },
+  {
+    id: "atu-5-biting-the-tree-root",
+    label: "The Mouse Who Kept On Chewing",
+    atuNumber: "ATU 5",
+    category: "Animal Tales",
+    emoji: "🌱",
+    tagline: "A pinched paw, a patient bit of gnawing, and a quiet escape nobody notices.",
+  },
+  {
+    id: "atu-6-animal-captor-persuaded-to-talk",
+    label: "The Rooster Who Talked His Way Free",
+    atuNumber: "ATU 6",
+    category: "Animal Tales",
+    emoji: "🐓",
+    tagline: "Held gently but firmly, and freed by nothing more than a good question.",
+  },
+  {
+    id: "atu-6-animal-captor-talks-with-booty-in",
+    label: "The Bird Who Answered Anyway",
+    atuNumber: "ATU 6*",
+    category: "Animal Tales",
+    emoji: "🐦",
+    tagline: "A cheeky remark from the bushes, and a captor who simply cannot help answering back.",
+  },
+  {
+    id: "atu-7-the-three-tree-names",
+    label: "The Three Trees' Names",
+    atuNumber: "ATU 7",
+    category: "Animal Tales",
+    emoji: "🌳",
+    tagline: "A riddle asked under three different trees, and a friend who has been listening all along.",
+  },
+  {
+    id: "atu-20c-the-animals-flee-in-fear-of",
+    label: "The Day the Animals Ran",
+    atuNumber: "ATU 20C",
+    category: "Animal Tales",
+    emoji: "🐇",
+    tagline: "An acorn falls, a rumor grows legs, and a whole forest goes rushing nowhere.",
+  },
+  {
+    id: "atu-31-fox-climbs-from-the-pit-on",
+    label: "Out of the Pit, Together",
+    atuNumber: "ATU 31",
+    category: "Animal Tales",
+    emoji: "🕳️",
+    tagline: "A deep pit, a boost from an unlikely ladder, and a debt paid back by evening.",
+  },
+  {
+    id: "atu-32-the-wolf-descends-into-the-well",
+    label: "Two Buckets in the Well",
+    atuNumber: "ATU 32",
+    category: "Animal Tales",
+    emoji: "🪣",
+    tagline: "One bucket down, one bucket up, and a fox who knows exactly how a well works.",
+  },
+  {
+    id: "atu-34-the-wolf-dives-into-the-water",
+    label: "The Wolf and the Moon in the Pond",
+    atuNumber: "ATU 34",
+    category: "Animal Tales",
+    emoji: "🌕",
+    tagline: "A round pale shape on the water, and a hungry wolf who is sure it's cheese.",
+  },
+  {
+    id: "atu-34a-the-dog-drops-his-meat-for",
+    label: "The Dog and His Reflection",
+    atuNumber: "ATU 34A",
+    category: "Animal Tales",
+    emoji: "🐕",
+    tagline: "A good bone, a bright puddle, and a dog who learns to trust his own luck.",
+  },
+  {
+    id: "atu-34c-the-monkey-with-the-lentils",
+    label: "The Monkey and the Lentil",
+    atuNumber: "ATU 34C",
+    category: "Animal Tales",
+    emoji: "🐒",
+    tagline: "A handful of lentils, one rolling seed, and a lap that turns out to hold plenty.",
+  },
+  {
+    id: "atu-41-the-wolf-overeats-in-the-cellar",
+    label: "The Wolf Who Ate Too Much",
+    atuNumber: "ATU 41",
+    category: "Animal Tales",
+    emoji: "🐺",
+    tagline: "A cellar full of good things, a gap in the fence, and a belly that needs a night to settle.",
+  },
+  {
+    id: "atu-43-the-bear-builds-a-house-of",
+    label: "The House of Wood and the House of Ice",
+    atuNumber: "ATU 43",
+    category: "Animal Tales",
+    emoji: "🏠",
+    tagline: "Two neighbours, two houses, and one built to last past the thaw.",
+  },
+  {
+    id: "atu-50a-fox-sees-all-tracks-going-into",
+    label: "The Tracks That Never Came Back",
+    atuNumber: "ATU 50A",
+    category: "Animal Tales",
+    emoji: "🦶",
+    tagline: "Footprints leading one way only, and a fox too sensible to follow them in.",
+  },
+  {
+    id: "atu-51a-the-fox-has-the-sniffles",
+    label: "The Fox's Sniffles",
+    atuNumber: "ATU 51A",
+    category: "Animal Tales",
+    emoji: "🤧",
+    tagline: "A stuffy nose, a ready excuse, and neighbours who see through it kindly.",
+  },
+  {
+    id: "atu-53-the-fox-investigates-a-roar",
+    label: "The Fox and the Big Roar",
+    atuNumber: "ATU 53*",
+    category: "Animal Tales",
+    emoji: "🌲",
+    tagline: "A tremendous noise in the forest, and one small fox brave enough to check.",
+  },
+  {
+    id: "atu-58-the-crocodile-carries-the-jackal",
+    label: "The Crocodile's Ferry",
+    atuNumber: "ATU 58",
+    category: "Animal Tales",
+    emoji: "🐊",
+    tagline: "A river crossing, a hungry rumble, and a jackal who talks his way to the far bank.",
+  },
+  {
+    id: "atu-63-the-fox-rids-himself-of-fleas",
+    label: "How the Fox Lost His Fleas",
+    atuNumber: "ATU 63",
+    category: "Animal Tales",
+    emoji: "🦊",
+    tagline: "An itchy fox, a slow wade into the pond, and a clever way to travel light.",
+  },
+  {
+    id: "atu-67-the-fox-in-a-swollen-river",
+    label: "The Fox and the Rising River",
+    atuNumber: "ATU 67",
+    category: "Animal Tales",
+    emoji: "🌊",
+    tagline: "A river rising fast, an armful of treasures, and the peace of choosing what to keep.",
+  },
+  {
+    id: "atu-75-the-help-of-the-weak",
+    label: "The Lion and the Mouse",
+    atuNumber: "ATU 75",
+    category: "Animal Tales",
+    emoji: "🦁",
+    tagline: "A small kindness remembered, and a great favor returned when it matters most.",
+  },
+  {
+    id: "atu-75a-the-lion-and-the-worm",
+    label: "The Lion Who Learned to Listen",
+    atuNumber: "ATU 75A",
+    category: "Animal Tales",
+    emoji: "🐛",
+    tagline: "A boastful lion, a determined little worm, and a lesson about the smallest creatures.",
+  },
+  {
+    id: "atu-78a-animal-tied-up-because-of-a",
+    label: "Tied Safe Through the Storm",
+    atuNumber: "ATU 78A",
+    category: "Animal Tales",
+    emoji: "⛈️",
+    tagline: "Dark clouds rolling in, a rope tied to a sturdy tree, and morning arriving calm.",
+  },
+  {
+    id: "atu-81-too-cold-for-hare-to-build",
+    label: "Too Busy Enjoying the Weather to Build a House",
+    atuNumber: "ATU 81",
+    category: "Animal Tales",
+    emoji: "❄️",
+    tagline: "Four seasons of good excuses, and a warm burrow shared at last.",
+  },
+  {
+    id: "atu-87a-the-bear-stands-on-a-heap",
+    label: "The Bear on Top of the World",
+    atuNumber: "ATU 87A*",
+    category: "Animal Tales",
+    emoji: "🪵",
+    tagline: "A tall woodpile, a very big claim, and a friendly correction from smaller eyes.",
+  },
+  {
+    id: "atu-111-the-cat-and-the-mouse-converse",
+    label: "The Cat and the Mouse Have a Chat",
+    atuNumber: "ATU 111",
+    category: "Animal Tales",
+    emoji: "🐭",
+    tagline: "A careful conversation across a very safe distance, and a friendship it grows into.",
+  },
+];
+
+/** Every featured tale type, picker-card fields only. */
 export const TALE_TYPE_SUMMARIES: readonly TaleTypeSummary[] = [
   ...ORIGINAL_TALE_TYPE_SUMMARIES,
   ...CURATED_TALE_TYPE_SUMMARIES,
+  ...EXTENDED_TALE_TYPE_SUMMARIES,
 ];

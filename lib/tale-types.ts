@@ -1,4 +1,5 @@
 import { CURATED_TALE_TYPES } from "./tale-types-curated.ts";
+import { EXTENDED_TALE_TYPES } from "./tale-types-extended-authored.ts";
 
 /**
  * The tale-type registry — the heart of the generator.
@@ -334,17 +335,24 @@ export const ORIGINAL_TALE_TYPES: readonly TaleType[] = [
 ] as const;
 
 /**
- * The full featured registry: the twelve originals, then the fifty that were
- * catalogue-only until beats were written for them.
+ * The full featured registry, in order of how long each tier has existed: the
+ * twelve originals, then the fifty that were catalogue-only until beats were
+ * written for them, then the entries promoted out of the generated tier.
  *
- * The import sits at the bottom rather than the top because
- * `lib/tale-types-curated.ts` imports the `TaleType` type from this file. It is
- * a type-only import and therefore erased at build time, but keeping the value
- * import down here makes the one-directional shape obvious to a reader.
+ * All three tiers are the same shape and are treated identically everywhere
+ * downstream. The split into three files is about provenance and reviewability
+ * — each file's header records how its entries were written and what was
+ * softened — not about any behavioural difference between them.
+ *
+ * The imports sit at the bottom rather than the top because both of those
+ * files import the `TaleType` type from this one. They are type-only imports
+ * and therefore erased at build time, but keeping the value imports down here
+ * makes the one-directional shape obvious to a reader.
  */
 export const TALE_TYPES: readonly TaleType[] = [
   ...ORIGINAL_TALE_TYPES,
   ...CURATED_TALE_TYPES,
+  ...EXTENDED_TALE_TYPES,
 ];
 
 /** All valid tale-type ids, useful for validation. */

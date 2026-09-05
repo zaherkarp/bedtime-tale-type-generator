@@ -22,6 +22,8 @@ story, regardless of type, decelerate into a soft goodnight.
 | Second story family | Curated fables in their own registry, not ATU | Fables have provenance ATU cannot express |
 | Fable request shape | `kind`-tagged discriminated union, untagged ⇒ `atu` | New family opts in; every old request still validates |
 | Fable corpus scale  | 11 hand-modelled seeds, transparent TS data | Architecture is the deliverable; no DB, scraper or CMS |
+| Catalogue depth     | Promote generated types into the hand-authored registry, in batches | 208 browsable types but only 62 with beats made the catalogue look deeper than it read |
+| Promotion mechanics | Third registry file; generated tier filtered by id in `lib/atu-index.ts` | Keeps the generated file an honest record of the pipeline, and the catalogue free of duplicates |
 
 ## Core design
 
@@ -64,11 +66,13 @@ story, regardless of type, decelerate into a soft goodnight.
 
 ## Verification
 
-- `npm run lint`, `npm run typecheck`, `npm test` (198 unit tests), `npm run build`
+- `npm run lint`, `npm run typecheck`, `npm test` (200 unit tests), `npm run build`
   all pass. Unit tests cover the registry integrity, schema accept/reject for
   both story families, prompt assembly + injection framing, the fable kernel /
   expansion / adaptation blocks, provenance staying out of the brief, length
-  mapping, and story parsing.
+  mapping, and story parsing. Two more cover promotion out of the generated
+  tier: that a promoted id traces back to something the pipeline actually
+  produced, and that it appears once, as featured, with its ATU number intact.
 - `npm run test:e2e` (Playwright, mock mode, 19 tests) covers the happy path
   (pick → fill → streamed story → save → library), the fable door and its
   provenance panel, the empty-library state, and a gentle error state.
@@ -77,7 +81,8 @@ story, regardless of type, decelerate into a soft goodnight.
 
 ## Backlog (not built)
 
-A browse/search page for the fable corpus once it outgrows one screen · fable
+Beats for the remaining 121 generated-tier types, continuing the batch-by-batch
+promotion · a browse/search page for the fable corpus once it outgrows one screen · fable
 themes as a cross-tradition filter ("tonight, a story about patience") ·
 measuring generated fable length against its target band ·
 a faster Haiku "quick tale" mode · share-as-image ·

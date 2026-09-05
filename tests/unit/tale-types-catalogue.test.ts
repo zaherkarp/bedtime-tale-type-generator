@@ -3,6 +3,7 @@ import {
   TALE_TYPE_SUMMARIES,
   ORIGINAL_TALE_TYPE_SUMMARIES,
   CURATED_TALE_TYPE_SUMMARIES,
+  EXTENDED_TALE_TYPE_SUMMARIES,
 } from "@/lib/tale-types-catalogue";
 import { TALE_TYPES, ORIGINAL_TALE_TYPES } from "@/lib/tale-types";
 
@@ -17,6 +18,7 @@ describe("tale-type catalogue summary", () => {
     expect(TALE_TYPE_SUMMARIES).toEqual([
       ...ORIGINAL_TALE_TYPE_SUMMARIES,
       ...CURATED_TALE_TYPE_SUMMARIES,
+      ...EXTENDED_TALE_TYPE_SUMMARIES,
     ]);
   });
 

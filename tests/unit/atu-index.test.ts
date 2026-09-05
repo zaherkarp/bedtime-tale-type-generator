@@ -9,6 +9,40 @@ import {
   searchAtu,
 } from "@/lib/atu-index";
 import { TALE_TYPES } from "@/lib/tale-types";
+import { EXTENDED_TALE_TYPES } from "@/lib/tale-types-extended-authored";
+import { ATU_EXTENDED } from "@/lib/atu-extended";
+
+describe("promotion out of the generated tier", () => {
+  // `lib/tale-types-extended-authored.ts` takes entries that arrived from the
+  // knowledge base with only a title and a blurb and gives them beats. The
+  // catalogue then has to stop listing them as generated rows. These are the
+  // two ways that can silently go wrong.
+
+  it("only ever promotes a type the generated tier actually produced", () => {
+    // A typo in an id would otherwise invent a brand-new tale type that no
+    // safety screen and no human read-through ever saw, while looking exactly
+    // like a promotion. Every promoted id must trace back to `ATU_EXTENDED`.
+    const generated = new Set(ATU_EXTENDED.map((e) => e.id));
+    for (const t of EXTENDED_TALE_TYPES) {
+      expect(generated.has(t.id), `${t.id} came from the generated tier`).toBe(
+        true,
+      );
+    }
+  });
+
+  it("carries a promoted type once, as featured, with its ATU number intact", () => {
+    // The id-uniqueness test below would catch a duplicate, but not a promotion
+    // that landed under a changed ATU number — which would split one tale type
+    // into two catalogue rows that no longer look like duplicates at all.
+    const byAtu = new Map(ATU_EXTENDED.map((e) => [e.id, e.atu]));
+    for (const t of EXTENDED_TALE_TYPES) {
+      const rows = ATU_INDEX.filter((e) => e.id === t.id);
+      expect(rows, `${t.id} appears once`).toHaveLength(1);
+      expect(rows[0].featured, `${t.id} is featured`).toBe(true);
+      expect(rows[0].atu, `${t.id} keeps its ATU number`).toBe(byAtu.get(t.id));
+    }
+  });
+});
 
 describe("ATU index", () => {
   it("includes every featured type plus the extra catalogue", () => {
@@ -40,12 +74,21 @@ describe("ATU index", () => {
     }
   });
 
-  it("gives every hand-authored entry a blurb and a simple ATU number", () => {
+  it("gives every hand-authored entry a blurb and a well-formed ATU number", () => {
     // Only the generated tier is allowed to go without a description; someone
     // wrote every featured and curated entry by hand and owes it a sentence.
+    // A promoted entry inherits the blurb it arrived with, via `CURATED_BLURBS`.
+    //
+    // The number pattern is the same one `tests/unit/atu-extended.test.ts`
+    // applies to the generated tier. It used to be stricter here because no
+    // hand-authored type had ever carried an asterisk — the twelve originals
+    // and the fifty curated ones are all famous, plainly numbered tales. The
+    // moment promotion started drawing from the generated tier that stopped
+    // being true, and a starred code like `87A*` is a real ATU designation,
+    // not a malformed one.
     for (const e of ATU_INDEX.filter((x) => x.tier !== "extended")) {
       expect(e.blurb?.length, `${e.id} blurb`).toBeGreaterThan(0);
-      expect(e.atu, `${e.id} atu`).toMatch(/^\d+[A-Z]?$/);
+      expect(e.atu, `${e.id} atu`).toMatch(/^\d+[A-Z]*\*{0,3}$/);
     }
   });
 
