@@ -18,7 +18,7 @@ live from the **Claude API** (`claude-opus-4-8`).
 - **Real ATU tale types** — every story is shaped after a genuine tale type from
   the [Aarne–Thompson–Uther folktale index](https://en.wikipedia.org/wiki/Aarne%E2%80%93Thompson%E2%80%93Uther_Index),
   gently softened for bedtime.
-  - **112 featured types** with a hand-authored narrative shape, signature motifs,
+  - **208 featured types** with a hand-authored narrative shape, signature motifs,
     and voice — Cinderella (ATU 510A), The Dragon-Slayer (300), The Gingerbread
     Man (2025) and the rest of the original twelve, plus the types promoted out
     of the generated tier as beats were written for them.
@@ -111,7 +111,7 @@ not one catalogue with a flag on it.
 |---|---|---|
 | Identified by | an ATU tale-type number | a named traditional story, in a named tradition |
 | Lives in | `lib/atu-index.ts`, `lib/tale-types.ts` | `lib/fables.ts` |
-| Size | 208 types, three tiers, 112 hand-authored | 11 fables, all hand-modelled |
+| Size | 208 types, all hand-authored | 11 fables, all hand-modelled |
 | Drives the prompt with | beats, signature elements, tone, opener | `coreBeats` + adaptation metadata + `expansionBeats` |
 | Extras | Thompson motifs (up to 3 per story) | provenance, themes, per-fable child adaptation |
 | Safety comes from | the stem screens in `lib/safety.ts`, plus review | per-fable metadata written by a person who read the tale |
@@ -224,18 +224,21 @@ traditional telling; nothing in the product should imply otherwise.
 
 ### The three catalogue tiers
 
-The catalogue is 208 tale types in three tiers, ordered by how much anybody has
-actually vouched for them:
+The catalogue is 208 tale types. The tier field records how each one got here,
+ordered by how much anybody has vouched for it — and as of the promotion pass,
+every type sits in the top tier:
 
 | Tier | Count | Where | Drives the prompt with |
 |---|---|---|---|
-| `featured` | 112 | `lib/tale-types.ts` + `lib/tale-types-curated.ts` + `lib/tale-types-extended-authored.ts`, hand-authored | beats, signature elements, tone, opener |
+| `featured` | 208 | `lib/tale-types.ts` + `lib/tale-types-curated.ts` + `lib/tale-types-extended-authored.ts`, hand-authored | beats, signature elements, tone, opener |
 | `curated` | 0 | `EXTRA_TYPES` in `lib/atu-index.ts`, hand-authored | title + blurb |
-| `extended` | 96 | `lib/atu-extended.ts`, generated **then read** | title + blurb |
+| `extended` | 0 | `lib/atu-extended.ts`, generated **then read** | title + blurb |
 
-`curated` is empty because all fifty of its entries were promoted once beats
-were written for them. The tier stays because it is where the next hand-written
-blurb-only type lands.
+`curated` and `extended` are both empty: every type in them has been promoted.
+Nothing in the catalogue now drives the prompt from a bare title. The tiers stay
+in the model because they are where the next un-promoted type lands — a new
+hand-written blurb-only entry, or a knowledge-base regeneration adding codes
+nobody has written beats for yet.
 
 `extended` is shrinking the same way. `lib/tale-types-extended-authored.ts`
 takes generated-tier entries and gives them beats, and `lib/atu-index.ts`
@@ -246,8 +249,8 @@ promotion is a fact about this repo rather than about that pipeline.
 
 Each promoted entry records what its beats were written from, in a `source`
 field: either a named public-domain edition with its Gutenberg id, or
-`knowledge` where no text was consulted. Ten of the fifty promoted so far carry
-an edition; the rest do not, and say so.
+`knowledge` where no text was consulted. 30 of the 146 carry an edition; the
+other 116 do not, and say so.
 
 That ratio is close to the ceiling rather than a backlog. Searching eleven
 public-domain collections and confirming each candidate by reading it found a

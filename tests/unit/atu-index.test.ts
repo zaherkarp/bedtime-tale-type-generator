@@ -66,10 +66,14 @@ describe("promotion out of the generated tier", () => {
 });
 
 describe("ATU index", () => {
-  it("includes every featured type plus the extra catalogue", () => {
+  it("carries every registry type and nothing that is not one", () => {
+    // The catalogue and the registry are now the same set: promotion finished,
+    // so every browsable type has beats. The second assertion used to be
+    // `>` — the catalogue was larger because most of it had no registry
+    // record. Equality is the stronger statement, and it is the one that holds.
     const featured = ATU_INDEX.filter((e) => e.featured);
     expect(featured).toHaveLength(TALE_TYPES.length);
-    expect(ATU_INDEX.length).toBeGreaterThan(TALE_TYPES.length);
+    expect(ATU_INDEX).toHaveLength(TALE_TYPES.length);
   });
 
   it("has unique ids and unique ATU numbers", () => {
@@ -119,13 +123,21 @@ describe("ATU index", () => {
       // `featured` is the old boolean and must never disagree with the tier.
       expect(e.featured, `${e.id} featured/tier agree`).toBe(e.tier === "featured");
     }
-    // `curated` is currently empty: every one of the fifty catalogue-only
-    // types was promoted to `featured` once beats were written for them. The
-    // tier stays in the union because it is where the next hand-written
-    // blurb-only type will land, so this asserts the two that must be there
-    // rather than all three.
-    for (const tier of ["featured", "extended"] as const) {
-      expect(ATU_INDEX.some((e) => e.tier === tier), `${tier} present`).toBe(true);
+    // `curated` and `extended` are both empty now. Every catalogue-only type
+    // has been promoted to `featured`, which is the end state this work was
+    // aimed at: nothing in the catalogue drives the prompt from a bare title.
+    //
+    // Both tiers stay in the union rather than being deleted, because they are
+    // where the next un-promoted type lands — a hand-written blurb-only entry
+    // in `EXTRA_TYPES`, or a fresh knowledge-base regeneration adding codes
+    // nobody has written beats for yet. So this asserts the one tier that must
+    // be populated, and that the other two are empty rather than forgotten.
+    expect(ATU_INDEX.some((e) => e.tier === "featured"), "featured present").toBe(true);
+    for (const tier of ["curated", "extended"] as const) {
+      expect(
+        ATU_INDEX.filter((e) => e.tier === tier),
+        `${tier} is empty because everything in it was promoted`,
+      ).toHaveLength(0);
     }
   });
 

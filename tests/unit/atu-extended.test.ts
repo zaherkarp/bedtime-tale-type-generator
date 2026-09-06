@@ -52,10 +52,24 @@ describe("the review file", () => {
 });
 
 describe("generated ATU tier", () => {
-  it("is a substantial expansion of the hand-authored catalogue", () => {
+  it("still holds every type the pipeline produced, promoted or not", () => {
+    // This used to assert the generated tier outnumbered the hand-authored one.
+    // It no longer can: every type it produced has since been given beats, so
+    // `ATU_INDEX` shows none of them as `extended` any more.
+    //
+    // What is still worth asserting is that promotion never *removed* anything
+    // from this file. It is the record of what the knowledge-base pipeline
+    // emitted, and it has to stay complete for `catalogue:check` to detect
+    // drift and for the promotion test to have something to trace ids back to.
+    // Shrinking it would silently narrow the catalogue instead.
     expect(ATU_EXTENDED.length).toBeGreaterThan(100);
-    const handAuthored = ATU_INDEX.filter((e) => e.tier !== "extended");
-    expect(ATU_EXTENDED.length).toBeGreaterThan(handAuthored.length);
+    const promoted = new Set(EXTENDED_TALE_TYPES.map((t) => t.id));
+    for (const e of ATU_EXTENDED) {
+      expect(
+        promoted.has(e.id) || ATU_INDEX.some((x) => x.id === e.id),
+        `${e.id} is still reachable`,
+      ).toBe(true);
+    }
   });
 
   it("has a well-formed record for every entry", () => {
