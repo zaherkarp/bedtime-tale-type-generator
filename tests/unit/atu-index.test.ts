@@ -30,6 +30,27 @@ describe("promotion out of the generated tier", () => {
     }
   });
 
+  it("says, for every promoted type, what its beats were written from", () => {
+    // The point of `source` is that a citation is checkable. An entry claiming
+    // an edition must name one retrievably; an entry that names nothing must
+    // say so rather than leaving the reader to assume.
+    for (const t of EXTENDED_TALE_TYPES) {
+      expect(t.source, `${t.id} declares a source`).toBeTruthy();
+      if (t.source?.kind === "edition") {
+        expect(t.source.work.length, `${t.id} names a work`).toBeGreaterThan(0);
+        expect(t.source.taleTitle.length, `${t.id} names the tale`).toBeGreaterThan(0);
+        // A Gutenberg id that is not a positive integer cannot be looked up,
+        // which would make the citation decorative rather than checkable.
+        expect(
+          Number.isInteger(t.source.gutenbergId) && t.source.gutenbergId > 0,
+          `${t.id} gutenbergId is retrievable`,
+        ).toBe(true);
+      } else {
+        expect(t.source?.kind, `${t.id} source kind`).toBe("knowledge");
+      }
+    }
+  });
+
   it("carries a promoted type once, as featured, with its ATU number intact", () => {
     // The id-uniqueness test below would catch a duplicate, but not a promotion
     // that landed under a changed ATU number — which would split one tale type

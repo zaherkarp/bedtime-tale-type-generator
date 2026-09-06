@@ -18,7 +18,7 @@ live from the **Claude API** (`claude-opus-4-8`).
 - **Real ATU tale types** — every story is shaped after a genuine tale type from
   the [Aarne–Thompson–Uther folktale index](https://en.wikipedia.org/wiki/Aarne%E2%80%93Thompson%E2%80%93Uther_Index),
   gently softened for bedtime.
-  - **87 featured types** with a hand-authored narrative shape, signature motifs,
+  - **112 featured types** with a hand-authored narrative shape, signature motifs,
     and voice — Cinderella (ATU 510A), The Dragon-Slayer (300), The Gingerbread
     Man (2025) and the rest of the original twelve, plus the types promoted out
     of the generated tier as beats were written for them.
@@ -111,7 +111,7 @@ not one catalogue with a flag on it.
 |---|---|---|
 | Identified by | an ATU tale-type number | a named traditional story, in a named tradition |
 | Lives in | `lib/atu-index.ts`, `lib/tale-types.ts` | `lib/fables.ts` |
-| Size | 208 types, three tiers, 87 hand-authored | 11 fables, all hand-modelled |
+| Size | 208 types, three tiers, 112 hand-authored | 11 fables, all hand-modelled |
 | Drives the prompt with | beats, signature elements, tone, opener | `coreBeats` + adaptation metadata + `expansionBeats` |
 | Extras | Thompson motifs (up to 3 per story) | provenance, themes, per-fable child adaptation |
 | Safety comes from | the stem screens in `lib/safety.ts`, plus review | per-fable metadata written by a person who read the tale |
@@ -229,9 +229,9 @@ actually vouched for them:
 
 | Tier | Count | Where | Drives the prompt with |
 |---|---|---|---|
-| `featured` | 87 | `lib/tale-types.ts` + `lib/tale-types-curated.ts` + `lib/tale-types-extended-authored.ts`, hand-authored | beats, signature elements, tone, opener |
+| `featured` | 112 | `lib/tale-types.ts` + `lib/tale-types-curated.ts` + `lib/tale-types-extended-authored.ts`, hand-authored | beats, signature elements, tone, opener |
 | `curated` | 0 | `EXTRA_TYPES` in `lib/atu-index.ts`, hand-authored | title + blurb |
-| `extended` | 121 | `lib/atu-extended.ts`, generated **then read** | title + blurb |
+| `extended` | 96 | `lib/atu-extended.ts`, generated **then read** | title + blurb |
 
 `curated` is empty because all fifty of its entries were promoted once beats
 were written for them. The tier stays because it is where the next hand-written
@@ -243,6 +243,18 @@ filters any promoted id out of the generated tier so the catalogue never lists
 one twice. The generated file itself still lists every type the pipeline
 screened, which is correct: it records what the knowledge base produced, and
 promotion is a fact about this repo rather than about that pipeline.
+
+Each promoted entry records what its beats were written from, in a `source`
+field: either a named public-domain edition with its Gutenberg id, or
+`knowledge` where no text was consulted. Ten of the fifty promoted so far carry
+an edition; the rest do not, and say so.
+
+That ratio is close to the ceiling rather than a backlog. Searching eleven
+public-domain collections and confirming each candidate by reading it found a
+usable English text for about a fifth of the generated tier. The remainder is
+ATU long-tail material never translated into English, and the concordance that
+would map a type number to a text is Uther 2004, which `kb/` deliberately does
+not ingest. Title matching alone was tried and was roughly 40% wrong.
 
 A promoted entry keeps its ATU number — that is its identity — but gets a
 child-facing `label` in place of the canonical scholarly title, a re-chosen

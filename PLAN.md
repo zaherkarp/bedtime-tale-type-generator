@@ -24,6 +24,7 @@ story, regardless of type, decelerate into a soft goodnight.
 | Fable corpus scale  | 11 hand-modelled seeds, transparent TS data | Architecture is the deliverable; no DB, scraper or CMS |
 | Catalogue depth     | Promote generated types into the hand-authored registry, in batches | 208 browsable types but only 62 with beats made the catalogue look deeper than it read |
 | Promotion mechanics | Third registry file; generated tier filtered by id in `lib/atu-index.ts` | Keeps the generated file an honest record of the pipeline, and the catalogue free of duplicates |
+| Beat provenance     | Per-entry `source`: a named edition, or `knowledge` | Only ~21% of the tier has a locatable public-domain text, so one file-level caveat averaged two different things together |
 
 ## Core design
 
@@ -66,7 +67,7 @@ story, regardless of type, decelerate into a soft goodnight.
 
 ## Verification
 
-- `npm run lint`, `npm run typecheck`, `npm test` (200 unit tests), `npm run build`
+- `npm run lint`, `npm run typecheck`, `npm test` (202 unit tests), `npm run build`
   all pass. Unit tests cover the registry integrity, schema accept/reject for
   both story families, prompt assembly + injection framing, the fable kernel /
   expansion / adaptation blocks, provenance staying out of the brief, length
@@ -81,8 +82,9 @@ story, regardless of type, decelerate into a soft goodnight.
 
 ## Backlog (not built)
 
-Beats for the remaining 121 generated-tier types, continuing the batch-by-batch
-promotion · a browse/search page for the fable corpus once it outgrows one screen · fable
+Beats for the remaining 96 generated-tier types, continuing the batch-by-batch
+promotion · surfacing each tale's `source` in the UI, so a reader can see which
+stories rest on a read edition and which do not · a browse/search page for the fable corpus once it outgrows one screen · fable
 themes as a cross-tradition filter ("tonight, a story about patience") ·
 measuring generated fable length against its target band ·
 a faster Haiku "quick tale" mode · share-as-image ·
