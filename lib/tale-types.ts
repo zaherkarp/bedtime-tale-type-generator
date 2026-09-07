@@ -1,4 +1,5 @@
 import { CURATED_TALE_TYPES } from "./tale-types-curated.ts";
+import { EXTENDED_TALE_TYPES } from "./tale-types-extended-authored.ts";
 
 /**
  * The tale-type registry — the heart of the generator.
@@ -33,7 +34,42 @@ export interface TaleType {
   tone: string;
   /** An illustrative opening line (guides style, never copied verbatim). */
   exampleOpener: string;
+  /**
+   * What the beats above were written from.
+   *
+   * Optional because the twelve originals and the fifty curated predate the
+   * field; absent means the same thing `"knowledge"` does, and the file each
+   * entry lives in records which. New entries should set it explicitly.
+   *
+   * - `{ kind: "edition", ... }` — a public-domain text was read while writing
+   *   these beats, and is named so the claim can be checked.
+   * - `{ kind: "knowledge" }` — written from general knowledge of the pattern
+   *   the tale type names, with no text consulted.
+   *
+   * This exists because the two are genuinely different and the difference was
+   * previously averaged away in a file-level caveat. Only about a fifth of the
+   * generated tier has an English public-domain text that can be located and
+   * matched to its ATU number at all: the index's long tail is regional oral
+   * material that was never translated, and the concordance that would map the
+   * rest is Uther 2004, which this repository deliberately does not use.
+   *
+   * A consumer that wants to show only what has been checked can filter on it.
+   */
+  source?: TaleTypeSource;
 }
+
+/** Where a tale type's beats came from. See `TaleType.source`. */
+export type TaleTypeSource =
+  | {
+      kind: "edition";
+      /** The collection, as it titles itself. */
+      work: string;
+      /** The tale's title in that edition, which often differs from the ATU title. */
+      taleTitle: string;
+      /** Project Gutenberg ebook number, so the exact text is retrievable. */
+      gutenbergId: number;
+    }
+  | { kind: "knowledge" };
 
 /**
  * The twelve types this app shipped with, hand-authored from scratch.
@@ -334,17 +370,24 @@ export const ORIGINAL_TALE_TYPES: readonly TaleType[] = [
 ] as const;
 
 /**
- * The full featured registry: the twelve originals, then the fifty that were
- * catalogue-only until beats were written for them.
+ * The full featured registry, in order of how long each tier has existed: the
+ * twelve originals, then the fifty that were catalogue-only until beats were
+ * written for them, then the entries promoted out of the generated tier.
  *
- * The import sits at the bottom rather than the top because
- * `lib/tale-types-curated.ts` imports the `TaleType` type from this file. It is
- * a type-only import and therefore erased at build time, but keeping the value
- * import down here makes the one-directional shape obvious to a reader.
+ * All three tiers are the same shape and are treated identically everywhere
+ * downstream. The split into three files is about provenance and reviewability
+ * — each file's header records how its entries were written and what was
+ * softened — not about any behavioural difference between them.
+ *
+ * The imports sit at the bottom rather than the top because both of those
+ * files import the `TaleType` type from this one. They are type-only imports
+ * and therefore erased at build time, but keeping the value imports down here
+ * makes the one-directional shape obvious to a reader.
  */
 export const TALE_TYPES: readonly TaleType[] = [
   ...ORIGINAL_TALE_TYPES,
   ...CURATED_TALE_TYPES,
+  ...EXTENDED_TALE_TYPES,
 ];
 
 /** All valid tale-type ids, useful for validation. */

@@ -168,15 +168,22 @@ const EXTRA_TYPES: readonly ExtraType[] = [
 ];
 
 /**
- * Card blurbs for the fifty types that were catalogue-only before they had
- * beats. They keep their hand-written blurb rather than falling back to the
+ * Card blurbs for every type that was catalogue-only before it had beats —
+ * the fifty from `EXTRA_TYPES` and, since the promotion pass, the generated
+ * entries in `ATU_EXTENDED` too.
+ *
+ * A promoted type keeps its hand-written blurb rather than falling back to the
  * `tagline` from the registry: the blurb was written to sell the tale to a
  * parent scanning a grid, and the tagline was written to orient a storyteller.
  * Both are good; they are just aimed at different readers.
+ *
+ * `EXTRA_TYPES` is spread last so that if an id ever appears in both, the
+ * hand-authored blurb wins over the generated one.
  */
-const CURATED_BLURBS: Readonly<Record<string, string>> = Object.fromEntries(
-  EXTRA_TYPES.map((e) => [e.id, e.blurb!]),
-);
+const CURATED_BLURBS: Readonly<Record<string, string>> = Object.fromEntries([
+  ...ATU_EXTENDED.filter((e) => e.blurb).map((e) => [e.id, e.blurb!] as const),
+  ...EXTRA_TYPES.map((e) => [e.id, e.blurb!] as const),
+]);
 
 /** Featured entries, derived from the client-facing tale-type summaries. */
 const FEATURED_ENTRIES: readonly AtuIndexEntry[] = TALE_TYPE_SUMMARIES.map((t) => {
@@ -219,8 +226,18 @@ const EXTRA_ENTRIES: readonly AtuIndexEntry[] = EXTRA_TYPES.filter(
  * The generated tier, from `lib/atu-extended.ts`. Category is derived from the
  * ATU number by the same range rule the curated tier uses, so all three tiers
  * agree about which division a number belongs to.
+ *
+ * Filtered against the featured ids for the same reason `EXTRA_ENTRIES` is:
+ * writing beats for a generated-tier type promotes it into the registry under
+ * the *same id*, and without this filter the catalogue would carry it twice —
+ * once as a featured card and once as the generated row it was promoted from.
+ * `lib/atu-extended.ts` is generated and keeps listing every type it screened,
+ * which is correct: it records what the knowledge-base pipeline produced, and
+ * promotion is a fact about this repo rather than about that pipeline.
  */
-const EXTENDED_ENTRIES: readonly AtuIndexEntry[] = ATU_EXTENDED.map((e) => ({
+const EXTENDED_ENTRIES: readonly AtuIndexEntry[] = ATU_EXTENDED.filter(
+  (e) => !FEATURED_IDS.has(e.id),
+).map((e) => ({
   id: e.id,
   atu: e.atu,
   title: e.title,

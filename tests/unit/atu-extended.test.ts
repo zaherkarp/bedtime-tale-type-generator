@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import { ATU_EXTENDED } from "@/lib/atu-extended";
 import { ATU_INDEX, atuCategory } from "@/lib/atu-index";
 import { TALE_TYPES } from "@/lib/tale-types";
+import { EXTENDED_TALE_TYPES } from "@/lib/tale-types-extended-authored";
 
 interface ReviewRecord {
   verdict: "safe" | "unsafe";
@@ -51,10 +52,24 @@ describe("the review file", () => {
 });
 
 describe("generated ATU tier", () => {
-  it("is a substantial expansion of the hand-authored catalogue", () => {
+  it("still holds every type the pipeline produced, promoted or not", () => {
+    // This used to assert the generated tier outnumbered the hand-authored one.
+    // It no longer can: every type it produced has since been given beats, so
+    // `ATU_INDEX` shows none of them as `extended` any more.
+    //
+    // What is still worth asserting is that promotion never *removed* anything
+    // from this file. It is the record of what the knowledge-base pipeline
+    // emitted, and it has to stay complete for `catalogue:check` to detect
+    // drift and for the promotion test to have something to trace ids back to.
+    // Shrinking it would silently narrow the catalogue instead.
     expect(ATU_EXTENDED.length).toBeGreaterThan(100);
-    const handAuthored = ATU_INDEX.filter((e) => e.tier !== "extended");
-    expect(ATU_EXTENDED.length).toBeGreaterThan(handAuthored.length);
+    const promoted = new Set(EXTENDED_TALE_TYPES.map((t) => t.id));
+    for (const e of ATU_EXTENDED) {
+      expect(
+        promoted.has(e.id) || ATU_INDEX.some((x) => x.id === e.id),
+        `${e.id} is still reachable`,
+      ).toBe(true);
+    }
   });
 
   it("has a well-formed record for every entry", () => {
@@ -69,11 +84,23 @@ describe("generated ATU tier", () => {
     }
   });
 
-  it("never collides with a hand-authored entry", () => {
-    const handAuthored = ATU_INDEX.filter((e) => e.tier !== "extended");
+  it("never collides with a hand-authored entry it did not itself produce", () => {
+    // The original invariant was that the generator must never propose a type
+    // somebody had already written by hand — a collision there means two rows
+    // for one tale, written by two people who did not know about each other.
+    //
+    // Promotion is the one legitimate way an id ends up on both sides, and it
+    // is the opposite situation: the hand-authored entry exists *because* of
+    // the generated one, carries the same id deliberately, and is filtered out
+    // of the generated tier by `lib/atu-index.ts`. So promoted ids are excluded
+    // here, and `tests/unit/atu-index.test.ts` asserts the filter works.
+    const promoted = new Set(EXTENDED_TALE_TYPES.map((t) => t.id));
+    const handAuthored = ATU_INDEX.filter(
+      (e) => e.tier !== "extended" && !promoted.has(e.id),
+    );
     const numbers = new Set(handAuthored.map((e) => e.atu));
     const ids = new Set(handAuthored.map((e) => e.id));
-    for (const e of ATU_EXTENDED) {
+    for (const e of ATU_EXTENDED.filter((x) => !promoted.has(x.id))) {
       expect(numbers.has(e.atu), `ATU ${e.atu} duplicated`).toBe(false);
       expect(ids.has(e.id), `id ${e.id} duplicated`).toBe(false);
     }
@@ -95,9 +122,18 @@ describe("generated ATU tier", () => {
     }
   });
 
-  it("never shadows a featured type", () => {
-    const featured = new Set(TALE_TYPES.map((t) => t.atuNumber.replace(/^ATU\s+/i, "")));
-    for (const e of ATU_EXTENDED) {
+  it("never shadows a featured type it was not promoted into", () => {
+    // Same carve-out as the collision test above, one field over: a promoted
+    // entry keeps its ATU number, so of course that number is now also a
+    // featured one. What must still never happen is the generator proposing a
+    // number that a *separately* written featured type already claims.
+    const promoted = new Set(EXTENDED_TALE_TYPES.map((t) => t.id));
+    const featured = new Set(
+      TALE_TYPES.filter((t) => !promoted.has(t.id)).map((t) =>
+        t.atuNumber.replace(/^ATU\s+/i, ""),
+      ),
+    );
+    for (const e of ATU_EXTENDED.filter((x) => !promoted.has(x.id))) {
       expect(featured.has(e.atu), `${e.atu} shadows a featured type`).toBe(false);
     }
   });

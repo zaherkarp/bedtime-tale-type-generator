@@ -9,12 +9,71 @@ import {
   searchAtu,
 } from "@/lib/atu-index";
 import { TALE_TYPES } from "@/lib/tale-types";
+import { EXTENDED_TALE_TYPES } from "@/lib/tale-types-extended-authored";
+import { ATU_EXTENDED } from "@/lib/atu-extended";
+
+describe("promotion out of the generated tier", () => {
+  // `lib/tale-types-extended-authored.ts` takes entries that arrived from the
+  // knowledge base with only a title and a blurb and gives them beats. The
+  // catalogue then has to stop listing them as generated rows. These are the
+  // two ways that can silently go wrong.
+
+  it("only ever promotes a type the generated tier actually produced", () => {
+    // A typo in an id would otherwise invent a brand-new tale type that no
+    // safety screen and no human read-through ever saw, while looking exactly
+    // like a promotion. Every promoted id must trace back to `ATU_EXTENDED`.
+    const generated = new Set(ATU_EXTENDED.map((e) => e.id));
+    for (const t of EXTENDED_TALE_TYPES) {
+      expect(generated.has(t.id), `${t.id} came from the generated tier`).toBe(
+        true,
+      );
+    }
+  });
+
+  it("says, for every promoted type, what its beats were written from", () => {
+    // The point of `source` is that a citation is checkable. An entry claiming
+    // an edition must name one retrievably; an entry that names nothing must
+    // say so rather than leaving the reader to assume.
+    for (const t of EXTENDED_TALE_TYPES) {
+      expect(t.source, `${t.id} declares a source`).toBeTruthy();
+      if (t.source?.kind === "edition") {
+        expect(t.source.work.length, `${t.id} names a work`).toBeGreaterThan(0);
+        expect(t.source.taleTitle.length, `${t.id} names the tale`).toBeGreaterThan(0);
+        // A Gutenberg id that is not a positive integer cannot be looked up,
+        // which would make the citation decorative rather than checkable.
+        expect(
+          Number.isInteger(t.source.gutenbergId) && t.source.gutenbergId > 0,
+          `${t.id} gutenbergId is retrievable`,
+        ).toBe(true);
+      } else {
+        expect(t.source?.kind, `${t.id} source kind`).toBe("knowledge");
+      }
+    }
+  });
+
+  it("carries a promoted type once, as featured, with its ATU number intact", () => {
+    // The id-uniqueness test below would catch a duplicate, but not a promotion
+    // that landed under a changed ATU number — which would split one tale type
+    // into two catalogue rows that no longer look like duplicates at all.
+    const byAtu = new Map(ATU_EXTENDED.map((e) => [e.id, e.atu]));
+    for (const t of EXTENDED_TALE_TYPES) {
+      const rows = ATU_INDEX.filter((e) => e.id === t.id);
+      expect(rows, `${t.id} appears once`).toHaveLength(1);
+      expect(rows[0].featured, `${t.id} is featured`).toBe(true);
+      expect(rows[0].atu, `${t.id} keeps its ATU number`).toBe(byAtu.get(t.id));
+    }
+  });
+});
 
 describe("ATU index", () => {
-  it("includes every featured type plus the extra catalogue", () => {
+  it("carries every registry type and nothing that is not one", () => {
+    // The catalogue and the registry are now the same set: promotion finished,
+    // so every browsable type has beats. The second assertion used to be
+    // `>` — the catalogue was larger because most of it had no registry
+    // record. Equality is the stronger statement, and it is the one that holds.
     const featured = ATU_INDEX.filter((e) => e.featured);
     expect(featured).toHaveLength(TALE_TYPES.length);
-    expect(ATU_INDEX.length).toBeGreaterThan(TALE_TYPES.length);
+    expect(ATU_INDEX).toHaveLength(TALE_TYPES.length);
   });
 
   it("has unique ids and unique ATU numbers", () => {
@@ -40,12 +99,21 @@ describe("ATU index", () => {
     }
   });
 
-  it("gives every hand-authored entry a blurb and a simple ATU number", () => {
+  it("gives every hand-authored entry a blurb and a well-formed ATU number", () => {
     // Only the generated tier is allowed to go without a description; someone
     // wrote every featured and curated entry by hand and owes it a sentence.
+    // A promoted entry inherits the blurb it arrived with, via `CURATED_BLURBS`.
+    //
+    // The number pattern is the same one `tests/unit/atu-extended.test.ts`
+    // applies to the generated tier. It used to be stricter here because no
+    // hand-authored type had ever carried an asterisk — the twelve originals
+    // and the fifty curated ones are all famous, plainly numbered tales. The
+    // moment promotion started drawing from the generated tier that stopped
+    // being true, and a starred code like `87A*` is a real ATU designation,
+    // not a malformed one.
     for (const e of ATU_INDEX.filter((x) => x.tier !== "extended")) {
       expect(e.blurb?.length, `${e.id} blurb`).toBeGreaterThan(0);
-      expect(e.atu, `${e.id} atu`).toMatch(/^\d+[A-Z]?$/);
+      expect(e.atu, `${e.id} atu`).toMatch(/^\d+[A-Z]*\*{0,3}$/);
     }
   });
 
@@ -55,13 +123,21 @@ describe("ATU index", () => {
       // `featured` is the old boolean and must never disagree with the tier.
       expect(e.featured, `${e.id} featured/tier agree`).toBe(e.tier === "featured");
     }
-    // `curated` is currently empty: every one of the fifty catalogue-only
-    // types was promoted to `featured` once beats were written for them. The
-    // tier stays in the union because it is where the next hand-written
-    // blurb-only type will land, so this asserts the two that must be there
-    // rather than all three.
-    for (const tier of ["featured", "extended"] as const) {
-      expect(ATU_INDEX.some((e) => e.tier === tier), `${tier} present`).toBe(true);
+    // `curated` and `extended` are both empty now. Every catalogue-only type
+    // has been promoted to `featured`, which is the end state this work was
+    // aimed at: nothing in the catalogue drives the prompt from a bare title.
+    //
+    // Both tiers stay in the union rather than being deleted, because they are
+    // where the next un-promoted type lands — a hand-written blurb-only entry
+    // in `EXTRA_TYPES`, or a fresh knowledge-base regeneration adding codes
+    // nobody has written beats for yet. So this asserts the one tier that must
+    // be populated, and that the other two are empty rather than forgotten.
+    expect(ATU_INDEX.some((e) => e.tier === "featured"), "featured present").toBe(true);
+    for (const tier of ["curated", "extended"] as const) {
+      expect(
+        ATU_INDEX.filter((e) => e.tier === tier),
+        `${tier} is empty because everything in it was promoted`,
+      ).toHaveLength(0);
     }
   });
 

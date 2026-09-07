@@ -24,7 +24,14 @@ describe("tale-type registry", () => {
       expect(t.signatureElements.length, `${t.id} signature`).toBeGreaterThanOrEqual(3);
       expect(t.exampleOpener.length, `${t.id} opener`).toBeGreaterThan(20);
       expect(t.tagline.length, `${t.id} tagline`).toBeGreaterThan(10);
-      expect(t.atuNumber, `${t.id} atu`).toMatch(/^ATU \d+[A-Z]?$/);
+      // Trailing asterisks are part of the ATU grammar, not noise: Aarne and
+      // Thompson used them for types added outside the main numbered sequence,
+      // and `**` for a second such addition. The generated tier carries 28 of
+      // them (6*, 87A*, 112**, 219F*), so a pattern that rejected them would
+      // have blocked every promotion of a starred type into this registry.
+      // Same grammar as `tests/unit/atu-extended.test.ts` applies to the
+      // generated tier, so the two tiers cannot disagree about what a code is.
+      expect(t.atuNumber, `${t.id} atu`).toMatch(/^ATU \d+[A-Z]*\*{0,3}$/);
     }
   });
 
