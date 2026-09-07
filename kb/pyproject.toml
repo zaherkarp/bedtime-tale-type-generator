@@ -29,4 +29,20 @@ include = ["atukb*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-filterwarnings = ["error::DeprecationWarning"]
+filterwarnings = [
+    # Deprecated usage in atukb's own code is a test failure, deliberately: this
+    # is a long-lived data pipeline and a silent deprecation is how it rots.
+    "error::DeprecationWarning",
+    # ...but a third-party library deprecating its own alias is not something
+    # atukb can act on, and as an error it is fatal rather than noisy: the
+    # warning is raised at *import* time, so pytest dies during collection
+    # before running a single test. starlette's TestClient — reached via
+    # `fastapi.testclient`, which `tests/test_api.py` imports — still touches
+    # `anyio.abc.BlockingPortal`, which anyio 4.15 deprecated in favour of
+    # `anyio.from_thread.BlockingPortal`.
+    #
+    # Scoped to this one message rather than to the module or the category, so
+    # it lapses the moment starlette stops using the alias, and so no other
+    # deprecation gets waved through in the meantime.
+    "ignore:The anyio.abc.BlockingPortal alias is deprecated:DeprecationWarning",
+]
