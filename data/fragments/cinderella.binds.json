@@ -1,0 +1,65 @@
+{
+  "introducedAt": "spine:1",
+  "bundles": [
+    {
+      "helper": {
+        "a": "a moth with lamplight wings",
+        "the": "the moth"
+      },
+      "gift": {
+        "a": "a cloak stitched out of dusk",
+        "the": "the cloak"
+      },
+      "token": {
+        "a": "one small pearl button",
+        "the": "the pearl button"
+      },
+      "gathering": "the lantern-lit barn"
+    },
+    {
+      "helper": {
+        "a": "an old woman made mostly of warmth",
+        "the": "the old woman"
+      },
+      "gift": {
+        "a": "a pair of glass-grey slippers",
+        "the": "the slippers"
+      },
+      "token": {
+        "a": "a single glass-grey slipper",
+        "the": "the slipper"
+      },
+      "gathering": "the great warm hall"
+    },
+    {
+      "helper": {
+        "a": "a cat the colour of woodsmoke",
+        "the": "the cat"
+      },
+      "gift": {
+        "a": "a dress the colour of the first star",
+        "the": "the dress"
+      },
+      "token": {
+        "a": "a thread of silver ribbon",
+        "the": "the silver thread"
+      },
+      "gathering": "the house with every window lit"
+    },
+    {
+      "helper": {
+        "a": "a small brass lamp with a kind voice",
+        "the": "the little lamp"
+      },
+      "gift": {
+        "a": "a ribbon that held a little moonlight",
+        "the": "the ribbon"
+      },
+      "token": {
+        "a": "a glove with a star on the cuff",
+        "the": "the glove"
+      },
+      "gathering": "the winter ball"
+    }
+  ]
+}

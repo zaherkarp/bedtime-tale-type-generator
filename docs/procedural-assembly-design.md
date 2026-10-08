@@ -1,6 +1,9 @@
 # Procedural assembly: a combined Short/Dias architecture
 
-Status: design only. Nothing in this document is built.
+Status: layers 1 and 3 are built, with one tale type's corpus and the audit gate.
+The bake script exists but has never run against the live API. See **What building
+it changed** at the end: four things in this document were wrong, and the
+corrections are recorded there rather than quietly edited in above.
 
 ## What problem this solves
 
@@ -212,3 +215,83 @@ subtraction.
 3. **Fragment budget.** 208 ATU types plus 11 fables, times 3 age bands, times
    3 lengths, times slots, times variants. The incremental nightly bake makes
    this affordable over time but the total is worth costing before starting.
+
+## What building it changed
+
+Layers 1 and 3 are now in `lib/`, with 42 unit tests, a corpus for one tale type,
+and the audit gate running clean. Four things the design above got wrong only
+became visible once the code ran, which is the argument for having built the
+prototype before the rest.
+
+### 1. ATU expansion slots cannot be topical
+
+The plan originally drew expansion material from `TaleType.signatureElements` and
+gave each chosen element its own slot. The first run produced a Cinderella telling
+that lingered on "a small token that leads to a warm recognition" immediately
+after the cindery-chores beat — four paragraphs before any token existed. Signature
+elements are plot motifs, and a motif cannot be dwelt on before the beat that
+introduces it.
+
+An ATU expansion is now **positional and atmospheric**: "linger on the world
+around the beat you just heard", which is safe anywhere. Signature elements enter
+as model tags instead, which is what this document said in the first place; the
+implementation had quietly promoted them to slots.
+
+Fables are unaffected, because `expansionBeats` is authored world-building rather
+than plot. They keep named slots, distributed in their authored order, since that
+order is meaningful: a walk home belongs after the encounter.
+
+### 2. Binds must be correlated bundles, not per-key candidates
+
+The obvious shape for `bind` is per-key candidate lists, and it is wrong. Drawing
+`gift` and `token` independently produced a telling that handed over a stitched
+cloak and then left a glass slipper on the step. The keys describe one object
+between them, so a whole bundle is chosen at once.
+
+### 3. One string per bound value is not enough
+
+Reading the first assembled tellings turned up two defects in one line:
+`a cloak stitched out of dusk did what it had come to do`. A bound value needs an
+introduction form and a later-mention form (`{{gift}}` and `{{gift:the}}`), and
+the substituter has to supply a capital when a value opens a sentence. Asking the
+bake for capitalised variants of every value would multiply the corpus for nothing
+and is a rule the bake would sometimes forget.
+
+### 4. The plan and the assembler needed separate streams
+
+The audit gate earned its place on its first run by reporting that one expansion
+fragment filled 64% of its slot where three interchangeable fragments should each
+get a third. The cause was not bias in the generator: the narration plan and the
+assembler were both seeded with the telling seed directly, so both drew from the
+same sequence from the same state, and their decisions were coupled. `deriveSeed`
+now gives each consumer a labelled stream. Any new consumer of the seed must take
+a label too.
+
+This is also the clearest evidence for the gate itself. The skew was invisible in
+the prose, would never have been caught by reading, and was a real defect.
+
+### What the numbers say, and what they do not
+
+Over 120 tellings of the committed corpus (37 fragments across 11 slots): no dead
+fragments, no fragment above the 60% dominance limit, mean pairwise trigram
+similarity 0.143 with a maximum of 0.544. Those are regression baselines, not
+evidence of quality. Whether the prose reads as one story is a reading judgement,
+and `npm run tellings:preview` exists to make it cheap to make.
+
+### Still unproven
+
+The corpus committed here was written by a model (Claude Opus 5) directly in a
+working session, to the tag contract, because the environment had no API key. Its
+provenance records `via: "session"` rather than `via: "bake-script"`, and the
+difference is deliberate: it is the same authorship but not the same
+reproducibility. So the architecture's central unknown is **narrower** than it
+was — a model can write interchangeable paragraph variants, and the three rules
+in `scripts/bake-fragments.ts` are what it needed to be told — but it is not
+closed. Whether the bake script elicits the same quality unsupervised, at 208 tale
+types times three age bands times three lengths, is the next thing to find out,
+and it needs a key.
+
+### Still deliberately not built
+
+Title variants (the H1 is a template, as in `lib/mock.ts`), the fable path through
+the audit, per-pronoun-set corpora, and the three open questions below.

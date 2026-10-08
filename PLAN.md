@@ -25,6 +25,10 @@ story, regardless of type, decelerate into a soft goodnight.
 | Catalogue depth     | Promote every generated type into the hand-authored registry | 208 browsable types but only 62 with beats made the catalogue look deeper than it read; all 208 now carry beats |
 | Promotion mechanics | Third registry file; generated tier filtered by id in `lib/atu-index.ts` | Keeps the generated file an honest record of the pipeline, and the catalogue free of duplicates |
 | Beat provenance     | Per-entry `source`: a named edition, or `knowledge` | Only ~21% of the tier has a locatable public-domain text, so one file-level caveat averaged two different things together |
+| Static deployment   | Procedural assembly from baked fragments, not baked stories | GitHub Pages cannot run the streaming route; baked stories fix the prose per (type, age, length) |
+| Assembly design     | Short's narration plan over Dias's Improv selection engine | They solve different halves; Improv has no layer that varies *what* is narrated |
+| Assembly granularity| Whole paragraphs, selected never composed        | Short's rule. Seams and agreement bugs live below the paragraph |
+| Oatmeal check       | Improv's `audit` promoted to a CI gate           | Their fragments were hand-written and read; ours are generated in bulk and read by nobody |
 
 ## Core design
 
@@ -79,6 +83,31 @@ story, regardless of type, decelerate into a soft goodnight.
   provenance panel, the empty-library state, and a gentle error state.
 - CI (`.github/workflows/ci.yml`) runs lint → typecheck → unit tests → build on
   every push and PR. (E2e runs locally against mock mode.)
+
+## Procedural assembly (prototype)
+
+A static-hosting path, built far enough to judge. `docs/procedural-assembly-design.md`
+carries the architecture, the prior art it combines, and the four things building
+it proved wrong.
+
+- **Layer 1** (`lib/narration-plan.ts`) decides which beats are told, in what
+  order, and how many digressions sit between them. The spine always plays in
+  full: `TaleType.beats` and `Fable.coreBeats` are what make a tale recognisable.
+- **Layer 2** (`lib/fragments.ts`) is the tagged store. Tags are arrays from
+  general to specific, so specificity ranks and contradiction excludes.
+- **Layer 3** (`lib/assemble.ts`) is Improv's engine — groups, tags, salience,
+  `bind`, `reincorporate`, `audit` — reimplemented seeded, so a telling replays
+  from one number and a library entry stores a seed instead of prose.
+- **The gate** (`npm run fragments:audit`) fails the build on dead fragments,
+  dominant fragments, unresolved placeholders, or tellings that are quantitatively
+  near-identical. It caught a real correlated-seed defect on its first run.
+- **Reading it** (`npm run tellings:preview`) is the only test of whether the
+  prose holds together, and that judgement stays with a person.
+
+One corpus is committed (`cinderella`, 6-8, medium), written by a model in a
+working session rather than by `scripts/bake-fragments.ts`, which has never run
+against the live API. Its `provenance.via` records which, because the two are the
+same authorship and not the same reproducibility.
 
 ## Backlog (not built)
 

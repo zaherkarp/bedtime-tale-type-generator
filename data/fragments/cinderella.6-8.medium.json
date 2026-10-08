@@ -1,0 +1,677 @@
+{
+  "sourceKind": "atu",
+  "sourceId": "cinderella",
+  "ageBand": "6-8",
+  "length": "medium",
+  "provenance": {
+    "kind": "generated",
+    "model": "claude-opus-5",
+    "via": "session",
+    "at": "2026-10-08",
+    "note": "Written to the tag contract in a working session rather than by scripts/bake-fragments.ts, because this environment has no ANTHROPIC_API_KEY. Same authorship, not the same reproducibility."
+  },
+  "slots": [
+    {
+      "slotId": "opener",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "opener"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "opener#g0",
+              "text": "Outside, the sky had turned the deep soft blue it keeps for the very end of the day. One small window was still lit, and the light in it was the colour of warm honey. That is where this story lives, {{hero}}, and it begins the way the best ones do: quietly, with nobody in any hurry at all."
+            },
+            {
+              "id": "opener#g1",
+              "text": "There is a kind of hour that arrives after the dishes and before the dreams, when the house creaks once and then settles. In that hour the stories come out. Tonight one has come out for {{hero}}, and it has brought its own small lamp, and it promises that nothing in it will be frightening."
+            },
+            {
+              "id": "opener#g2",
+              "text": "Long ago, and also just now, the evening folded itself over a house the way a blanket folds over a bed. The chimney breathed. The floorboards thought about creaking and decided against it. Settle in, {{hero}}. This story knows exactly how late it is, and it intends to be kind about it."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slotId": "spine:0",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "spine",
+              "0"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "spine:0#g0",
+              "text": "In that house lived a child with soot on {{their}} apron and kindness in {{their}} hands. All day there were small grey jobs: ashes to sweep, hearthstones to wipe, a kettle to coax. {{hero}} did them without complaining, and while {{their}} hands worked, something quiet and hopeful sat behind {{their}} ribs, keeping warm, waiting to be needed."
+            },
+            {
+              "id": "spine:0#g1",
+              "text": "The chores were the sort nobody thanks you for. Sweep the ash. Carry the pail. Wipe the grate until it shines, then watch it go grey again by morning. {{hero}} worked through them anyway, humming a little, and all the while kept one small wish folded up small enough to fit in a pocket."
+            },
+            {
+              "id": "spine:0#g2",
+              "text": "Every evening the hearth needed tending, and {{hero}} was the one who tended it. The cinders went soft and warm under the brush. The pail grew heavy and then light again. It was dull, patient work, and {{hero}} did it with a care that the house noticed even when nobody else did."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slotId": "expansion:after-0",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "expansion",
+              "after-0"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "expansion:after-0#g0",
+              "text": "The kitchen at that hour had its own small weather. Steam on the cold pane. The tick of cooling iron. A draught that came under the door and curled up by the hearth like something tame. The brush went shh, shh across the stone, and the sound was so regular that it was almost a lullaby already."
+            },
+            {
+              "id": "expansion:after-0#g1",
+              "text": "There were good things in that grey work, if you knew where to look. The smell of ash is not a bad smell. Warm stone under a palm is a kindness. And the last ember, when you find it, glows orange right through the grey like a secret somebody left you on purpose."
+            },
+            {
+              "id": "expansion:after-0#g2",
+              "text": "Outside, the garden was going about its evening. A blackbird said one thing and then thought better of it. The gate breathed on its hinge. Inside, the kettle made the small ticking noise kettles make when they are cooling down and have nothing left to prove. Everything was busy being ordinary and warm."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slotId": "spine:1",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "spine",
+              "1"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "spine:1#g0",
+              "text": "Then the air by the hearth went softer than air usually goes, and {{helper}} was simply there, as though {{hero}} had always been about to be visited. Nothing banged. Nothing flashed. There was only a warmth, and a voice like a hand on a shoulder, and the offer of {{gift}}, held out as easily as you would hold out tea.",
+              "binds": [
+                {
+                  "helper": {
+                    "a": "a moth with lamplight wings",
+                    "the": "the moth"
+                  },
+                  "gift": {
+                    "a": "a cloak stitched out of dusk",
+                    "the": "the cloak"
+                  },
+                  "token": {
+                    "a": "one small pearl button",
+                    "the": "the pearl button"
+                  },
+                  "gathering": "the lantern-lit barn"
+                },
+                {
+                  "helper": {
+                    "a": "an old woman made mostly of warmth",
+                    "the": "the old woman"
+                  },
+                  "gift": {
+                    "a": "a pair of glass-grey slippers",
+                    "the": "the slippers"
+                  },
+                  "token": {
+                    "a": "a single glass-grey slipper",
+                    "the": "the slipper"
+                  },
+                  "gathering": "the great warm hall"
+                },
+                {
+                  "helper": {
+                    "a": "a cat the colour of woodsmoke",
+                    "the": "the cat"
+                  },
+                  "gift": {
+                    "a": "a dress the colour of the first star",
+                    "the": "the dress"
+                  },
+                  "token": {
+                    "a": "a thread of silver ribbon",
+                    "the": "the silver thread"
+                  },
+                  "gathering": "the house with every window lit"
+                },
+                {
+                  "helper": {
+                    "a": "a small brass lamp with a kind voice",
+                    "the": "the little lamp"
+                  },
+                  "gift": {
+                    "a": "a ribbon that held a little moonlight",
+                    "the": "the ribbon"
+                  },
+                  "token": {
+                    "a": "a glove with a star on the cuff",
+                    "the": "the glove"
+                  },
+                  "gathering": "the winter ball"
+                }
+              ]
+            },
+            {
+              "id": "spine:1#g1",
+              "text": "{{helper}} arrived the way sleep arrives, which is to say without being noticed starting. One moment the hearth was a hearth. The next there was company, and the company was kind, and it had brought {{gift}} along, and set it down where {{hero}} could see it without having to decide anything yet.",
+              "binds": [
+                {
+                  "helper": {
+                    "a": "a moth with lamplight wings",
+                    "the": "the moth"
+                  },
+                  "gift": {
+                    "a": "a cloak stitched out of dusk",
+                    "the": "the cloak"
+                  },
+                  "token": {
+                    "a": "one small pearl button",
+                    "the": "the pearl button"
+                  },
+                  "gathering": "the lantern-lit barn"
+                },
+                {
+                  "helper": {
+                    "a": "an old woman made mostly of warmth",
+                    "the": "the old woman"
+                  },
+                  "gift": {
+                    "a": "a pair of glass-grey slippers",
+                    "the": "the slippers"
+                  },
+                  "token": {
+                    "a": "a single glass-grey slipper",
+                    "the": "the slipper"
+                  },
+                  "gathering": "the great warm hall"
+                },
+                {
+                  "helper": {
+                    "a": "a cat the colour of woodsmoke",
+                    "the": "the cat"
+                  },
+                  "gift": {
+                    "a": "a dress the colour of the first star",
+                    "the": "the dress"
+                  },
+                  "token": {
+                    "a": "a thread of silver ribbon",
+                    "the": "the silver thread"
+                  },
+                  "gathering": "the house with every window lit"
+                },
+                {
+                  "helper": {
+                    "a": "a small brass lamp with a kind voice",
+                    "the": "the little lamp"
+                  },
+                  "gift": {
+                    "a": "a ribbon that held a little moonlight",
+                    "the": "the ribbon"
+                  },
+                  "token": {
+                    "a": "a glove with a star on the cuff",
+                    "the": "the glove"
+                  },
+                  "gathering": "the winter ball"
+                }
+              ]
+            },
+            {
+              "id": "spine:1#g2",
+              "text": "Something gentle had come into the kitchen. {{hero}} knew it before looking, the way you know a window has been opened. It was {{helper}}, come with {{gift}} and nothing at all to ask for, offering it plainly and then waiting, which was the kindest part of the whole evening.",
+              "binds": [
+                {
+                  "helper": {
+                    "a": "a moth with lamplight wings",
+                    "the": "the moth"
+                  },
+                  "gift": {
+                    "a": "a cloak stitched out of dusk",
+                    "the": "the cloak"
+                  },
+                  "token": {
+                    "a": "one small pearl button",
+                    "the": "the pearl button"
+                  },
+                  "gathering": "the lantern-lit barn"
+                },
+                {
+                  "helper": {
+                    "a": "an old woman made mostly of warmth",
+                    "the": "the old woman"
+                  },
+                  "gift": {
+                    "a": "a pair of glass-grey slippers",
+                    "the": "the slippers"
+                  },
+                  "token": {
+                    "a": "a single glass-grey slipper",
+                    "the": "the slipper"
+                  },
+                  "gathering": "the great warm hall"
+                },
+                {
+                  "helper": {
+                    "a": "a cat the colour of woodsmoke",
+                    "the": "the cat"
+                  },
+                  "gift": {
+                    "a": "a dress the colour of the first star",
+                    "the": "the dress"
+                  },
+                  "token": {
+                    "a": "a thread of silver ribbon",
+                    "the": "the silver thread"
+                  },
+                  "gathering": "the house with every window lit"
+                },
+                {
+                  "helper": {
+                    "a": "a small brass lamp with a kind voice",
+                    "the": "the little lamp"
+                  },
+                  "gift": {
+                    "a": "a ribbon that held a little moonlight",
+                    "the": "the ribbon"
+                  },
+                  "token": {
+                    "a": "a glove with a star on the cuff",
+                    "the": "the glove"
+                  },
+                  "gathering": "the winter ball"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tags": [
+            [
+              "slot",
+              "spine",
+              "1"
+            ],
+            [
+              "element",
+              "a-magical-helper-and"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "spine:1#e0",
+              "text": "{{helper}} did not arrive so much as become obvious, the way a star does when you finally look at the right part of the sky. And {{gift}} came too, shimmering in a way that was not showing off: a soft, private shine, the kind a thing has when it is meant for exactly one person and knows it.",
+              "binds": [
+                {
+                  "helper": {
+                    "a": "a moth with lamplight wings",
+                    "the": "the moth"
+                  },
+                  "gift": {
+                    "a": "a cloak stitched out of dusk",
+                    "the": "the cloak"
+                  },
+                  "token": {
+                    "a": "one small pearl button",
+                    "the": "the pearl button"
+                  },
+                  "gathering": "the lantern-lit barn"
+                },
+                {
+                  "helper": {
+                    "a": "an old woman made mostly of warmth",
+                    "the": "the old woman"
+                  },
+                  "gift": {
+                    "a": "a pair of glass-grey slippers",
+                    "the": "the slippers"
+                  },
+                  "token": {
+                    "a": "a single glass-grey slipper",
+                    "the": "the slipper"
+                  },
+                  "gathering": "the great warm hall"
+                },
+                {
+                  "helper": {
+                    "a": "a cat the colour of woodsmoke",
+                    "the": "the cat"
+                  },
+                  "gift": {
+                    "a": "a dress the colour of the first star",
+                    "the": "the dress"
+                  },
+                  "token": {
+                    "a": "a thread of silver ribbon",
+                    "the": "the silver thread"
+                  },
+                  "gathering": "the house with every window lit"
+                },
+                {
+                  "helper": {
+                    "a": "a small brass lamp with a kind voice",
+                    "the": "the little lamp"
+                  },
+                  "gift": {
+                    "a": "a ribbon that held a little moonlight",
+                    "the": "the ribbon"
+                  },
+                  "token": {
+                    "a": "a glove with a star on the cuff",
+                    "the": "the glove"
+                  },
+                  "gathering": "the winter ball"
+                }
+              ]
+            },
+            {
+              "id": "spine:1#e1",
+              "text": "There was {{helper}}, warm as a banked fire and patient as a Sunday. And set down beside {{helper:the}} was {{gift}}, which shimmered the way still water shimmers when a lamp goes by. It was not grand. It was better than grand. It was right, and it was {{hero}}'s, and it had been waiting a while.",
+              "binds": [
+                {
+                  "helper": {
+                    "a": "a moth with lamplight wings",
+                    "the": "the moth"
+                  },
+                  "gift": {
+                    "a": "a cloak stitched out of dusk",
+                    "the": "the cloak"
+                  },
+                  "token": {
+                    "a": "one small pearl button",
+                    "the": "the pearl button"
+                  },
+                  "gathering": "the lantern-lit barn"
+                },
+                {
+                  "helper": {
+                    "a": "an old woman made mostly of warmth",
+                    "the": "the old woman"
+                  },
+                  "gift": {
+                    "a": "a pair of glass-grey slippers",
+                    "the": "the slippers"
+                  },
+                  "token": {
+                    "a": "a single glass-grey slipper",
+                    "the": "the slipper"
+                  },
+                  "gathering": "the great warm hall"
+                },
+                {
+                  "helper": {
+                    "a": "a cat the colour of woodsmoke",
+                    "the": "the cat"
+                  },
+                  "gift": {
+                    "a": "a dress the colour of the first star",
+                    "the": "the dress"
+                  },
+                  "token": {
+                    "a": "a thread of silver ribbon",
+                    "the": "the silver thread"
+                  },
+                  "gathering": "the house with every window lit"
+                },
+                {
+                  "helper": {
+                    "a": "a small brass lamp with a kind voice",
+                    "the": "the little lamp"
+                  },
+                  "gift": {
+                    "a": "a ribbon that held a little moonlight",
+                    "the": "the ribbon"
+                  },
+                  "token": {
+                    "a": "a glove with a star on the cuff",
+                    "the": "the glove"
+                  },
+                  "gathering": "the winter ball"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slotId": "expansion:after-1",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "expansion",
+              "after-1"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "expansion:after-1#g0",
+              "text": "For a moment nobody did anything at all. The fire thought about it. {{gift:the}} caught the lamplight and let it go again, caught it and let it go, the way water does. It is a strange and lovely thing to be given something before you have asked, and the kitchen seemed to understand and stayed quiet about it."
+            },
+            {
+              "id": "expansion:after-1#g1",
+              "text": "The house took the news well. A floorboard settled. The draught came back, found the room warmer than before, and stayed. {{helper:the}} said nothing, which was exactly the right amount, and {{hero}} stood with hands still a little grey from the ashes, looking at something shining, not quite ready to touch it."
+            },
+            {
+              "id": "expansion:after-1#g2",
+              "text": "There are gifts that make a noise and gifts that do not. This one did not. It simply sat there being lovely, and the lovely spread out slowly into the corners of the kitchen, warming the jars and the broom handle and the cold end of the room where nobody usually stood."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slotId": "spine:2",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "spine",
+              "2"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "spine:2#g0",
+              "text": "And then {{hero}} was dressed in wonder, which fits better than anything tailored. Out through the gate, down a lane that had gone blue with evening, towards {{gathering}}, where every window was lit and the light came out onto the grass in long warm rectangles, as if the whole building were glad."
+            },
+            {
+              "id": "spine:2#g1",
+              "text": "{{gift:the}} did what it had come to do. {{hero}} went out into the evening looking like the evening's best idea, and the lane carried {{them}} gently along to {{gathering}}, where music was doing something soft and there were so many small lamps that the dark had quite given up on the place."
+            },
+            {
+              "id": "spine:2#g2",
+              "text": "The walk was not long. Hedges, a bridge, a bend, and then {{gathering}} ahead with all its windows awake. Inside there was warmth and chatter and the smell of something sweet, and {{hero}} stepped in dressed in wonder, and nobody there could have told you why the room felt suddenly kinder."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slotId": "expansion:after-2",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "expansion",
+              "after-2"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "expansion:after-2#g0",
+              "text": "{{gathering}} was the sort of place that hums. Not loudly. The hum of a hundred small pleasant things happening at once: a cup set down, a laugh halfway across the room, a shoe finding the beat before its owner does. The lamps were low and gold and everywhere, and the ceiling held the warmth in like a lid."
+            },
+            {
+              "id": "expansion:after-2#g1",
+              "text": "There were plates of small good things nobody could name. There was a window seat where the cold came in politely and was ignored. Somebody was teaching somebody else a step, badly, and both of them were laughing. {{hero}} stood in the middle of it all, and the middle of it all did not mind."
+            },
+            {
+              "id": "expansion:after-2#g2",
+              "text": "Light did clever things in that room. It gathered in the glasses, slid along the floor, and came back up under everyone's chin so that every face looked a little kinder than it does by daylight. Outside the windows the dark pressed its nose against the glass and did not come in."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slotId": "spine:3",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "spine",
+              "3"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "spine:3#g0",
+              "text": "But hours do what hours do. Somewhere a clock cleared its throat, and {{hero}} remembered the ash and the kettle and the long blue lane. So {{hero}} slipped out quietly, between one song and the next, and did not notice that {{token}} had stayed behind on the step, catching the light all by itself."
+            },
+            {
+              "id": "spine:3#g1",
+              "text": "The evening tipped, the way evenings do, from early to late in the space of one breath. {{hero}} went, without fuss and without goodbyes, back out into the cool. Behind {{them}} on the stair lay {{token}}, small and patient, waiting to become the part of the story that matters next."
+            },
+            {
+              "id": "spine:3#g2",
+              "text": "It got late in the way it always does: all at once. {{hero}} was out of the door and down the steps before anybody had finished turning round. Only {{token}} stayed, resting where it fell, as if it had decided on its own to keep {{hero}}'s place in the evening safe."
+            }
+          ]
+        },
+        {
+          "tags": [
+            [
+              "slot",
+              "spine",
+              "3"
+            ],
+            [
+              "element",
+              "a-small-token-that"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "spine:3#e0",
+              "text": "And when {{hero}} had gone, {{token}} stayed. Just that, just one small thing, lying where the light could find it. It was not much to leave behind. But small things left behind have a way of becoming the hinge a whole evening swings on, and this one settled in to wait."
+            },
+            {
+              "id": "spine:3#e1",
+              "text": "{{hero}} slipped away late and left {{token}} behind without meaning to. It lay on the cool stone, quite alone, shining faintly, the way a thing shines when it still has a job to do. Nobody had noticed yet. In a little while somebody would, and then the story would turn."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slotId": "expansion:after-3",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "expansion",
+              "after-3"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "expansion:after-3#g0",
+              "text": "The lane going home was a different lane. Cooler, quieter, with the hedges keeping their own company. Behind, the windows of the evening grew small and gold. Ahead, the house waited with its one lit window. In between there was only the sound of walking, which is one of the good sounds."
+            },
+            {
+              "id": "expansion:after-3#g1",
+              "text": "Back at {{gathering}} the music carried on for a while without noticing. Then it noticed. A step paused. A head turned. And there on the stone lay {{token:the}}, small and quite certain of itself, in the exact place where somebody kind had been standing a moment before."
+            },
+            {
+              "id": "expansion:after-3#g2",
+              "text": "Night did its tidying. It put the garden away, folded up the lane, and turned the lamps down one by one along the street. Somewhere behind all that, a small thing lay where it had fallen and went on shining patiently, because that was all it had been asked to do."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slotId": "spine:4",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "spine",
+              "4"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "spine:4#g0",
+              "text": "So {{token:the}} did its quiet work. It led a friend along the blue lane, past the hedges, up to the house with one lit window, and there was {{hero}} with grey hands and a kind face, exactly the person the evening had been about. And everyone said so, warmly, and that was that."
+            },
+            {
+              "id": "spine:4#g1",
+              "text": "A friend came looking, with {{token:the}} held carefully in both hands, and the looking was not hard. Kindness is easy to find once you have decided to look for it. {{hero}} was recognised, and welcomed, and brought in to the warm, and nobody mentioned the ashes except to say they had never mattered."
+            },
+            {
+              "id": "spine:4#g2",
+              "text": "In the morning, or near enough, {{token:the}} brought someone to the door. There was a moment of looking, and then no doubt at all. {{hero}} was gathered up into warmth — a chair by the fire, a blanket, a cup of something — and the house, which had always known, seemed quietly pleased."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slotId": "coda",
+      "groups": [
+        {
+          "tags": [
+            [
+              "slot",
+              "coda"
+            ]
+          ],
+          "fragments": [
+            {
+              "id": "coda#g0",
+              "text": "And after all that, the only thing left to do was rest. The fire went low and orange. The blanket went heavy and warm. The story folded itself up small and put itself away on a shelf where you can always find it again. Goodnight, {{hero}}. Goodnight, lane. Goodnight, small shining thing. Sleep now."
+            },
+            {
+              "id": "coda#g1",
+              "text": "The lamps went down one by one, the way they do. Everything in the house got softer at the edges. Outside, the blue went dark and the dark went quiet, and the quiet came in and sat on the end of the bed. Goodnight, {{hero}}. Nothing in the night needs anything from you. Sleep."
+            },
+            {
+              "id": "coda#g2",
+              "text": "Slowly, then more slowly, the story let go. The music was long over. The ash had gone cool. There was only warmth, and weight, and the slow in-and-out of a room with somebody sleepy in it. Goodnight, {{hero}}. Goodnight to all of it. Dream of gentle things, and let the rest wait for morning."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
