@@ -29,6 +29,15 @@ jobs:
       - name: Unit tests
         run: npm test
 
+      - name: Fragment corpora pass the oatmeal gate
+        # Improv's `audit`, promoted from a debugging aid to a build gate. A
+        # hand-written corpus is read as it is written, so a dead or dominant
+        # phrase shows up in the writing; a generated one is read by nobody, so
+        # the check has to be machinery. Fails on dead fragments, dominant
+        # fragments, unresolved placeholders, and tellings that are
+        # quantitatively near-identical. See docs/procedural-assembly-design.md.
+        run: npm run fragments:audit
+
       - name: Generated files are in sync
         # The catalogue and motif tables are generated from the knowledge base
         # and committed. These catch a hand-edit or a screen changed without

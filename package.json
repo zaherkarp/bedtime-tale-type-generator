@@ -20,7 +20,10 @@
     "motifs:build": "node --experimental-strip-types scripts/build-motifs.ts",
     "motifs:check": "node --experimental-strip-types scripts/build-motifs.ts --check",
     "tale-catalogue:build": "node --experimental-strip-types scripts/build-tale-catalogue.ts",
-    "tale-catalogue:check": "node --experimental-strip-types scripts/build-tale-catalogue.ts --check"
+    "tale-catalogue:check": "node --experimental-strip-types scripts/build-tale-catalogue.ts --check",
+    "tellings:preview": "node --experimental-strip-types scripts/preview-tellings.ts",
+    "fragments:audit": "node --experimental-strip-types scripts/audit-fragments.ts",
+    "fragments:bake": "node --experimental-strip-types scripts/bake-fragments.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.113.0",
