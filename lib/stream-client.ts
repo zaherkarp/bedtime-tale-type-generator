@@ -70,6 +70,7 @@ export async function streamTale(
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
+  let terminated = false;
 
   try {
     for (;;) {
@@ -81,33 +82,37 @@ export async function streamTale(
       while ((newlineIndex = buffer.indexOf("\n")) !== -1) {
         const line = buffer.slice(0, newlineIndex).trim();
         buffer = buffer.slice(newlineIndex + 1);
-        if (line) dispatch(line, callbacks);
+        if (line && !terminated) terminated = dispatch(line, callbacks);
       }
     }
     const tail = buffer.trim();
-    if (tail) dispatch(tail, callbacks);
+    if (tail && !terminated) terminated = dispatch(tail, callbacks);
+    if (!terminated) callbacks.onError("connection");
   } catch (err) {
     if (isAbort(err)) return;
-    callbacks.onError("connection");
+    if (!terminated) callbacks.onError("connection");
   }
 }
 
-function dispatch(line: string, callbacks: StreamCallbacks): void {
+function dispatch(line: string, callbacks: StreamCallbacks): boolean {
   let event: unknown;
   try {
     event = JSON.parse(line);
   } catch {
-    return;
+    return false;
   }
-  if (typeof event !== "object" || event === null) return;
+  if (typeof event !== "object" || event === null) return false;
   const e = event as { t?: string; text?: string; code?: string };
   if (e.t === "delta" && typeof e.text === "string") {
     callbacks.onDelta(e.text);
   } else if (e.t === "done") {
     callbacks.onDone();
+    return true;
   } else if (e.t === "error") {
     callbacks.onError((e.code as TaleErrorCode) ?? "unknown");
+    return true;
   }
+  return false;
 }
 
 function isAbort(err: unknown): boolean {
