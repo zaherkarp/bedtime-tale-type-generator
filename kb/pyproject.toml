@@ -29,6 +29,7 @@ include = ["atukb*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+asyncio_default_fixture_loop_scope = "function"
 filterwarnings = [
     # Deprecated usage in atukb's own code is a test failure, deliberately: this
     # is a long-lived data pipeline and a silent deprecation is how it rots.

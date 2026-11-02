@@ -72,10 +72,9 @@ test("the reading controls resize the story and persist across pages", async ({
   // The setting belongs to the device, so it survives a navigation.
   const enlarged = await sizeOf();
   await page.goto("/library");
-  const scale = await page.evaluate(() =>
-    getComputedStyle(document.documentElement).getPropertyValue("--story-scale"),
-  );
-  expect(parseFloat(scale)).toBeGreaterThan(1);
+  await expect.poll(() => page.evaluate(() =>
+    parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--story-scale")),
+  )).toBeGreaterThan(1);
   expect(enlarged).toBeGreaterThan(before);
 });
 
