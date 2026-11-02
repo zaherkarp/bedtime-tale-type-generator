@@ -102,8 +102,12 @@ self.addEventListener("fetch", (event) => {
         if (cached) return cached;
         const response = await fetch(request);
         if (response.ok) {
-          const cache = await caches.open(ASSET_CACHE);
-          await cache.put(request, response.clone());
+          try {
+            const cache = await caches.open(ASSET_CACHE);
+            await cache.put(request, response.clone());
+          } catch {
+            // Storage quota/private-mode failures must not break online use.
+          }
         }
         return response;
       })(),
@@ -118,8 +122,12 @@ self.addEventListener("fetch", (event) => {
         try {
           const response = await fetch(request);
           if (response.ok) {
-            const cache = await caches.open(SHELL_CACHE);
-            await cache.put(request, response.clone());
+            try {
+              const cache = await caches.open(SHELL_CACHE);
+              await cache.put(request, response.clone());
+            } catch {
+              // A successful network navigation still wins if storage fails.
+            }
           }
           return response;
         } catch {

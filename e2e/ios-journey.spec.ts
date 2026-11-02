@@ -1,9 +1,42 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test as base, expect, type Page } from "@playwright/test";
+import { createServer, request as proxyRequest } from "node:http";
+
+// WebKit's setOffline flag rejects even local service-worker responses:
+// https://github.com/microsoft/playwright/issues/42775
+// Stop an isolated forwarding origin instead. This tests a real network outage
+// without stopping shared app servers or faking the worker's cache responses.
+const test = base.extend<{ offlineOrigin: { url: string; stop: () => Promise<void> } }>({
+  offlineOrigin: async ({ baseURL }, provide) => {
+    const server = createServer((incoming, outgoing) => {
+      const target = new URL(incoming.url ?? "/", baseURL);
+      const upstream = proxyRequest(target, {
+        method: incoming.method,
+        headers: { ...incoming.headers, host: target.host },
+      }, (response) => {
+        outgoing.writeHead(response.statusCode ?? 502, response.headers);
+        response.pipe(outgoing);
+      });
+      upstream.on("error", () => { outgoing.writeHead(502); outgoing.end(); });
+      incoming.pipe(upstream);
+    });
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    const address = server.address();
+    if (!address || typeof address === "string") throw new Error("missing test origin");
+    const stop = async () => {
+      if (!server.listening) return;
+      const closed = new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
+      server.closeAllConnections();
+      await closed;
+    };
+    try { await provide({ url: `http://127.0.0.1:${address.port}`, stop }); }
+    finally { await stop(); }
+  },
+});
 
 // WebKit + touch/viewport emulation is a regression gate, not a claim that a
 // physical iPhone or Add to Home Screen installation has been tested.
-async function choose(page: Page, family: "folktale" | "fable") {
-  await page.goto("/");
+async function choose(page: Page, family: "folktale" | "fable", startURL = "/") {
+  await page.goto(startURL);
   if (family === "fable") {
     await page.getByTestId("family-fable").click();
     await page.getByTestId("fable-lion-and-the-mouse").click();
@@ -20,8 +53,8 @@ async function noOverflow(page: Page) {
 }
 
 for (const family of ["folktale", "fable"] as const) {
-  test(`${family}: choices, streaming, reading, saved and offline reopen`, async ({ page, context }) => {
-    await choose(page, family);
+  test(`${family}: choices, streaming, reading, saved and offline reopen`, async ({ page, offlineOrigin }) => {
+    await choose(page, family, offlineOrigin.url);
     await noOverflow(page);
     await page.getByTestId("generate-button").click();
     await expect(page.getByTestId("stop-button")).toBeVisible();
@@ -63,12 +96,13 @@ for (const family of ["folktale", "fable"] as const) {
     });
     expect(shellAssets.count).toBeGreaterThan(0);
     expect(shellAssets.missing, "saved-library worker shell dependencies").toEqual([]);
-    await context.setOffline(true);
-    await page.reload();
+    await offlineOrigin.stop();
+    await expect(fetch(offlineOrigin.url)).rejects.toThrow();
+    const reopened = await page.reload();
+    expect(reopened?.fromServiceWorker()).toBe(true);
     await page.getByRole("listitem").filter({ hasText: title }).getByRole("button", { name: "Read", exact: true }).click();
     await expect(page.getByTestId("story-body")).toHaveText(body, { useInnerText: true });
     await noOverflow(page);
-    await context.setOffline(false);
   });
 
   test.describe(`${family} intercepted response`, () => {
@@ -113,7 +147,7 @@ test.describe("long response fixture", () => {
   test.use({ serviceWorkers: "block" });
 test("a long story stays readable without horizontal overflow", async ({ page }) => {
   const paragraph = "Amara walked softly beneath the stars, listening to the quiet trees and feeling safe beside a kind friend. ";
-  const text = "# A Long Gentle Evening\n\n" + Array(70).fill(paragraph).join("\n\n") + "\n\nGoodnight, Amara.";
+  const text = "# A Long Gentle Evening\n\n" + Array(80).fill(paragraph).join("\n\n") + "\n\nGoodnight, Amara.";
   await page.route("**/api/tale", (route) => route.fulfill({
     contentType: "application/x-ndjson",
     body: JSON.stringify({ t: "delta", text }) + "\n" + JSON.stringify({ t: "done" }) + "\n",
