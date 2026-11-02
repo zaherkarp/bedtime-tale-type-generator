@@ -21,7 +21,7 @@
  *    content-hashed, so a hit is always correct and a miss is always a new URL.
  */
 
-const VERSION = "v1";
+const VERSION = "v2";
 const SHELL_CACHE = `btg-shell-${VERSION}`;
 const ASSET_CACHE = `btg-assets-${VERSION}`;
 
@@ -31,13 +31,34 @@ const SHELL_ROUTES = ["/", "/library", "/browse", "/credits"];
 self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
-      const cache = await caches.open(SHELL_CACHE);
-      // Individually, so one 404 during a deploy cannot fail the whole install.
-      await Promise.all(
-        SHELL_ROUTES.map((route) =>
-          cache.add(new Request(route, { cache: "reload" })).catch(() => {}),
-        ),
-      );
+      const shell = await caches.open(SHELL_CACHE);
+      const assets = await caches.open(ASSET_CACHE);
+      const pendingAssets = new Map();
+      async function cacheRoute(route) {
+        const request = new Request(route, { cache: "reload" });
+        const response = await fetch(request);
+        if (!response.ok) throw new Error(`shell unavailable: ${route}`);
+        const html = await response.clone().text();
+        // Next's generated HTML lists the initial scripts, styles and font
+        // preloads. They loaded before this worker registered, so a fetch
+        // handler alone cannot make the first saved story available offline.
+        const urls = [...html.matchAll(/\b(?:src|href)=["'](\/_next\/static\/[^"']+)["']/g)]
+          .map((match) => new URL(match[1], self.location.origin).href);
+        await Promise.all(urls.map((url) => {
+          if (!pendingAssets.has(url)) {
+            pendingAssets.set(url, (async () => {
+              if (!(await assets.match(url))) await assets.add(url);
+            })());
+          }
+          return pendingAssets.get(url);
+        }));
+        await shell.put(request, response);
+      }
+      // Never activate a replacement that cannot hydrate the saved library.
+      // Less essential routes may be temporarily absent during deployment.
+      await cacheRoute("/library");
+      await Promise.all(SHELL_ROUTES.filter((route) => route !== "/library")
+        .map((route) => cacheRoute(route).catch(() => {})));
     })(),
   );
 });
@@ -82,7 +103,7 @@ self.addEventListener("fetch", (event) => {
         const response = await fetch(request);
         if (response.ok) {
           const cache = await caches.open(ASSET_CACHE);
-          void cache.put(request, response.clone());
+          await cache.put(request, response.clone());
         }
         return response;
       })(),
@@ -98,7 +119,7 @@ self.addEventListener("fetch", (event) => {
           const response = await fetch(request);
           if (response.ok) {
             const cache = await caches.open(SHELL_CACHE);
-            void cache.put(request, response.clone());
+            await cache.put(request, response.clone());
           }
           return response;
         } catch {

@@ -41,21 +41,40 @@ for (const family of ["folktale", "fable"] as const) {
     await expect(page.getByTestId("save-button")).toHaveText(/saved/i);
     await page.getByTestId("library-link").click();
     await page.getByRole("listitem").filter({ hasText: title }).getByRole("button", { name: "Read", exact: true }).click();
-    await expect(page.getByTestId("story-body")).toHaveText(body);
+    await expect(page.getByTestId("story-body")).toHaveText(body, { useInnerText: true });
     await noOverflow(page);
 
     // Real installed worker + a fresh offline document, not a source-string
     // assertion or retained React state. Warm the library's route assets first.
     await page.evaluate(async () => { await navigator.serviceWorker.ready; });
     await expect.poll(() => page.evaluate(() => !!navigator.serviceWorker.controller)).toBe(true);
+    // Do not let the HTTP cache hide a worker that cached HTML but omitted
+    // the JavaScript/CSS needed to hydrate the saved-library screen.
+    const shellAssets = await page.evaluate(async () => {
+      const shell = await caches.match("/library");
+      if (!shell) return { count: 0, missing: ["/library"] };
+      const html = new DOMParser().parseFromString(await shell.text(), "text/html");
+      const urls = Array.from(html.querySelectorAll('script[src], link[rel="stylesheet"][href]'))
+        .map((el) => new URL(el.getAttribute("src") ?? el.getAttribute("href")!, location.origin))
+        .filter((url) => url.origin === location.origin && url.pathname.startsWith("/_next/static/"));
+      const missing = [];
+      for (const url of urls) if (!(await caches.match(url.href))) missing.push(url.pathname);
+      return { count: urls.length, missing };
+    });
+    expect(shellAssets.count).toBeGreaterThan(0);
+    expect(shellAssets.missing, "saved-library worker shell dependencies").toEqual([]);
     await context.setOffline(true);
     await page.reload();
     await page.getByRole("listitem").filter({ hasText: title }).getByRole("button", { name: "Read", exact: true }).click();
-    await expect(page.getByTestId("story-body")).toHaveText(body);
+    await expect(page.getByTestId("story-body")).toHaveText(body, { useInnerText: true });
     await noOverflow(page);
     await context.setOffline(false);
   });
 
+  test.describe(`${family} intercepted response`, () => {
+    // Playwright cannot intercept requests handled by a service worker in
+    // WebKit. Only fixture-driven cases block it; offline cases above do not.
+    test.use({ serviceWorkers: "block" });
   test(`${family}: incomplete response offers a working retry with the same choices`, async ({ page }) => {
     let attempt = 0;
     const requests: unknown[] = [];
@@ -86,9 +105,12 @@ for (const family of ["folktale", "fable"] as const) {
     expect(requests[1]).toEqual(requests[0]);
     await noOverflow(page);
   });
+  });
 }
 
 // A separate deliberately long fixture tests reading geometry, not model quality.
+test.describe("long response fixture", () => {
+  test.use({ serviceWorkers: "block" });
 test("a long story stays readable without horizontal overflow", async ({ page }) => {
   const paragraph = "Amara walked softly beneath the stars, listening to the quiet trees and feeling safe beside a kind friend. ";
   const text = "# A Long Gentle Evening\n\n" + Array(70).fill(paragraph).join("\n\n") + "\n\nGoodnight, Amara.";
@@ -103,4 +125,6 @@ test("a long story stays readable without horizontal overflow", async ({ page })
   await page.getByTestId("save-button").scrollIntoViewIfNeeded();
   await expect(page.getByTestId("save-button")).toBeInViewport();
   await noOverflow(page);
+});
+
 });
