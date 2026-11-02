@@ -59,7 +59,7 @@ jobs:
         # No API key needed: MOCK_TALE=1 is set by playwright.config.ts, and the
         # browser is cached by setup-node's npm cache via the Playwright deps.
         run: |
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium webkit
           npm run test:e2e
 
   # The knowledge base is a separate deliverable with its own toolchain, so it
